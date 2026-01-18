@@ -25,7 +25,7 @@ export default function Escort() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/escorts")
+    fetch("/api/girls")
       .then((res) => res.json())
       .then((data) => {
         setProfiles(data || []);
