@@ -2,13 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda';
 
-const lambda = new LambdaClient({
-  region: process.env.LAMBDA_REGION,
-  credentials: {
-    accessKeyId: process.env.LAMBDA_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.LAMBDA_SECRET_ACCESS_KEY!,
-  },
-});
+const lambda = new LambdaClient({ region: 'us-east-1' });
 
 export async function GET(req: NextRequest) {
   try {
