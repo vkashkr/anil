@@ -1,18 +1,48 @@
+'use client';
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { getS3ImageUrl } from "../escort/s3Utils";
-import girls from "../../public/data/girls.json";
 
-
-const imageFiles = [
-  "OIP (1).webp",
-  "OIP (2).webp",
-  "OIP (3).webp",
-  "OIP (4).webp"
-];
-
-const profiles = girls;
+type Profile = {
+  id: string | number;
+  name: string;
+  age: string | number;
+  gender?: string;
+  description?: string;
+  location?: string;
+  filename?: string;
+  full_path: string;
+};
 
 export default function Home() {
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/bff/api/profiles")
+      .then(res => res.json())
+      .then(data => {
+        // Lambda returns { images: [{ filename, metadata: { ... } }] }
+        console.log("Raw data from API:", data);
+        console.log("Data images:", data.body.images);
+        if (data && data.body.images) {
+          const mapped = data.body.images.map((img: any) => ({
+            id: img.metadata.id || img.filename,
+            name: img.metadata.name || "-",
+            age: img.metadata.age || "-",
+            gender: img.metadata.gender,
+            description: img.metadata.description,
+            location: img.metadata.location,
+            filename: img.filename,
+            full_path: img.full_path,
+          }));
+          console.log("Profiles from API:", mapped);
+          setProfiles(mapped);
+        }
+        setLoading(false);
+      })
+      .catch((error) => { console.error("Error fetching profiles:", error); setLoading(false); })
+  }, []);
+
   return (
     <div className="min-h-screen w-full bg-zinc-50 font-sans dark:bg-black flex flex-col">
       <div className="w-full bg-pink-100 py-8 px-2 flex flex-col items-center">
@@ -23,21 +53,31 @@ export default function Home() {
         <span className="text-pink-600 font-semibold text-sm sm:text-base">Ahmedabad’s #1 Local Girl Service | 1000+ Verified Profiles</span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 py-6 px-2 sm:px-4">
-        {profiles.map((profile, idx) => (
-          <div key={profile.id} className="bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-xs w-full flex flex-col items-center mx-auto">
-            <Image
-              src={getS3ImageUrl(imageFiles[idx % imageFiles.length])}
-              alt={profile.name}
-              width={180}
-              height={180}
-              className="rounded-lg object-cover border mb-3 sm:mb-4 w-full h-auto"
-            />
-            <h2 className="text-lg sm:text-xl font-bold text-pink-700 mb-1 text-center">{profile.name}</h2>
-            <p className="text-gray-600 mb-1 text-sm sm:text-base"><strong>Age:</strong> {profile.age}</p>
-            <p className="text-gray-600 mb-1 text-sm sm:text-base"><strong>Location:</strong> {profile.location}</p>
-            <p className="text-gray-600 text-center mb-2 text-sm sm:text-base">{profile.description}</p>
-          </div>
-        ))}
+        {loading ? (
+          <div className="col-span-full text-center text-gray-500">Loading profiles...</div>
+        ) : (
+          profiles.map((profile) => (
+            <div key={profile.id} className="bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-xs w-full flex flex-col items-center mx-auto">
+              {profile.full_path ? (
+                <Image
+                  src={profile.full_path}
+                  alt={profile.name}
+                  width={180}
+                  height={180}
+                  className="rounded-lg object-cover border mb-3 sm:mb-4 w-full h-auto"
+                  onError={(e) => { (e.target as HTMLImageElement).src = '/images/placeholder.png'; }}
+                />
+              ) : (
+                <div className="w-[180px] h-[180px] flex items-center justify-center bg-gray-200 text-gray-500 mb-3 sm:mb-4 rounded-lg border">No Image</div>
+              )}
+              <h2 className="text-lg sm:text-xl font-bold text-pink-700 mb-1 text-center">{profile.name}</h2>
+              <p className="text-gray-600 mb-1 text-sm sm:text-base"><strong>Age:</strong> {profile.age}</p>
+              {profile.gender && <p className="text-gray-600 mb-1 text-sm sm:text-base"><strong>Gender:</strong> {profile.gender}</p>}
+              {profile.location && <p className="text-gray-600 mb-1 text-sm sm:text-base"><strong>Location:</strong> {profile.location}</p>}
+              {profile.description && <p className="text-gray-600 text-center mb-2 text-sm sm:text-base">{profile.description}</p>}
+            </div>
+          ))
+        )}
       </div>
 
       <section className="w-full bg-yellow-50 py-8 flex flex-col items-center border-t border-yellow-200">
