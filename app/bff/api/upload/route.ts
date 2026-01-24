@@ -5,7 +5,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda';
 
 // Lambda client config (update region and credentials as needed)
-const lambda = new LambdaClient({ region: 'us-east-1' });
+const lambda = new LambdaClient({
+  region: process.env.LAMBDA_REGION,
+  credentials: {
+    accessKeyId: process.env.LAMBDA_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.LAMBDA_SECRET_ACCESS_KEY!,
+  },
+});
 
 export async function POST(req: NextRequest) {
   try {
