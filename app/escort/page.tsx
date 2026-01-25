@@ -18,14 +18,15 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/bff/api/profiles")
+    fetch("/bff/api/profiles", {
+    })
       .then(res => res.json())
       .then(data => {
         // Lambda returns { images: [{ filename, metadata: { ... } }] }
         console.log("Raw data from API:", data);
-        console.log("Data images:", data.body.images);
-        if (data && data.body.images) {
-          const mapped = data.body.images.map((img: any) => ({
+        console.log("Data images:", data.data.images);
+        if (data && data.data && data.data.images) {
+          const mapped = data.data.images.map((img: any) => ({
             id: img.metadata.id || img.filename,
             name: img.metadata.name || "-",
             age: img.metadata.age || "-",
