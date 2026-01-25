@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getS3ImageUrl } from "./escort/s3Utils";
+import { getS3ImageUrl } from "./profile/s3Utils";
 import girls from "../public/data/girls.json";
 
 
