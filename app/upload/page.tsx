@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 
 export default function UploadImagePage() {
-  const [image, setImage] = useState<File | null>(null);
-  const [filename, setFilename] = useState("");
+  const [images, setImages] = useState<File[]>([]);
+  const [filenames, setFilenames] = useState<string[]>([]);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
@@ -13,43 +13,42 @@ export default function UploadImagePage() {
   const [result, setResult] = useState<string | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setImage(file);
-      setFilename(file.name);
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      setImages(files);
+      setFilenames(files.map(f => f.name));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!image) {
-      setResult("Please select an image.");
+    if (images.length === 0) {
+      setResult("Please select at least one image.");
       return;
     }
-    if (!filename || !id || !name || !age || !gender || !description) {
+    if (!id || !name || !age || !gender || !description) {
       setResult("Please fill all fields.");
       return;
     }
     setUploading(true);
     setResult(null);
     try {
-      // Convert image to base64 (remove data: prefix)
+      // Convert images to base64
       const toBase64 = (file: File) =>
         new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onload = () => {
             const result = reader.result as string;
-            // Remove data:image/...;base64, prefix
             const base64 = result.split(',')[1] || result;
             resolve(base64);
           };
           reader.onerror = error => reject(error);
         });
-      const imageBase64 = await toBase64(image);
-      const payload = {
-        image: imageBase64,
-        filename,
+      const imagesBase64 = await Promise.all(images.map(toBase64));
+      const payload = images.map((img, idx) => ({
+        image: imagesBase64[idx],
+        filename: img.name,
         metadata: {
           id,
           name,
@@ -57,14 +56,14 @@ export default function UploadImagePage() {
           gender,
           description,
         },
-      };
+      }));
       const res = await fetch("/bff/api/upload", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
       const data = await res.json();
-      if (data.success) {
+      if (data.success || Array.isArray(data) && data.every((d: any) => d.success)) {
         setResult("Upload successful!");
       } else {
         setResult(data.error || "Upload failed.");
@@ -81,13 +80,19 @@ export default function UploadImagePage() {
       <h2 className="text-2xl font-bold mb-4" style={{ color: 'black' }}>Upload Image & Meta Data</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex items-center mb-2">
-          <label className="font-medium mr-2" style={{ color: 'black', minWidth: 100 }}>Image</label>
-          <input type="file" accept="image/*" onChange={handleImageChange} required />
+          <label className="font-medium mr-2" style={{ color: 'black', minWidth: 100 }}>Images</label>
+          <input type="file" accept="image/*" multiple onChange={handleImageChange} required />
         </div>
-        <div className="flex items-center mb-2">
-          <label className="font-medium mr-2" style={{ color: 'black', minWidth: 100 }}>Filename</label>
-          <input type="text" value={filename} onChange={e => setFilename(e.target.value)} className="border rounded px-2 py-1 flex-1" required placeholder="e.g. photo.jpg" />
-        </div>
+        {filenames.length > 0 && (
+          <div className="flex flex-col mb-2">
+            <span className="font-medium" style={{ color: 'black' }}>Selected files:</span>
+            <ul className="list-disc ml-6">
+              {filenames.map((fn, idx) => (
+                <li key={idx} style={{ color: 'black' }}>{fn}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <div className="flex items-center mb-2">
           <label className="font-medium mr-2" style={{ color: 'black', minWidth: 100 }}>ID</label>
           <input type="text" value={id} onChange={e => setId(e.target.value)} className="border rounded px-2 py-1 flex-1" required placeholder="Unique ID" />
