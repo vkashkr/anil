@@ -71,7 +71,7 @@ export default function Home() {
         </p>
         <span className="text-pink-600 font-semibold text-sm sm:text-base">Ahmedabad’s #1 Local Girl Service | 1000+ Verified Profiles</span>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 py-6 px-2 sm:px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 py-6 px-2 sm:px-4">
         {loading ? (
           <div className="col-span-full text-center text-gray-500">Loading profiles...</div>
         ) : (
@@ -79,76 +79,50 @@ export default function Home() {
             const idx = carouselIndex[id] || 0;
             const profile = images[idx];
             return (
-              <div
-                key={id}
-                className="relative bg-black rounded-2xl shadow-xl overflow-hidden max-w-xs w-full flex flex-col items-center mx-auto border border-gray-800 group transition-transform duration-200 hover:scale-105"
-                style={{ minHeight: 320 }}
-              >
-                {/* Image and overlay */}
-                <div className="relative w-full h-[260px] flex items-center justify-center">
-                  {profile.full_path ? (
-                    <Image
-                      src={profile.full_path}
-                      alt={profile.name}
-                      width={340}
-                      height={460}
-                      className="object-cover w-full h-full"
-                      style={{ borderRadius: '16px 16px 0 0' }}
-                      onError={(e) => { (e.target as HTMLImageElement).src = '/images/placeholder.png'; }}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500">No Image</div>
-                  )}
-                  {/* Top-right badge (example: SafeSex) */}
-                  <div className="absolute top-3 right-3 bg-fuchsia-600 bg-opacity-90 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow z-20">
-                    Aliya <span className="ml-1 text-fuchsia-200">♥</span>
-                  </div>
-                  {/* Carousel arrows */}
-                  {images.length > 1 && (
-                    <>
-                      <button
-                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 text-gray-900 rounded-full w-9 h-9 flex items-center justify-center shadow-lg z-30 hover:bg-fuchsia-600 hover:text-white transition-colors border border-white"
-                        style={{ zIndex: 30 }}
-                        onClick={() => setCarouselIndex(prev => ({ ...prev, [id]: (prev[id] - 1 + images.length) % images.length }))}
-                        aria-label="Previous image"
-                      >
-                        <span className="text-2xl font-bold">&#8592;</span>
-                      </button>
-                      <button
-                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 text-gray-900 rounded-full w-9 h-9 flex items-center justify-center shadow-lg z-30 hover:bg-fuchsia-600 hover:text-white transition-colors border border-white"
-                        style={{ zIndex: 30 }}
-                        onClick={() => setCarouselIndex(prev => ({ ...prev, [id]: (prev[id] + 1) % images.length }))}
-                        aria-label="Next image"
-                      >
-                        <span className="text-2xl font-bold">&#8594;</span>
-                      </button>
-                    </>
-                  )}
-                  {/* Image count badge */}
-                  {images.length > 1 && (
-                    <div
-                      className="absolute left-1/2 -translate-x-1/2 bottom-3 px-3 py-1 rounded-full bg-black/70 backdrop-blur-sm text-white text-xs font-semibold shadow border border-white border-opacity-30 flex items-center justify-center z-20"
-                      style={{ zIndex: 20 }}
-                    >
-                      {idx + 1} / {images.length}
-                    </div>
-                  )}
-                  {/* Bottom overlay for text */}
-                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 pt-10 pb-3 flex flex-col items-start justify-end z-10">
-                    <div className="flex w-full justify-between items-end">
-                      <div>
-                        {profile.name && profile.name !== '-' && (
-                          <h2 className="text-lg sm:text-xl font-bold text-white mb-0 leading-tight drop-shadow">{profile.name}</h2>
-                        )}
-                        <div className="text-gray-200 text-xs sm:text-sm font-medium mt-0.5 drop-shadow">{'Ahmedabad'}</div>
-                      </div>
-                      {profile.age && profile.age !== '-' && (
-                        <div className="text-white text-lg font-bold drop-shadow">{profile.age}</div>
-                      )}
-                    </div>
+              <div key={id} className="bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-xs w-full flex flex-col items-center mx-auto">
+                <div className="relative w-full flex flex-col items-center">
+                  <div className="relative w-full flex items-center justify-center">
+                    {profile.full_path ? (
+                      <Image
+                        src={profile.full_path}
+                        alt={profile.name}
+                        width={180}
+                        height={180}
+                        className="rounded-lg object-cover border mb-3 sm:mb-4 w-full h-auto"
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/images/placeholder.png'; }}
+                      />
+                    ) : (
+                      <div className="w-[180px] h-[180px] flex items-center justify-center bg-gray-200 text-gray-500 mb-3 sm:mb-4 rounded-lg border">No Image</div>
+                    )}
+                    {images.length > 1 && (
+                      <>
+                        <button
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-pink-600 bg-opacity-80 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg z-20 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                          style={{ zIndex: 20 }}
+                          onClick={() => setCarouselIndex(prev => ({ ...prev, [id]: (prev[id] - 1 + images.length) % images.length }))}
+                          aria-label="Previous image"
+                        >&lt;</button>
+                        <button
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-pink-600 bg-opacity-80 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg z-20 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                          style={{ zIndex: 20 }}
+                          onClick={() => setCarouselIndex(prev => ({ ...prev, [id]: (prev[id] + 1) % images.length }))}
+                          aria-label="Next image"
+                        >&gt;</button>
+                        <div
+                          className="absolute left-1/2 -translate-x-1/2 bottom-3 px-3 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white text-xs font-semibold shadow-lg border border-white border-opacity-30 flex items-center justify-center z-10"
+                          style={{ zIndex: 10 }}
+                        >
+                          {idx + 1} / {images.length}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
-                {/* Optionally, add more info below the card if needed */}
+                <h2 className="text-lg sm:text-xl font-bold text-pink-700 mb-1 text-center">{profile.name}</h2>
+                <p className="text-gray-600 mb-1 text-sm sm:text-base"><strong>Age:</strong> {profile.age}</p>
+                {profile.gender && <p className="text-gray-600 mb-1 text-sm sm:text-base"><strong>Gender:</strong> {profile.gender}</p>}
+                {profile.location && <p className="text-gray-600 mb-1 text-sm sm:text-base"><strong>Location:</strong> {profile.location}</p>}
+                {profile.description && <p className="text-gray-600 text-center mb-2 text-sm sm:text-base">{profile.description}</p>}
               </div>
             );
           })

@@ -81,9 +81,19 @@ def list_images(event):
                 metadata = head.get('Metadata', {})
                 full_path = f"https://{BUCKET}.s3.amazonaws.com/{key}"
                 images.append({
+                    "id": key.split('/')[0],
                     "filename": key,
                     "full_path": full_path,
                     "metadata": metadata
+                })
+            else:
+                head = s3.head_object(Bucket=BUCKET, Key=key)
+                metadata = head.get('Metadata', {})
+                full_path = f"https://{BUCKET}.s3.amazonaws.com/{key}"
+                images.append({
+                    "id": key.split('/')[0],
+                    "filename": key,
+                    "full_path": full_path
                 })
         logger.info(f"Found {len(images)} images")
         return {
@@ -130,7 +140,7 @@ def post_images(event):
                 logger.info(f"Uploading image: {filename}, {BUCKET}")
                 s3.put_object(
                     Bucket=BUCKET,
-                    Key=f"{id}/{s3_filename}",
+                    Key=f"{s3_filename}",
                     Body=image_bytes,
                     Metadata=metadata,
                     ContentType="image/jpeg"  # or detect from filename
