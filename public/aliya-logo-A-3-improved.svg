@@ -1,0 +1,16 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradA3_v2" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f72585"/>
+      <stop offset="0.5" stop-color="#ffd166"/>
+      <stop offset="1" stop-color="#7209b7"/>
+    </linearGradient>
+  </defs>
+  <!-- Letter A -->
+   <text x="60" y="90" text-anchor="middle" font-family="'Unna', serif" font-size="110" font-weight="700" fill="url(#gradA3_v2)">A</text>
+  <!-- Serpentine Whip Icon -->
+  <g transform="translate(10, 15) rotate(-10)">
+    <path d="M 0 80 C 30 70, 40 40, 50 20 S 80 0, 100 10" stroke="#f72585" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <rect x="-6" y="78" width="12" height="5" fill="#ffd166" stroke="#fff" stroke-width="1"/>
+  </g>
+</svg>

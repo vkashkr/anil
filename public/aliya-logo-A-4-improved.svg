@@ -1,0 +1,22 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradA4_v2" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff99c9"/>
+      <stop offset="0.5" stop-color="#f72585"/>
+      <stop offset="1" stop-color="#500724"/>
+    </linearGradient>
+  </defs>
+  <!-- Corset A -->
+  <path d="M 30 10 L 50 110 L 70 110 L 90 10 Z" fill="url(#gradA4_v2)"/>
+  <path d="M 30 10 L 90 10 L 70 110 L 50 110 Z" fill="url(#gradA4_v2)" transform="scale(1, -1) translate(0, -120)"/>
+  <path d="M 50 110 C 60 90, 60 30, 70 10" fill="none" stroke="url(#gradA4_v2)" stroke-width="20"/>
+  <!-- Lacing -->
+  <g stroke="#fff" stroke-width="2" opacity="0.9">
+    <line x1="55" y1="20" x2="65" y2="35"/> <line x1="65" y1="20" x2="55" y2="35"/>
+    <line x1="55" y1="40" x2="65" y2="55"/> <line x1="65" y1="40" x2="55" y2="55"/>
+    <line x1="55" y1="60" x2="65" y2="75"/> <line x1="65" y1="60" x2="55" y2="75"/>
+    <line x1="55" y1="80" x2="65" y2="95"/> <line x1="65" y1="80" x2="55" y2="95"/>
+  </g>
+  <!-- Bow -->
+  <path d="M 55 15 C 50 10, 50 5, 55 0 L 60 10 L 65 0 C 70 5, 70 10, 65 15 Z" fill="#ffd166"/>
+</svg>

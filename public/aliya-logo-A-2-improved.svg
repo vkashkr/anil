@@ -1,0 +1,24 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradA2_v2" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f72585"/>
+      <stop offset="0.5" stop-color="#ffd166"/>
+      <stop offset="1" stop-color="#7209b7"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Letter A -->
+  <text x="55" y="90" text-anchor="middle" font-family="'Bodoni Moda', serif" font-size="100" font-weight="bold" fill="url(#gradA2_v2)">A</text>
+  <!-- Stiletto Heel Icon -->
+  <g transform="translate(70, 10) rotate(10)">
+    <path d="M 0 90 L 5 89 L 35 20 L 40 18 L 10 88 L 0 90 Z" fill="#f72585" filter="url(#glow)"/>
+    <path d="M 35 20 Q 55 10, 60 25 L 45 35 Q 40 20, 35 20 Z" fill="#ffd166" />
+    <circle cx="58" cy="23" r="1.5" fill="#fff" opacity="0.8"/>
+  </g>
+</svg>

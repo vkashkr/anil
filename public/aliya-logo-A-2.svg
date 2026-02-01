@@ -1,0 +1,16 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradA2" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f72585"/>
+      <stop offset="0.5" stop-color="#ffd166"/>
+      <stop offset="1" stop-color="#7209b7"/>
+    </linearGradient>
+  </defs>
+  <!-- Letter A -->
+  <text x="60" y="85" text-anchor="middle" font-family="'Playfair Display', serif" font-size="100" font-weight="bold" fill="url(#gradA2)">A</text>
+  <!-- High Heel Icon -->
+  <g transform="translate(65, 5) rotate(15)">
+    <path d="M 0 80 L 10 78 L 30 20 L 35 18 L 20 75 L 0 80 Z" fill="#f72585" />
+    <path d="M 30 20 Q 45 15, 50 25 L 40 30 Q 35 20, 30 20 Z" fill="#ffd166" />
+  </g>
+</svg>

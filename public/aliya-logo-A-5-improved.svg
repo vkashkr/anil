@@ -1,0 +1,26 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradA5_v2" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f72585"/>
+      <stop offset="0.5" stop-color="#ffd166"/>
+      <stop offset="1" stop-color="#7209b7"/>
+    </linearGradient>
+    <filter id="sparkle">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+    </filter>
+  </defs>
+  <!-- Letter A -->
+  <text x="60" y="95" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="120" font-weight="700" fill="url(#gradA5_v2)">A</text>
+  <!-- Feathered Mask -->
+  <g transform="translate(25, 10)">
+    <path d="M 0 25 C 10 5, 25 5, 35 20 C 45 5, 60 5, 70 25" fill="#f72585" stroke="#fff" stroke-width="2.5"/>
+    <circle cx="18" cy="20" r="6" fill="none" stroke="#fff" stroke-width="2"/>
+    <circle cx="52" cy="20" r="6" fill="none" stroke="#fff" stroke-width="2"/>
+    <g stroke="#ffd166" stroke-width="2.5" fill="none">
+      <path d="M 70 25 C 75 15, 85 10, 90 20"/>
+      <path d="M 70 25 C 80 20, 85 25, 85 35"/>
+      <path d="M 70 25 C 70 35, 75 40, 80 45"/>
+    </g>
+    <circle cx="35" cy="18" r="1.5" fill="#ffd166" filter="url(#sparkle)"/>
+  </g>
+</svg>

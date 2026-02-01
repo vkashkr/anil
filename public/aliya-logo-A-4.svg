@@ -1,0 +1,20 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradA4" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f72585"/>
+      <stop offset="0.5" stop-color="#ffd166"/>
+      <stop offset="1" stop-color="#7209b7"/>
+    </linearGradient>
+  </defs>
+  <!-- Corset A -->
+  <path d="M 30 100 L 50 20 L 70 20 L 90 100 Z" fill="url(#gradA4)"/>
+  <!-- Lacing -->
+  <g stroke="#fff" stroke-width="1.5" opacity="0.8">
+    <line x1="52" y1="30" x2="68" y2="45"/>
+    <line x1="68" y1="30" x2="52" y2="45"/>
+    <line x1="52" y1="50" x2="68" y2="65"/>
+    <line x1="68" y1="50" x2="52" y2="65"/>
+    <line x1="52" y1="70" x2="68" y2="85"/>
+    <line x1="68" y1="70" x2="52" y2="85"/>
+  </g>
+</svg>
