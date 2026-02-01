@@ -82,16 +82,16 @@ export default function Home() {
               <div
                 key={id}
                 className="relative bg-black rounded-2xl shadow-xl overflow-hidden max-w-xs w-full flex flex-col items-center mx-auto border border-gray-800 group transition-transform duration-200 hover:scale-105"
-                style={{ minHeight: 320 }}
+                style={{ minHeight: 420 }}
               >
                 {/* Image and overlay */}
-                <div className="relative w-full h-[260px] flex items-center justify-center">
+                <div className="relative w-full h-[340px] flex items-center justify-center">
                   {profile.full_path ? (
                     <Image
                       src={profile.full_path}
                       alt={profile.name}
                       width={340}
-                      height={460}
+                      height={540}
                       className="object-cover w-full h-full"
                       style={{ borderRadius: '16px 16px 0 0' }}
                       onError={(e) => { (e.target as HTMLImageElement).src = '/images/placeholder.png'; }}
@@ -107,7 +107,7 @@ export default function Home() {
                   {images.length > 1 && (
                     <>
                       <button
-                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 text-gray-900 rounded-full w-9 h-9 flex items-center justify-center shadow-lg z-30 hover:bg-fuchsia-600 hover:text-white transition-colors border border-white"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-transparent text-gray-900 rounded-full w-9 h-9 flex items-center justify-center shadow-lg z-30 hover:bg-fuchsia-600 hover:text-white transition-colors border border-white"
                         style={{ zIndex: 30 }}
                         onClick={() => setCarouselIndex(prev => ({ ...prev, [id]: (prev[id] - 1 + images.length) % images.length }))}
                         aria-label="Previous image"
@@ -115,7 +115,7 @@ export default function Home() {
                         <span className="text-2xl font-bold">&#8592;</span>
                       </button>
                       <button
-                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 text-gray-900 rounded-full w-9 h-9 flex items-center justify-center shadow-lg z-30 hover:bg-fuchsia-600 hover:text-white transition-colors border border-white"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent bg-opacity-80 text-gray-900 rounded-full w-9 h-9 flex items-center justify-center shadow-lg z-30 hover:bg-fuchsia-600 hover:text-white transition-colors border border-white"
                         style={{ zIndex: 30 }}
                         onClick={() => setCarouselIndex(prev => ({ ...prev, [id]: (prev[id] + 1) % images.length }))}
                         aria-label="Next image"
