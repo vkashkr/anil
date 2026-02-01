@@ -1,5 +1,5 @@
-"use client";
-import React, { useEffect, useState } from "react";
+'use client';
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface GirlProfile {
@@ -14,7 +14,7 @@ interface GirlProfile {
   };
 }
 
-function ViewProfilesPage() {
+function ViewProfilesClient() {
   const [profiles, setProfiles] = useState<GirlProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -190,5 +190,13 @@ function ViewProfilesPage() {
   );
 }
 
+export default function ViewProfilesPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ViewProfilesClient />
+    </Suspense>
+  );
+}
+
 // Export with hideFooter prop for layout
-export default Object.assign(ViewProfilesPage, { hideFooter: true });
+Object.assign(ViewProfilesPage, { hideFooter: true });
