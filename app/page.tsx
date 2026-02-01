@@ -1,6 +1,8 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import ProfileMarquee from "./components/ProfileMarquee";
+import HeroVideo from "./components/HeroVideo";
 
 type Profile = {
   id: string | number;
@@ -77,18 +79,13 @@ export default function Home() {
         <span className="relative z-10 text-pink-200 font-semibold text-base sm:text-lg bg-black/20 px-4 py-1 rounded-full shadow-md tracking-wide animate-pulse mt-1">
           Ahmedabad’s <span className="text-yellow-200 font-bold">#1 Local Girl Service</span> | <span className="text-fuchsia-200 font-bold">1000+ Verified Profiles</span>
         </span>
-      </div>      <div className="w-full max-w-4xl mx-auto my-6 px-2">
-        <video 
-          className="w-full h-auto rounded-lg shadow-2xl" 
-          controls 
-          autoPlay 
-          muted 
-          loop
-        >
-          <source src="/title.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 py-4 px-2">
+      </div>
+      
+      <HeroVideo />
+
+      <ProfileMarquee profiles={Object.values(profilesById).map(p => p[0])} />
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 py-4 px-2">
         {loading ? (
           <div className="col-span-full text-center text-gray-500">Loading profiles...</div>
         ) : (
