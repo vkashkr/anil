@@ -88,12 +88,14 @@ export default function Home() {
                 <div className="relative w-full h-[340px] flex items-center justify-center">
                   {profile.full_path ? (
                     <Image
+                      key={profile.full_path + idx}
                       src={profile.full_path}
                       alt={profile.name}
                       width={340}
                       height={540}
-                      className="object-cover w-full h-full"
+                      className="object-cover w-full h-full transition-transform transition-opacity duration-500 ease-in-out scale-95 opacity-0 animate-pink-fade-in"
                       style={{ borderRadius: '16px 16px 0 0' }}
+                      onLoadingComplete={img => { img.classList.remove('opacity-0'); img.classList.add('opacity-100', 'scale-100'); }}
                       onError={(e) => { (e.target as HTMLImageElement).src = '/images/placeholder.png'; }}
                     />
                   ) : (
@@ -112,7 +114,7 @@ export default function Home() {
                         onClick={() => setCarouselIndex(prev => ({ ...prev, [id]: (prev[id] - 1 + images.length) % images.length }))}
                         aria-label="Previous image"
                       >
-                        <span className="text-2xl font-bold">&#8592;</span>
+                        <span className="text-xl font-bold text-fuchsia-600">{'<'}</span>
                       </button>
                       <button
                         className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent bg-opacity-80 text-gray-900 rounded-full w-9 h-9 flex items-center justify-center shadow-lg z-30 hover:bg-fuchsia-600 hover:text-white transition-colors border border-white"
@@ -120,17 +122,50 @@ export default function Home() {
                         onClick={() => setCarouselIndex(prev => ({ ...prev, [id]: (prev[id] + 1) % images.length }))}
                         aria-label="Next image"
                       >
-                        <span className="text-2xl font-bold">&#8594;</span>
+                        <span className="text-xl font-bold text-fuchsia-600">{'>'}</span>
                       </button>
                     </>
                   )}
                   {/* Image count badge */}
                   {images.length > 1 && (
                     <div
-                      className="absolute left-1/2 -translate-x-1/2 bottom-3 px-3 py-1 rounded-full bg-black/70 backdrop-blur-sm text-white text-xs font-semibold shadow border border-white border-opacity-30 flex items-center justify-center z-20"
+                      className="absolute left-1/2 -translate-x-1/2 bottom-3 flex items-center gap-1 z-20"
                       style={{ zIndex: 20 }}
                     >
-                      {idx + 1} / {images.length}
+                      {(() => {
+                        const total = images.length;
+                        let start = 0;
+                        let end = total;
+                        if (total > 3) {
+                          if (idx === 0) {
+                            start = 0; end = 3;
+                          } else if (idx === total - 1) {
+                            start = total - 3; end = total;
+                          } else {
+                            start = idx - 1; end = idx + 2;
+                          }
+                        }
+                        return Array.from({ length: Math.min(3, total) }, (_, j) => {
+                          const i = (total > 3) ? start + j : j;
+                          const isSelected = i === idx;
+                          return (
+                            <span
+                              key={i}
+                              className={
+                                `w-4 h-4 flex items-center justify-center rounded-full border border-white/80 ` +
+                                (isSelected
+                                  ? 'bg-black/90 text-white font-bold scale-110 shadow-lg'
+                                  : 'bg-black/40 text-white/60')
+                              }
+                              style={{ transition: 'all 0.2s' }}
+                            >
+                              <span className="text-[10px] font-bold select-none leading-none flex items-center justify-center w-full h-full" style={{fontVariantNumeric:'tabular-nums'}}>
+                                {isSelected ? (i + 1) : ''}
+                              </span>
+                            </span>
+                          );
+                        });
+                      })()}
                     </div>
                   )}
                   {/* Bottom overlay for text */}
