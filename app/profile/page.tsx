@@ -71,7 +71,7 @@ export default function Home() {
         </p>
         <span className="text-pink-600 font-semibold text-sm sm:text-base">Ahmedabad’s #1 Local Girl Service | 1000+ Verified Profiles</span>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 py-6 px-2 sm:px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-0 sm:gap-0 py-1 px-2 sm:px-0">
         {loading ? (
           <div className="col-span-full text-center text-gray-500">Loading profiles...</div>
         ) : (
