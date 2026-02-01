@@ -77,8 +77,18 @@ export default function Home() {
         <span className="relative z-10 text-pink-200 font-semibold text-base sm:text-lg bg-black/20 px-4 py-1 rounded-full shadow-md tracking-wide animate-pulse mt-1">
           Ahmedabad’s <span className="text-yellow-200 font-bold">#1 Local Girl Service</span> | <span className="text-fuchsia-200 font-bold">1000+ Verified Profiles</span>
         </span>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 py-4 px-2">
+      </div>      <div className="w-full max-w-4xl mx-auto my-6 px-2">
+        <video 
+          className="w-full h-auto rounded-lg shadow-2xl" 
+          controls 
+          autoPlay 
+          muted 
+          loop
+        >
+          <source src="/title.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 py-4 px-2">
         {loading ? (
           <div className="col-span-full text-center text-gray-500">Loading profiles...</div>
         ) : (
@@ -201,7 +211,7 @@ export default function Home() {
       <section className="w-full px-0 py-8 bg-gradient-to-br from-black via-fuchsia-950 to-gray-900 relative">
         <div className="max-w-3xl mx-auto rounded-3xl shadow-2xl bg-black/60 backdrop-blur-lg border border-fuchsia-700/40 p-6 md:p-10 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none z-0" style={{background: 'radial-gradient(circle at 80% 10%, rgba(255,0,128,0.12) 0, transparent 70%), radial-gradient(circle at 10% 90%, rgba(255,255,0,0.10) 0, transparent 70%)'}}></div>
-          <p className="relative z-10 text-base md:text-lg leading-relaxed text-gray-100">
+          <div className="relative z-10 text-base md:text-lg leading-relaxed text-gray-100">
             <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-500 to-yellow-300 text-3xl md:text-4xl drop-shadow-pink animate-pulse">Welcome to Aliya Escort Ahmedabad</span>
             <span className="block italic text-fuchsia-400 font-semibold mt-2 text-xl">The Ultimate Destination for <span className="underline decoration-wavy decoration-pink-400">Premium <span className="text-pink-400">Call Girls</span></span> and <span className="font-bold text-yellow-400">Escort Services</span> in Ahmedabad</span><br/><br/>
             <span className="text-pink-400 font-bold">Are you searching for the most <span className="italic underline decoration-wavy decoration-fuchsia-400">trusted</span>, <span className="font-extrabold text-fuchsia-400">genuine</span>, and <span className="text-yellow-400">high-profile</span> call girls in Ahmedabad?</span> <span className="text-gray-200">Aliya Escort Ahmedabad is your <span className="font-bold text-fuchsia-400">one-stop solution</span> for <span className="italic text-pink-400">luxury companionship</span>, offering a wide range of <span className="font-bold text-yellow-400">beautiful</span>, <span className="italic text-fuchsia-400">independent escorts</span>, college girls, housewives, Russian models, and VIP companions.</span><br/><br/>
@@ -257,11 +267,11 @@ export default function Home() {
             </div>
             <span className="block mt-4 font-bold text-lg text-fuchsia-400 uppercase tracking-wider">You are at the right place to make your day and night more cool:</span>
             <span className="block text-yellow-400 font-semibold italic">Ahmedabad call girls, Ahmedabad escort service, local girls Ahmedabad, Russian call girls Ahmedabad, college girls Ahmedabad, housewife escorts Ahmedabad, VIP escorts Ahmedabad, independent call girls Ahmedabad, best call girl service Ahmedabad, real call girls Ahmedabad, cash payment call girls Ahmedabad, 24/7 call girls Ahmedabad, instant booking call girls Ahmedabad, safe escort service Ahmedabad, discreet call girls Ahmedabad, hotel delivery call girls Ahmedabad, home delivery call girls Ahmedabad, affordable call girls Ahmedabad, premium escort Ahmedabad, trusted call girls Ahmedabad, verified profiles Ahmedabad, privacy guaranteed Ahmedabad, top escort agency Ahmedabad, sexy call girls Ahmedabad, beautiful call girls Ahmedabad, mature escorts Ahmedabad, young call girls Ahmedabad, high-profile call girls Ahmedabad, incall outcall Ahmedabad, satisfaction guaranteed Ahmedabad, exclusive escort Ahmedabad, best rates call girls Ahmedabad, genuine call girls Ahmedabad, no advance payment call girls Ahmedabad.</span>
-          </p>
+          </div>
         </div>
         <div className="max-w-3xl mx-auto rounded-3xl shadow-2xl bg-black/60 backdrop-blur-lg border border-yellow-600/40 p-6 md:p-10 mt-8 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none z-0" style={{background: 'radial-gradient(circle at 80% 10%, rgba(255,255,0,0.10) 0, transparent 70%), radial-gradient(circle at 10% 90%, rgba(255,0,128,0.10) 0, transparent 70%)'}}></div>
-          <p className="relative z-10 text-base md:text-lg leading-relaxed text-gray-100">
+          <div className="relative z-10 text-base md:text-lg leading-relaxed text-gray-100">
             <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-400 to-fuchsia-500 text-3xl md:text-4xl drop-shadow-pink animate-pulse">अहमदाबाद की लोकल कॉल गर्ल्स और एस्कॉर्ट सर्विस – पूरी जानकारी</span><br/><br/>
             <span className="italic text-fuchsia-400 font-semibold">नमस्कार!</span> <span className="text-yellow-400 font-bold">अगर आप अहमदाबाद के <span className="underline decoration-wavy decoration-pink-400">Satellite, Vastrapur, Maninagar</span>, या किसी भी मोहल्ले में रहते हैं</span> और <span className="font-bold text-fuchsia-400">एकदम लोकल, भरोसेमंद</span> और <span className="italic text-pink-400">दिल से सेवा देने वाली कॉल गर्ल्स</span> की तलाश में हैं, तो <span className="font-bold text-yellow-300">Aliya Escort Ahmedabad</span> आपके लिए सबसे सही ठिकाना है।<br/><br/>
             <span className="text-pink-400 font-bold">यहाँ आपको मिलेंगी ऐसी गर्ल्स जो न सिर्फ खूबसूरत हैं, बल्कि आपकी हर बात को समझती हैं और दोस्ताना माहौल देती हैं।</span><br/><br/>
@@ -306,7 +316,7 @@ export default function Home() {
               <div className="italic text-pink-400 transition-all duration-200 hover:scale-105 hover:bg-fuchsia-900/30 rounded-xl p-2">"बुकिंग प्रोसेस बहुत आसान और फास्ट है, एकदम घर जैसा फील आता है।"</div>
             </div>
             <span className="block mt-4 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-400 to-fuchsia-500 text-3xl md:text-4xl drop-shadow-pink animate-pulse">अहमदाबाद में सबसे भरोसेमंद, लोकल और दिल से सेवा देने वाली कॉल गर्ल्स सर्विस – Aliya Escort Ahmedabad</span>
-          </p>
+          </div>
         </div>
       </section>
       <div className="w-full flex flex-col items-center mt-8 py-8 px-2 relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br from-fuchsia-900/80 via-black/80 to-yellow-900/70 border border-yellow-400/30 backdrop-blur-lg">
