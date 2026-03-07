@@ -66,7 +66,7 @@ export default function ProfileCard({ id, images }: ProfileCardProps) {
                   img.classList.add('opacity-100', 'scale-100');
                 }}
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/images/placeholder.png';
+                  (e.target as HTMLImageElement).src = '/images/placeholder.svg';
                 }}
               />
             </Link>

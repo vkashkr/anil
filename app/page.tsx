@@ -20,14 +20,23 @@ type Profile = {
 export default function Home() {
   const [profilesById, setProfilesById] = useState<{ [id: string]: Profile[] }>({});
   const [loading, setLoading] = useState(true);
+  const [nextToken, setNextToken] = useState<string | null>(null);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  useEffect(() => {
-    fetch("/bff/api/profiles", {})
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.data && data.data.images) {
-          // Map raw data to Profile type
-          const mapped = data.data.images.map((img: any) => ({
+  const fetchProfiles = async (token?: string | null) => {
+    try {
+       const url = token ? `/bff/api/profiles?limit=100&next_token=${encodeURIComponent(token)}` : '/bff/api/profiles?limit=100';
+       const res = await fetch(url);
+       const data = await res.json();
+       
+       if (data && data.success && data.data) {
+          const rawImages = data.data.images || [];
+          const newNextToken = data.data.next_token || null;
+          
+          setNextToken(newNextToken);
+          
+          // Process Data
+          const mapped = rawImages.map((img: any) => ({
             id: (img.metadata && img.metadata.id) || (img.filename ? img.filename.split('/')[0] : img.filename),
             name: img.metadata?.name || "-",
             age: img.metadata?.age || "-",
@@ -39,36 +48,80 @@ export default function Home() {
             metadata: img.metadata || {},
           }));
 
-          // Group by id and identify metadata source
           const grouped: { [id: string]: Profile[] } = {};
           const metaById: { [id: string]: any } = {};
           
           mapped.forEach((profile: Profile) => {
             if (!grouped[profile.id]) grouped[profile.id] = [];
             grouped[profile.id].push(profile);
-            
-            // Prioritize metadata from 'profile.jpg' if available
             if (profile.filename && profile.filename.endsWith('profile.jpg')) {
               metaById[profile.id] = profile.metadata;
             }
           });
 
-          // Consolidate metadata across the group
+          // Consolidate metadata across the group (current batch)
           Object.entries(grouped).forEach(([id, images]) => {
             if (metaById[id]) {
               grouped[id] = images.map(img => ({ ...img, ...metaById[id] }));
             }
           });
-          
-          setProfilesById(grouped);
-        }
-        setLoading(false);
-      })
-      .catch((error) => { 
-        console.error("Error fetching profiles:", error); 
-        setLoading(false); 
-      });
+
+          setProfilesById(prev => {
+             const combined = { ...prev };
+             
+             Object.entries(grouped).forEach(([id, newImages]) => {
+                 if (combined[id]) {
+                     // Merge new images with existing
+                     const existing = combined[id];
+                     const existingPaths = new Set(existing.map(p => p.full_path));
+                     const validNew = newImages.filter(img => !existingPaths.has(img.full_path));
+                     
+                     let allImages = [...existing, ...validNew];
+
+                     // Find best metadata source (prefer existing if valid, else new)
+                     const metaSource = allImages.find(img => img.name && img.name !== "-") 
+                                     || allImages.find(img => img.metadata && Object.keys(img.metadata).length > 0);
+
+                     if (metaSource) {
+                         // Apply metadata to all images in the group to ensure consistency
+                         const { name, age, gender, description, location, metadata } = metaSource;
+                         allImages = allImages.map(img => ({
+                             ...img,
+                             name: name !== "-" ? name : img.name,
+                             age: age !== "-" ? age : img.age,
+                             gender: gender || img.gender,
+                             description: description || img.description,
+                             location: location || img.location,
+                             metadata: metadata || img.metadata
+                         }));
+                     }
+                     combined[id] = allImages;
+                 } else {
+                     combined[id] = newImages;
+                 }
+             });
+             return combined;
+          });
+       }
+    } catch (error) {
+       console.error("Error fetching profiles:", error);
+    } finally {
+       setLoading(false);
+       setLoadingMore(false);
+    }
+  };
+
+  useEffect(() => {
+    // Initial Load
+    fetchProfiles(null);
   }, []);
+
+  const handleLoadMore = () => {
+    if (nextToken && !loadingMore) {
+        setLoadingMore(true);
+        fetchProfiles(nextToken);
+    }
+  };
 
   return (
     <div className="min-h-screen w-full bg-zinc-50 font-sans dark:bg-black flex flex-col">
@@ -78,6 +131,9 @@ export default function Home() {
         <h1 className="relative z-10 text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-500 to-yellow-300 text-center leading-tight drop-shadow-pink animate-pulse mb-3">
           Ahmedabad Escort & Local Call Girls <span className="inline-block animate-bounce">👄</span>
         </h1>
+        {/* Marquee with improved data handling */}
+      <ProfileMarquee profiles={Object.values(profilesById).map(p => p[0])} />
+
         <p className="relative z-10 text-lg sm:text-xl text-gray-100 max-w-xl sm:max-w-2xl text-center mb-4 font-medium">
           <span className="bg-black/30 px-3 py-2 rounded-2xl shadow-lg backdrop-blur-sm inline-block">
             Welcome to <span className="font-bold text-pink-300">Aliya Escort Ahmedabad</span> – your trusted directory for <span className="text-fuchsia-300 font-semibold">genuine, independent call girls</span> and <span className="text-yellow-200 font-semibold">premium escort services</span> in Ahmedabad.<br className="hidden sm:block"/> Book local girls for home or hotel delivery, enjoy <span className="italic text-pink-200">safe, private, and affordable companionship</span>. <span className="text-yellow-300 font-bold">No advance payment</span>, <span className="text-fuchsia-200 font-bold">100% privacy</span>, and <span className="text-pink-200 font-bold">real profiles only</span>.
@@ -90,21 +146,43 @@ export default function Home() {
       
       <HeroVideo />
 
-      {/* Marquee with improved data handling */}
-      <ProfileMarquee profiles={Object.values(profilesById).map(p => p[0])} />
-
+      
       {/* Grid Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 py-4 px-2">
-        {loading ? (
+        {loading && Object.keys(profilesById).length === 0 ? (
           <div className="col-span-full flex justify-center items-center py-20">
              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
           </div>
         ) : (
-          Object.entries(profilesById).map(([id, images]) => (
-            <ProfileCard key={id} id={id} images={images} />
-          ))
+          <>
+            {Object.entries(profilesById).map(([id, images]) => (
+              <ProfileCard key={id} id={id} images={images} />
+            ))}
+          </>
         )}
       </div>
+
+      {/* Pagination Load More */}
+      {nextToken && (
+        <div className="flex justify-center py-8">
+           <button 
+             onClick={handleLoadMore} 
+             disabled={loadingMore}
+             className="bg-gradient-to-r from-pink-600 to-fuchsia-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+           >
+             {loadingMore ? (
+               <>
+                 <span className="w-5 h-5 border-2 border-white/50 border-t-white rounded-full animate-spin"></span>
+                 Loading...
+               </>
+             ) : (
+               <>
+                 Load More Girls <span className="text-xl">💃</span>
+               </>
+             )}
+           </button>
+        </div>
+      )}
 
       <SEOContent />
 

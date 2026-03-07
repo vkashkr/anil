@@ -52,19 +52,10 @@ function ProfileContent() {
   }, [queryId, queryName]);
 
   useEffect(() => {
-    // Check if user is admin
-    const checkAdmin = async () => {
-      try {
-        const res = await fetch('/api/admin/status');
-        const data = await res.json();
-        if (data && data.isAdmin) {
-          setIsAdmin(true);
-        }
-      } catch (err) {
-        console.error('Auth check failed', err);
-      }
-    };
-    checkAdmin();
+    // Check if user is admin - using localStorage to avoid network calls
+    if (typeof window !== 'undefined' && localStorage.getItem("admin_auth_ui_flag") === "true") {
+      setIsAdmin(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -78,6 +69,23 @@ function ProfileContent() {
     }
 
     async function fetchProfile() {
+      const CACHE_KEY = `profile_detail_v1_${id}`;
+      const CACHE_TTL = 10 * 60 * 1000; // 10 minutes cache
+
+      // Try load from cache
+      try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+          const { timestamp, data } = JSON.parse(cached);
+          if (Date.now() - timestamp < CACHE_TTL) {
+            setProfile(data);
+            if (data.images && data.images.length > 0) setSelectedImage(data.images[0]);
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (e) { }
+
       try {
         // Fetch from DynamoDB (Metadata)
         const dynRes = await fetch(`/api/profile?id=${encodeURIComponent(id!)}`); // Use state id
@@ -100,50 +108,41 @@ function ProfileContent() {
             s3Images = imgs.map((i: any) => i.full_path);
         }
 
+        let finalProfile: any = null;
+
         if (dynData_profile) {
             // Merge: Use DynamoDB metadata, but prefer S3 images if available
-            const finalProfile = { ...dynData_profile };
+            finalProfile = { ...dynData_profile };
             if (s3Images.length > 0) {
                 finalProfile.images = s3Images;
             }
             // Ensure images array exists
             if (!finalProfile.images) finalProfile.images = [];
-            
-            setProfile(finalProfile);
-            if (finalProfile.images.length > 0) {
-                setSelectedImage(finalProfile.images[0]);
-            }
-            setLoading(false);
-            return;
-        }
-        
-        // Fallback: If no DynamoDB profile, try to build from S3 data (Legacy/Fallback)
-        if (s3Images.length > 0) {
-            // We have images but no metadata record in DynamoDB. 
-            // Try to extract metadata from the first image's S3 metadata if available (the BFF might return it)
-            // The BFF returns { filename, full_path, metadata? }
-            // Let's check the structure returned by BFF again.
-            // list_profile_images in lambda returns { filename, full_path } mostly.
-            // But list_images for main grid returned metadata. 
-            // list_profile_images for details page might NOT return metadata for all images.
-            // However, usually the first image might have metadata preserved if uploaded via old tool.
-            
-            // For now, just show images with defaults
-            setProfile({
+        } else if (s3Images.length > 0) {
+            // Fallback: If no DynamoDB profile, try to build from S3 data (Legacy/Fallback)
+            finalProfile = {
                 id: id!,
-                name: profile?.name || 'Aliya', // Fallback name
-                age: profile?.age || '23', // Fallback age
+                name: queryName || 'Aliya', // Fallback name
+                age: '23', // Fallback age
                 gender: 'female',
                 description: 'Ahmedabad Escort Service - Contact for Booking and Inquiries.',
                 location: 'Ahmedabad',
                 images: s3Images,
-            });
-            setSelectedImage(s3Images[0]);
-            setLoading(false);
-            return;
+            };
         }
 
-        setError('Profile not found');
+        if (finalProfile) {
+            setProfile(finalProfile);
+            if (finalProfile.images && finalProfile.images.length > 0) {
+                setSelectedImage(finalProfile.images[0]);
+            }
+            // Save Cache
+            try {
+                localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: finalProfile }));
+            } catch(e) {}
+        } else {
+             setError('Profile not found');
+        }
 
       } catch (err) {
         console.error(err);

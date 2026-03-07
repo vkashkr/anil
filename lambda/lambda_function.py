@@ -90,33 +90,55 @@ def list_profile_images(event):
         }
 def list_images(event):
     try:
-        response = s3.list_objects_v2(Bucket=BUCKET)
+        qs = event.get('queryStringParameters') or {}
+        limit = int(qs.get('limit', 50))
+        next_token = qs.get('next_token')
+        
+        list_params = {
+            'Bucket': BUCKET,
+            'MaxKeys': limit
+        }
+        if next_token:
+            list_params['ContinuationToken'] = next_token
+
+        response = s3.list_objects_v2(**list_params)
         images = []
+        
         for obj in response.get('Contents', []):
             key = obj['Key']
-            if key.endswith('profile.jpg'):
-                head = s3.head_object(Bucket=BUCKET, Key=key)
-                metadata = head.get('Metadata', {})
-                full_path = f"https://{BUCKET}.s3.amazonaws.com/{key}"
-                images.append({
-                    "id": key.split('/')[0],
-                    "filename": key,
-                    "full_path": full_path,
-                    "metadata": metadata
-                })
-            else:
-                head = s3.head_object(Bucket=BUCKET, Key=key)
-                metadata = head.get('Metadata', {})
-                full_path = f"https://{BUCKET}.s3.amazonaws.com/{key}"
-                images.append({
-                    "id": key.split('/')[0],
-                    "filename": key,
-                    "full_path": full_path
-                })
-        logger.info(f"Found {len(images)} images")
+            is_profile = key.endswith('profile.jpg')
+            metadata = {}
+            
+            if is_profile:
+                try:
+                    head = s3.head_object(Bucket=BUCKET, Key=key)
+                    metadata = head.get('Metadata', {})
+                except Exception as e:
+                    logger.error(f"Error getting metadata for {key}: {e}")
+
+            full_path = f"https://{BUCKET}.s3.amazonaws.com/{key}"
+            
+            img_data = {
+                "id": key.split('/')[0],
+                "filename": key,
+                "full_path": full_path,
+                "metadata": metadata
+            }
+            images.append(img_data)
+
+        logger.info(f"Found {len(images)} images in batch")
+        
+        result = {
+            "images": images
+        }
+        
+        if response.get('IsTruncated'):
+            # The key is NextContinuationToken, not NextToken
+            result['next_token'] = response.get('NextContinuationToken')
+
         return {
             "statusCode": 200,
-            "body": json.dumps({"images": images})
+            "body": json.dumps(result)
         }
     except Exception as e:
         logger.info(f"Error listing images: {e}")
@@ -429,7 +451,7 @@ def generate_profile_html(profile):
                     {service_tags}
                     <div class="mt-8 pt-6 border-t border-white/10">
                         <h3 class="text-lg font-bold text-white mb-4">Contact Information</h3>
-                        <a href="tel:+919999999999" class="block w-full text-center bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200 mb-4">Details: 📞 Call Now</a>
+                        <a href="tel:+919974599843" class="block w-full text-center bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200 mb-4">Details: 📞 Call Now</a>
                          <a href="https://wa.me/9199999999" class="block w-full text-center bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-400 hover:to-teal-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200">💬 WhatsApp Me</a>
                         <p class="text-center text-xs text-gray-500 mt-4">* Please mention you saw my profile on Aliya Escort</p>
                     </div>

@@ -15,6 +15,7 @@ export default function UploadImagePage() {
   const [result, setResult] = useState<string | null>(null);
 
   const handleLogout = async () => {
+    if (typeof window !== 'undefined') localStorage.removeItem("admin_auth_ui_flag");
     await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/login');
   };

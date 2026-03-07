@@ -3,7 +3,15 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   try {
-    const apiGatewayUrl = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp/view';
+    const { searchParams } = new URL(req.url);
+    const limit = searchParams.get('limit') || '50';
+    const next_token = searchParams.get('next_token');
+    
+    let apiGatewayUrl = `https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp/view?limit=${limit}`;
+    if (next_token) {
+        apiGatewayUrl += `&next_token=${encodeURIComponent(next_token)}`;
+    }
+    
     const apiResponse = await fetch(apiGatewayUrl, {
     });
 

@@ -14,7 +14,7 @@ export default function HeroVideo() {
           muted 
           loop
           playsInline
-          poster="/images/placeholder.png"
+          poster="/images/placeholder.svg"
         >
           <source src="/title.mp4" type="video/mp4" />
           Your browser does not support the video tag.

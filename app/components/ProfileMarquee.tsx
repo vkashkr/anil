@@ -36,7 +36,7 @@ export default function ProfileMarquee({ profiles }: { profiles: Profile[] }) {
                       alt={profile.name}
                       fill
                       className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
-                      onError={(e) => { (e.target as HTMLImageElement).src = '/images/placeholder.png'; }}
+                      onError={(e) => { (e.target as HTMLImageElement).src = '/images/placeholder.svg'; }}
                       sizes="(max-width: 640px) 144px, 122px"
                    />
                    {/* Shine effect */}
