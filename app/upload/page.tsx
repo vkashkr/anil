@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function UploadImagePage() {
+  const router = useRouter();
   const [images, setImages] = useState<File[]>([]);
   const [filenames, setFilenames] = useState<string[]>([]);
   const [id, setId] = useState("");
@@ -11,6 +13,11 @@ export default function UploadImagePage() {
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/login');
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -77,7 +84,12 @@ export default function UploadImagePage() {
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow" style={{ color: 'black' }}>
-      <h2 className="text-2xl font-bold mb-4" style={{ color: 'black' }}>Upload Image & Meta Data</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold" style={{ color: 'black' }}>Upload Image & Meta Data</h2>
+        <button onClick={handleLogout} className="px-3 py-1 text-sm text-red-600 border border-red-600 rounded hover:bg-red-50">
+          Logout
+        </button>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex items-center mb-2">
           <label className="font-medium mr-2" style={{ color: 'black', minWidth: 100 }}>Images</label>

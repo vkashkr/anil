@@ -1,8 +1,15 @@
 'use client';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
   const [isVisible, setIsVisible] = useState(true);
+  const pathname = usePathname();
+
+  // Hide footer on admin pages
+  if (pathname?.startsWith('/admin') || pathname?.startsWith('/upload') || pathname?.startsWith('/login') || pathname?.startsWith('/profile')) {
+    return null;
+  }
 
   return (
     <>

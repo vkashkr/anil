@@ -23,6 +23,11 @@ function ViewProfilesClient() {
   const searchParams = useSearchParams();
   const queryId = searchParams.get("id") || "";
 
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/login');
+  };
+
   useEffect(() => {
     async function fetchProfiles() {
       setLoading(true);
@@ -94,7 +99,12 @@ function ViewProfilesClient() {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded shadow" style={{ color: 'black' }}>
-      <h2 className="text-2xl font-bold mb-6" style={{ color: 'black' }}>Girl Profiles</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold" style={{ color: 'black' }}>Girl Profiles</h2>
+        <button onClick={handleLogout} className="px-3 py-1 text-sm text-red-600 border border-red-600 rounded hover:bg-red-50">
+          Logout
+        </button>
+      </div>
       <form
         onSubmit={e => {
           e.preventDefault();
