@@ -5,6 +5,11 @@ export interface Profile {
   name: string;
   age: string;
   gender: string;
+  country: string;
+  state: string;
+  district: string;
+  city: string;
+  place: string;
   location: string;
   description: string;
   services: string[];
@@ -16,6 +21,7 @@ export interface Profile {
   isVisible: boolean;
   updatedAt: string;
   extraProperties?: Record<string, string>;
+  reviews?: { name: string; rating: number; text: string; date: string }[];
 }
 
 const API_URL = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp/admin';
@@ -53,4 +59,8 @@ export async function getAllProfilesFromDynamoDB() {
 
 export async function deleteProfileFromDynamoDB(id: string) {
     return callApi({ action: 'delete_profile', id });
+}
+
+export async function addReviewToDynamoDB(id: string, review: { name: string; rating: number; text: string; date: string }) {
+    return callApi({ action: 'add_review', id, review });
 }

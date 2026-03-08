@@ -95,11 +95,13 @@ export function generateProfileHtml(profile: any) {
                             ${profile.age} Years Old
                         </span>
                         <span class="bg-yellow-600/20 text-yellow-300 px-3 py-1 rounded-full text-sm font-semibold border border-yellow-500/30">
-                            📍 ${profile.location}
+                            📍 ${profile.city || profile.location}${profile.state ? ', ' + profile.state : ''}${profile.country ? ', ' + profile.country : ''}
                         </span>
                         <span class="bg-purple-600/20 text-purple-300 px-3 py-1 rounded-full text-sm font-semibold border border-purple-500/30 capitalize">
                             ${profile.gender}
                         </span>
+                        ${profile.place ? `<span class="bg-teal-600/20 text-teal-300 px-3 py-1 rounded-full text-sm font-semibold border border-teal-500/30">📌 ${profile.place}</span>` : ''}
+                        ${profile.district ? `<span class="bg-indigo-600/20 text-indigo-300 px-3 py-1 rounded-full text-sm font-semibold border border-indigo-500/30">${profile.district}</span>` : ''}
                     </div>
 
                     <div class="space-y-4 text-gray-300 text-lg leading-relaxed">

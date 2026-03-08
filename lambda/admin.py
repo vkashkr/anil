@@ -7,6 +7,8 @@ from datetime import datetime
 dynamodb = boto3.resource('dynamodb')
 s3 = boto3.client('s3')
 
+from review import handle_add_review
+
 # Configuration
 TABLE_NAME = os.environ.get('TABLE_NAME', 'gif-gif')
 BUCKET_NAME = os.environ.get('BUCKET_NAME', 'www.aliyaescort.com')
@@ -101,11 +103,13 @@ def generate_profile_html(profile):
                             {profile.get('age', '')} Years Old
                         </span>
                         <span class="bg-yellow-600/20 text-yellow-300 px-3 py-1 rounded-full text-sm font-semibold border border-yellow-500/30">
-                            📍 {profile.get('location', '')}
+                            📍 {profile.get('city', '') or profile.get('location', '')}{', ' + profile.get('state') if profile.get('state') else ''}{', ' + profile.get('country') if profile.get('country') else ''}
                         </span>
                         <span class="bg-purple-600/20 text-purple-300 px-3 py-1 rounded-full text-sm font-semibold border border-purple-500/30 capitalize">
                             {profile.get('gender', '')}
                         </span>
+                        {'<span class="bg-teal-600/20 text-teal-300 px-3 py-1 rounded-full text-sm font-semibold border border-teal-500/30">📌 ' + profile.get('place', '') + '</span>' if profile.get('place') else ''}
+                        {'<span class="bg-indigo-600/20 text-indigo-300 px-3 py-1 rounded-full text-sm font-semibold border border-indigo-500/30">' + profile.get('district', '') + '</span>' if profile.get('district') else ''}
                     </div>
 
                     <div class="space-y-4 text-gray-300 text-lg leading-relaxed">
@@ -157,6 +161,11 @@ def lambda_handler(event, context):
             }
             
     action = body.get('action')
+    
+    # Handle add_review action separately
+    if action == 'add_review':
+        return handle_add_review(body, table)
+    
     profile = body.get('profile')
     
     if not profile or not profile.get('id'):

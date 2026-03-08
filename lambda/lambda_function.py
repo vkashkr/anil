@@ -4,6 +4,7 @@ import boto3
 import os
 import logging
 from datetime import datetime
+from review import handle_add_review
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -283,7 +284,7 @@ def admin_handler(event):
         except Exception as e:
              return {'statusCode': 500, 'body': json.dumps({'success': False, 'message': str(e)})}
 
-    if not profile and action not in ['get_profile', 'scan_profiles', 'delete_profile']:
+    if not profile and action not in ['get_profile', 'scan_profiles', 'delete_profile', 'add_review']:
         if not profile or not profile.get('id'):
             return {'statusCode': 400, 'body': json.dumps({'success': False, 'message': 'Missing profile data or ID'})}
         
@@ -343,6 +344,9 @@ def admin_handler(event):
                 },
                 'body': json.dumps({'success': True, 'message': 'Profile deleted'})
             }
+
+        elif action == 'add_review':
+            return handle_add_review(body, table)
 
         # 1. Save to DynamoDB (default action for 'save' or 'publish')
         if action in ['save', 'publish']:
@@ -452,7 +456,7 @@ def generate_profile_html(profile):
                     <div class="mt-8 pt-6 border-t border-white/10">
                         <h3 class="text-lg font-bold text-white mb-4">Contact Information</h3>
                         <a href="tel:+919974599843" class="block w-full text-center bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200 mb-4">Details: 📞 Call Now</a>
-                         <a href="https://wa.me/9199999999" class="block w-full text-center bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-400 hover:to-teal-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200">💬 WhatsApp Me</a>
+                         <a href="https://wa.me/919974599843" class="block w-full text-center bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-400 hover:to-teal-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200">💬 WhatsApp Me</a>
                         <p class="text-center text-xs text-gray-500 mt-4">* Please mention you saw my profile on Aliya Escort</p>
                     </div>
                 </div>

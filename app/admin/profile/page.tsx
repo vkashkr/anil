@@ -23,6 +23,11 @@ function AdminProfileEditorContent() {
                 // Check string fields to avoid undefined
                 p.name = p.name || '';
                 p.age = p.age || '';
+                p.country = p.country || 'India';
+                p.state = p.state || 'Gujarat';
+                p.district = p.district || '';
+                p.city = p.city || 'Ahmedabad';
+                p.place = p.place || '';
                 p.location = p.location || '';
                 p.description = p.description || '';
                 p.customCss = p.customCss || '';
@@ -41,6 +46,11 @@ function AdminProfileEditorContent() {
     name: '',
     age: '',
     gender: 'female',
+    country: 'India',
+    state: 'Gujarat',
+    district: '',
+    city: 'Ahmedabad',
+    place: '',
     location: 'Ahmedabad',
     description: '',
     services: [] as string[],
@@ -51,6 +61,64 @@ function AdminProfileEditorContent() {
     isVisible: true,
     extraProperties: {} as Record<string, string>
   });
+
+  const descEditorRef = React.useRef<HTMLDivElement>(null);
+  const seoTitleRef = React.useRef<HTMLInputElement>(null);
+  const seoDescRef = React.useRef<HTMLTextAreaElement>(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showSeoTitleEmoji, setShowSeoTitleEmoji] = useState(false);
+  const [showSeoDescEmoji, setShowSeoDescEmoji] = useState(false);
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [showSource, setShowSource] = useState(false);
+  const descInitialized = React.useRef(false);
+
+  const CSS_PRESETS = [
+    { label: 'Pink Border Card', value: '.profile-card { border: 2px solid #ec4899; border-radius: 16px; }' },
+    { label: 'Glow Shadow', value: 'img { box-shadow: 0 0 20px rgba(236, 72, 153, 0.5); }' },
+    { label: 'Gradient Background', value: 'body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }' },
+    { label: 'Rounded Images', value: 'img { border-radius: 20px; }' },
+    { label: 'Neon Pink Text', value: 'h1, h2 { color: #ff6ec7; text-shadow: 0 0 10px #ff6ec7, 0 0 20px #ff6ec7; }' },
+    { label: 'Gold Accent', value: 'h1, h2 { color: #ffd700; } a { color: #ffd700; }' },
+    { label: 'Dark Glassmorphism', value: '.bg-black\\/40 { background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }' },
+    { label: 'Animate Pulse Name', value: 'h1 { animation: pulse 2s infinite; }' },
+    { label: 'Hide Contact Section', value: '.mt-8.pt-6 { display: none; }' },
+    { label: 'Large Font Body', value: 'body { font-size: 18px; }' },
+  ];
+
+  const insertEmojiIntoField = (emoji: string, field: 'seoTitle' | 'seoDescription') => {
+    const ref = field === 'seoTitle' ? seoTitleRef.current : seoDescRef.current;
+    if (!ref) return;
+    const start = ref.selectionStart || 0;
+    const text = profile[field];
+    const newText = text.substring(0, start) + emoji + text.substring(start);
+    setProfile(prev => ({ ...prev, [field]: newText }));
+    setTimeout(() => {
+      ref.focus();
+      ref.selectionStart = ref.selectionEnd = start + emoji.length;
+    }, 0);
+  };
+
+  const EMOJI_LIST = ['😊','😍','💋','❤️','🔥','💃','👄','✨','💎','🌹','👸','🥰','😘','💕','🎀','💖','🫦','🍑','💅','🦋'];
+
+  const COLORS = ['#000000','#e11d48','#db2777','#a855f7','#3b82f6','#059669','#eab308','#f97316','#ffffff'];
+
+  const execCmd = (command: string, value?: string) => {
+    document.execCommand(command, false, value);
+    descEditorRef.current?.focus();
+    syncDescription();
+  };
+
+  const syncDescription = () => {
+    if (descEditorRef.current) {
+      setProfile(prev => ({ ...prev, description: descEditorRef.current?.innerHTML || '' }));
+    }
+  };
+
+  const insertEmojiIntoEditor = (emoji: string) => {
+    descEditorRef.current?.focus();
+    document.execCommand('insertText', false, emoji);
+    syncDescription();
+  };
   const [newService, setNewService] = useState('');
   const [newImageUrl, setNewImageUrl] = useState('');
   const [newPropKey, setNewPropKey] = useState('');
@@ -63,6 +131,11 @@ function AdminProfileEditorContent() {
         ...p,
         name: p.name || '',
         age: p.age || '',
+        country: p.country || 'India',
+        state: p.state || 'Gujarat',
+        district: p.district || '',
+        city: p.city || 'Ahmedabad',
+        place: p.place || '',
         location: p.location || '',
         description: p.description || '',
         customCss: p.customCss || '',
@@ -77,6 +150,14 @@ function AdminProfileEditorContent() {
     const { name, value } = e.target;
     setProfile(prev => ({ ...prev, [name]: value }));
   };
+
+  // Initialize WYSIWYG editor content (only once after data loads)
+  useEffect(() => {
+    if (descEditorRef.current && profile.description && !descInitialized.current) {
+      descEditorRef.current.innerHTML = profile.description;
+      descInitialized.current = true;
+    }
+  }, [profile.description]);
 
   // Add Service
   const addService = () => {
@@ -180,16 +261,133 @@ function AdminProfileEditorContent() {
                 <option value="trans">Trans</option>
               </select>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Location</label>
-              <input type="text" name="location" value={profile.location} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+          </div>
+
+          {/* Location Details */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3 text-gray-800">Location Details</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Country</label>
+                <input type="text" name="country" value={profile.country} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">State</label>
+                <input type="text" name="state" value={profile.state} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">District / Municipality</label>
+                <input type="text" name="district" value={profile.district} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" placeholder="e.g. Ahmedabad District" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">City</label>
+                <input type="text" name="city" value={profile.city} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Place / Area</label>
+                <input type="text" name="place" value={profile.place} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" placeholder="e.g. CG Road, Navrangpura" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Display Location (legacy)</label>
+                <input type="text" name="location" value={profile.location} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+              </div>
             </div>
           </div>
 
-          {/* Detailed Info */}
+          {/* Detailed Info with WYSIWYG Editor */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">About Description</label>
-            <textarea name="description" value={profile.description} onChange={handleChange} rows={5} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+            <label className="block text-sm font-medium text-gray-700 mb-1">About Description</label>
+            {/* Rich Text Toolbar */}
+            <div className="flex flex-wrap items-center gap-1 bg-gray-100 border border-gray-300 rounded-t-md p-2">
+              <button type="button" onClick={() => execCmd('bold')} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 font-bold text-sm" title="Bold">B</button>
+              <button type="button" onClick={() => execCmd('italic')} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 italic text-sm" title="Italic">I</button>
+              <button type="button" onClick={() => execCmd('underline')} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 underline text-sm" title="Underline">U</button>
+              <button type="button" onClick={() => execCmd('strikeThrough')} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 line-through text-sm" title="Strikethrough">S</button>
+              <div className="w-px h-6 bg-gray-300 mx-1"></div>
+              <select onChange={(e) => { if (e.target.value) { execCmd('formatBlock', e.target.value); e.target.value = ''; }}} className="px-2 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-200" defaultValue="">
+                <option value="" disabled>Heading</option>
+                <option value="h1">H1 - Largest</option>
+                <option value="h2">H2 - Large</option>
+                <option value="h3">H3 - Medium</option>
+                <option value="h4">H4 - Small</option>
+                <option value="p">Paragraph</option>
+              </select>
+              <select onChange={(e) => { if (e.target.value) { execCmd('fontSize', e.target.value); e.target.value = ''; }}} className="px-2 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-200" defaultValue="">
+                <option value="" disabled>Size</option>
+                <option value="1">Tiny</option>
+                <option value="2">Small</option>
+                <option value="3">Normal</option>
+                <option value="4">Large</option>
+                <option value="5">X-Large</option>
+                <option value="6">XX-Large</option>
+                <option value="7">Huge</option>
+              </select>
+              <div className="w-px h-6 bg-gray-300 mx-1"></div>
+              <button type="button" onClick={() => execCmd('justifyLeft')} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 text-sm" title="Align Left">⬅</button>
+              <button type="button" onClick={() => execCmd('justifyCenter')} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 text-sm" title="Center">⬛</button>
+              <button type="button" onClick={() => execCmd('justifyRight')} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 text-sm" title="Align Right">➡</button>
+              <div className="w-px h-6 bg-gray-300 mx-1"></div>
+              <button type="button" onClick={() => execCmd('insertUnorderedList')} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 text-sm" title="Bullet List">• List</button>
+              <button type="button" onClick={() => execCmd('insertOrderedList')} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 text-sm" title="Numbered List">1. List</button>
+              <button type="button" onClick={() => execCmd('insertHorizontalRule')} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 text-sm" title="Horizontal Line">—</button>
+              <div className="w-px h-6 bg-gray-300 mx-1"></div>
+              {/* Color Picker */}
+              <div className="relative">
+                <button type="button" onClick={() => { setShowColorPicker(prev => !prev); setShowEmojiPicker(false); }} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 text-sm" title="Text Color">🎨</button>
+                {showColorPicker && (
+                  <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2 flex gap-1 z-50">
+                    {COLORS.map((color) => (
+                      <button key={color} type="button" onClick={() => { execCmd('foreColor', color); setShowColorPicker(false); }} className="w-6 h-6 rounded-full border border-gray-300 hover:scale-125 transition" style={{ backgroundColor: color }} />
+                    ))}
+                  </div>
+                )}
+              </div>
+              {/* Emoji Picker */}
+              <div className="relative">
+                <button type="button" onClick={() => { setShowEmojiPicker(prev => !prev); setShowColorPicker(false); }} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 text-sm" title="Emoji">😊</button>
+                {showEmojiPicker && (
+                  <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2 grid grid-cols-5 gap-1 z-50 w-48">
+                    {EMOJI_LIST.map((emoji) => (
+                      <button key={emoji} type="button" onClick={() => { insertEmojiIntoEditor(emoji); setShowEmojiPicker(false); }} className="text-xl hover:bg-gray-100 rounded p-1 cursor-pointer">{emoji}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="w-px h-6 bg-gray-300 mx-1"></div>
+              <button type="button" onClick={() => execCmd('removeFormat')} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 text-sm text-red-500" title="Clear Formatting">✕</button>
+              <button type="button" onClick={() => {
+                setShowSource(prev => {
+                  if (prev && descEditorRef.current) {
+                    // Switching from source to WYSIWYG — sync HTML into editor
+                    setTimeout(() => {
+                      if (descEditorRef.current) descEditorRef.current.innerHTML = profile.description;
+                    }, 0);
+                  }
+                  return !prev;
+                });
+              }} className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 text-sm font-mono" title="View/Edit HTML Source">&lt;/&gt;</button>
+            </div>
+            {/* WYSIWYG Editor */}
+            {showSource ? (
+              <textarea
+                value={profile.description}
+                onChange={(e) => {
+                  setProfile(prev => ({ ...prev, description: e.target.value }));
+                }}
+                rows={8}
+                className="block w-full border border-gray-300 border-t-0 rounded-b-md shadow-sm p-3 font-mono text-sm bg-gray-50"
+                placeholder="Edit HTML source directly..."
+              />
+            ) : (
+              <div
+                ref={descEditorRef}
+                contentEditable
+                suppressContentEditableWarning
+                onInput={syncDescription}
+                onBlur={syncDescription}
+                className="block w-full border border-gray-300 border-t-0 rounded-b-md shadow-sm p-3 min-h-[160px] bg-white prose prose-sm max-w-none focus:outline-none focus:ring-2 focus:ring-pink-500/30"
+              />
+            )}
           </div>
 
           {/* Services */}
@@ -211,9 +409,28 @@ function AdminProfileEditorContent() {
            {/* Images */}
           <div>
             <label className="block text-sm font-medium text-gray-700">Image URLs (AWS S3)</label>
-            <div className="flex gap-2 mt-1 mb-2">
-              <input type="text" value={newImageUrl} onChange={(e) => setNewImageUrl(e.target.value)} className="flex-1 border border-gray-300 rounded-md p-2" placeholder="https://..." />
-              <button onClick={addImage} className="bg-green-500 text-white px-4 py-2 rounded">Add</button>
+            <div className="flex flex-col gap-2 mt-1 mb-2">
+              <select
+                id="s3BucketSelect"
+                className="border border-gray-300 rounded-md p-2 text-sm bg-white"
+                defaultValue="https://gif-gif.s3.amazonaws.com/"
+              >
+                <option value="https://gif-gif.s3.amazonaws.com/">gif-gif (Images Bucket)</option>
+                <option value="https://www.aliyaescort.com/">www.aliyaescort.com (Site Bucket)</option>
+                <option value="https://gif.aliyaescort.com/img/">gif.aliyaescort.com/img</option>
+                <option value="">Custom URL (no prefix)</option>
+              </select>
+              <div className="flex gap-2">
+                <input type="text" value={newImageUrl} onChange={(e) => setNewImageUrl(e.target.value)} className="flex-1 border border-gray-300 rounded-md p-2" placeholder="path/to/image.jpg  or full https://..." />
+                <button onClick={() => {
+                  if (!newImageUrl.trim()) return;
+                  const select = document.getElementById('s3BucketSelect') as HTMLSelectElement;
+                  const prefix = select?.value || '';
+                  const url = newImageUrl.startsWith('http') ? newImageUrl : prefix + newImageUrl;
+                  setProfile(prev => ({ ...prev, images: [...prev.images, url] }));
+                  setNewImageUrl('');
+                }} className="bg-green-500 text-white px-4 py-2 rounded">Add</button>
+              </div>
             </div>
              <div className="flex flex-wrap gap-2">
               {profile.images.map((img, idx) => (
@@ -248,17 +465,74 @@ function AdminProfileEditorContent() {
           <div className="border-t pt-4">
             <h3 className="text-lg font-semibold mb-2">Advanced: Styling & SEO</h3>
             <div className="grid grid-cols-1 gap-4">
+              {/* Custom CSS */}
               <div>
-                 <label className="block text-sm font-medium text-gray-700">Custom CSS (Injected into page)</label>
-                 <textarea name="customCss" value={profile.customCss} onChange={handleChange} rows={4} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 font-mono text-sm bg-gray-50" placeholder=".profile-card { border: 2px solid pink; }" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">Custom CSS (Injected into page)</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  <select
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        setProfile(prev => ({
+                          ...prev,
+                          customCss: prev.customCss ? prev.customCss + '\n' + e.target.value : e.target.value
+                        }));
+                        e.target.value = '';
+                      }
+                    }}
+                    className="px-3 py-2 bg-white border border-gray-300 rounded-md text-sm hover:bg-gray-50 text-gray-700"
+                    defaultValue=""
+                  >
+                    <option value="" disabled>+ Add CSS Preset...</option>
+                    {CSS_PRESETS.map((preset) => (
+                      <option key={preset.label} value={preset.value}>{preset.label}</option>
+                    ))}
+                  </select>
+                  {profile.customCss && (
+                    <button type="button" onClick={() => setProfile(prev => ({ ...prev, customCss: '' }))} className="px-3 py-2 bg-red-50 border border-red-200 rounded-md text-sm text-red-600 hover:bg-red-100">Clear All CSS</button>
+                  )}
+                </div>
+                <textarea name="customCss" value={profile.customCss} onChange={handleChange} rows={4} className="block w-full border border-gray-300 rounded-md shadow-sm p-2 font-mono text-sm bg-gray-50" placeholder="Select a preset above or write custom CSS..." />
+                {profile.customCss && (
+                  <div className="mt-1 text-xs text-gray-500">Active rules: {profile.customCss.split('}').filter(r => r.trim()).length}</div>
+                )}
               </div>
+
+              {/* SEO Title */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">SEO Title</label>
-                <input type="text" name="seoTitle" value={profile.seoTitle} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">SEO Title</label>
+                <div className="flex gap-1 items-center">
+                  <input ref={seoTitleRef} type="text" name="seoTitle" value={profile.seoTitle} onChange={handleChange} className="flex-1 border border-gray-300 rounded-md shadow-sm p-2" placeholder="e.g. Pooja - Premium Escort in Ahmedabad" />
+                  <div className="relative">
+                    <button type="button" onClick={() => { setShowSeoTitleEmoji(prev => !prev); setShowSeoDescEmoji(false); }} className="px-2 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100 text-sm">😊</button>
+                    {showSeoTitleEmoji && (
+                      <div className="absolute top-full right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2 grid grid-cols-5 gap-1 z-50 w-48">
+                        {EMOJI_LIST.map((emoji) => (
+                          <button key={emoji} type="button" onClick={() => { insertEmojiIntoField(emoji, 'seoTitle'); setShowSeoTitleEmoji(false); }} className="text-xl hover:bg-gray-100 rounded p-1 cursor-pointer">{emoji}</button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {profile.seoTitle && <div className="mt-1 text-xs text-gray-500">{profile.seoTitle.length}/200 characters {profile.seoTitle.length > 200 ? '⚠️ Too long' : '✅'}</div>}
               </div>
+
+              {/* SEO Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">SEO Description</label>
-                 <textarea name="seoDescription" value={profile.seoDescription} onChange={handleChange} rows={2} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">SEO Description</label>
+                <div className="flex gap-1 items-start">
+                  <textarea ref={seoDescRef} name="seoDescription" value={profile.seoDescription} onChange={handleChange} rows={2} className="flex-1 border border-gray-300 rounded-md shadow-sm p-2" placeholder="e.g. Book Pooja for premium escort services in Ahmedabad. Verified, independent call girl..." />
+                  <div className="relative">
+                    <button type="button" onClick={() => { setShowSeoDescEmoji(prev => !prev); setShowSeoTitleEmoji(false); }} className="px-2 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100 text-sm">😊</button>
+                    {showSeoDescEmoji && (
+                      <div className="absolute top-full right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2 grid grid-cols-5 gap-1 z-50 w-48">
+                        {EMOJI_LIST.map((emoji) => (
+                          <button key={emoji} type="button" onClick={() => { insertEmojiIntoField(emoji, 'seoDescription'); setShowSeoDescEmoji(false); }} className="text-xl hover:bg-gray-100 rounded p-1 cursor-pointer">{emoji}</button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {profile.seoDescription && <div className="mt-1 text-xs text-gray-500">{profile.seoDescription.length}/1000 characters {profile.seoDescription.length > 1000 ? '⚠️ Too long' : '✅'}</div>}
               </div>
             </div>
           </div>
@@ -269,14 +543,14 @@ function AdminProfileEditorContent() {
               disabled={loading}
               className="flex-1 bg-gray-800 text-white py-3 rounded-lg hover:bg-gray-900 transition disabled:opacity-50"
             >
-              {loading ? 'Processing...' : 'Save Draft (DynamoDB)'}
+              {loading ? 'Saving...' : 'Save'}
             </button>
             <button 
               onClick={() => handleSubmit('publish')} 
               disabled={loading}
               className="flex-1 bg-pink-600 text-white py-3 rounded-lg hover:bg-pink-700 transition font-bold disabled:opacity-50"
             >
-             {loading ? 'Processing...' : 'Publish to S3 & Sitemap'}
+             {loading ? 'Publishing...' : 'Publish'}
             </button>
           </div>
 

@@ -1,4 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { PHONE_DISPLAY } from '@/app/lib/constants';
+
+function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
+  const [open, setOpen] = useState(index < 2);
+  return (
+    <div className="border border-white/10 rounded-xl overflow-hidden transition-all duration-200 hover:border-fuchsia-500/40">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left bg-white/5 hover:bg-fuchsia-900/20 transition"
+      >
+        <span className="font-semibold text-fuchsia-300 text-sm md:text-base">{q}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className={`h-5 w-5 text-pink-400 flex-shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <div className="px-4 py-3 text-gray-200 text-sm md:text-base leading-relaxed bg-black/30 border-t border-white/5">
+          {a}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function SEOContent() {
   return (
@@ -51,23 +78,20 @@ export default function SEOContent() {
           
           <div className="mt-8">
             <h3 className="font-bold text-lg text-fuchsia-400 uppercase tracking-wider mb-4">Frequently Asked Questions (FAQs)</h3>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {[
-                { q: "Are your call girls real and verified?", a: "Yes, all profiles are genuine and verified for authenticity." },
-                { q: "Is my privacy guaranteed?", a: "Absolutely. We maintain strict confidentiality for all clients." },
-                { q: "What payment options are available?", a: "We accept cash payment on delivery for your convenience." },
-                { q: "How fast can I book a call girl?", a: "Doorstep delivery in 30 minutes, 24/7 availability." }
+                { q: "Are your call girls real and verified?", a: "Yes, every profile on Aliya Escort is 100% genuine and manually verified. We conduct identity checks and ensure all photos are recent and unedited. You get exactly what you see on the profile." },
+                { q: "Is my privacy and identity completely safe?", a: "Absolutely. We maintain strict confidentiality — your personal details, booking history, and contact information are never shared with anyone. All communication is encrypted and our staff follows a strict privacy protocol." },
+                { q: "What payment methods do you accept?", a: "We accept cash payment on delivery for your convenience. No advance payment or online transfer is required. You pay only when you are satisfied with the service." },
+                { q: "How fast can I book a call girl?", a: "Our average delivery time is just 30 minutes within Ahmedabad city limits. We operate 24/7 including holidays. Simply call or WhatsApp us and we'll arrange everything immediately." },
+                { q: "Do you serve areas outside Ahmedabad?", a: "Yes! While our primary service area is Ahmedabad (SG Highway, Satellite, Vastrapur, Prahlad Nagar, Bodakdev, etc.), we also serve Gandhinagar, Sanand, and nearby cities within Gujarat on request." },
+                { q: "Can I choose a specific girl from the website?", a: "Of course! Browse our profiles, pick your preferred companion, and mention her name/ID when you call. If she's available, we'll send her to your location. If not, we'll suggest similar options." },
+                { q: "What is the minimum booking duration?", a: "The minimum booking is typically 1 hour. Extended bookings for overnight stays, dinner dates, or travel companionship are also available at special rates." },
+                { q: "Are there any hidden charges?", a: "No hidden charges whatsoever. The rate you see is the rate you pay. Travel charges may apply for locations outside city limits, which will be communicated upfront before confirmation." },
+                { q: "Do you offer incall and outcall services?", a: "Yes, we offer both. Incall means you visit our safe, clean, and private location. Outcall means the escort visits your hotel, home, or any private location of your choice." },
+                { q: `How do I contact you for booking?`, a: `You can reach us anytime via phone call or WhatsApp at ${PHONE_DISPLAY}. Our support team is available 24 hours a day, 7 days a week to assist with bookings and queries.` }
               ].map((faq, i) => (
-                <div key={i} className="transition-all duration-200 hover:scale-105 hover:bg-fuchsia-900/30 rounded-xl p-3 border border-transparent hover:border-fuchsia-500/30">
-                  <div className="flex gap-2">
-                    <span className="font-bold text-yellow-400 min-w-[20px]">Q:</span> 
-                    <span className="italic text-fuchsia-300">{faq.q}</span>
-                  </div>
-                  <div className="flex gap-2 mt-1">
-                    <span className="font-bold text-pink-400 min-w-[20px]">A:</span> 
-                    <span className="text-gray-100">{faq.a}</span>
-                  </div>
-                </div>
+                <FAQItem key={i} q={faq.q} a={faq.a} index={i} />
               ))}
             </div>
           </div>
