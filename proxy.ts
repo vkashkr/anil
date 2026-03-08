@@ -10,6 +10,11 @@ export function proxy(request: NextRequest) {
   // Check if the current route is protected (starts with any of the protected routes)
   const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
 
+  // Exclude admin login page from protection
+  if (pathname === '/admin/login') {
+    return NextResponse.next();
+  }
+
   if (isProtectedRoute) {
     const authToken = request.cookies.get('auth_token')?.value;
 

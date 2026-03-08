@@ -5,6 +5,7 @@ import os
 import logging
 from datetime import datetime
 from review import handle_add_review
+from user_auth import handle_signup, handle_verify_otp, handle_user_login, handle_resend_otp, handle_google_signin
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -40,6 +41,8 @@ def lambda_handler(event, context):
         return delete_image(event)
     elif routeKey == 'POST /admin':
         return admin_handler(event)
+    elif routeKey == 'POST /user-auth':
+        return user_auth_handler(event)
     else:
         return {"statusCode": 405, "body": "Method Not Allowed"}
 
@@ -241,6 +244,35 @@ def post_images(event):
             "statusCode": 500,
             "body": json.dumps({"error": str(e)})
         }
+
+def user_auth_handler(event):
+    logger.info("Processing User Auth Request")
+    body = event.get('body')
+    if body:
+        try:
+            if isinstance(body, str):
+                body = json.loads(body)
+        except Exception:
+            return {'statusCode': 400, 'body': json.dumps({'success': False, 'message': 'Invalid JSON body'})}
+    else:
+        return {'statusCode': 400, 'body': json.dumps({'success': False, 'message': 'Missing body'})}
+
+    USER_TABLE_NAME = os.environ.get('USER_TABLE_NAME', 'user-gif')
+    user_table = dynamodb.Table(USER_TABLE_NAME)
+
+    action = body.get('action')
+    if action == 'signup':
+        return handle_signup(body, user_table)
+    elif action == 'verify_otp':
+        return handle_verify_otp(body, user_table)
+    elif action == 'login':
+        return handle_user_login(body, user_table)
+    elif action == 'resend_otp':
+        return handle_resend_otp(body, user_table)
+    elif action == 'google_signin':
+        return handle_google_signin(body, user_table)
+    else:
+        return {'statusCode': 400, 'body': json.dumps({'success': False, 'message': f'Unknown auth action: {action}'})}
 
 def admin_handler(event):
     logger.info("Processing Admin Request")
