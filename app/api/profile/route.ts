@@ -1,16 +1,20 @@
 import { NextResponse } from 'next/server';
-import { getProfileFromDynamoDB } from '@/app/lib/dynamodb';
+import { getProfileFromDynamoDB, getProfileByNameFromDynamoDB } from '@/app/lib/dynamodb';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
+  const name = searchParams.get('name');
 
-  if (!id) {
-    return NextResponse.json({ success: false, message: 'ID is required' }, { status: 400 });
+  if (!id && !name) {
+    return NextResponse.json({ success: false, message: 'ID or name is required' }, { status: 400 });
   }
 
   try {
-    const profile = await getProfileFromDynamoDB(id);
+    const profile = id
+      ? await getProfileFromDynamoDB(id)
+      : await getProfileByNameFromDynamoDB(name!);
+
     if (profile) {
       return NextResponse.json({ success: true, profile });
     } else {

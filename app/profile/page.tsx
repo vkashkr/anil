@@ -49,18 +49,33 @@ function ProfileContent() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // If ID is not in query, try to get from localStorage using name
     if (!id && queryName && typeof window !== 'undefined') {
-       const storedId = localStorage.getItem(`profile_id_${queryName}`);
-       if (storedId) {
-         setId(storedId);
-       } else {
-         setError('Profile ID not found locally. Please try accessing from the home page.');
-         setLoading(false);
-       }
+      // First try localStorage (fast path for returning visitors)
+      const storedId = localStorage.getItem(`profile_id_${queryName}`);
+      if (storedId) {
+        setId(storedId);
+      } else {
+        // Fallback: resolve name → id via API (works for Google bot and direct links)
+        setLoading(true);
+        fetch(`/api/profile?name=${encodeURIComponent(queryName)}`)
+          .then(r => r.json())
+          .then(data => {
+            if (data.success && data.profile?.id) {
+              localStorage.setItem(`profile_id_${queryName}`, data.profile.id);
+              setId(data.profile.id);
+            } else {
+              setError('Profile not found.');
+              setLoading(false);
+            }
+          })
+          .catch(() => {
+            setError('Failed to load profile. Please try again.');
+            setLoading(false);
+          });
+      }
     } else if (!id && !queryName) {
-       setError('No profile identifier provided');
-       setLoading(false);
+      setError('No profile identifier provided');
+      setLoading(false);
     }
   }, [queryId, queryName]);
 
@@ -108,11 +123,6 @@ function ProfileContent() {
 
   useEffect(() => {
     if (!id) {
-       // Only start fetch if we have an ID (which might be set from localStorage effect)
-       if (queryName && !localStorage.getItem(`profile_id_${queryName}`) && !queryId) {
-           setError('Profile ID not found. Please navigate from home page.');
-           setLoading(false);
-       }
        return;
     }
 
@@ -268,12 +278,16 @@ function ProfileContent() {
         </div>
       </nav>
 
-      {/* Admin Quick Actions */}
+      {/* Admin Quick Actions — top bar */}
       {isAdmin && (
-        <div className="fixed bottom-4 right-4 z-50 flex gap-2">
-           <Link href={`/admin/profile?id=${id}`} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition transform hover:scale-105">
-              Edit / Manage
-           </Link>
+        <div className="bg-blue-950/80 border-b border-blue-700/40 px-4 py-2 flex items-center gap-3">
+          <span className="text-blue-300 text-xs font-semibold uppercase tracking-widest">Admin</span>
+          <Link
+            href={`/admin/profile?id=${id}`}
+            className="bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold py-1.5 px-5 rounded-full shadow transition"
+          >
+            ✏️ Edit / Manage Profile
+          </Link>
         </div>
       )}
 
