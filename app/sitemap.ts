@@ -41,12 +41,25 @@ async function fetchAllProfileNames(): Promise<string[]> {
   return Array.from(names);
 }
 
+interface StoryItem {
+  PK: string;
+  slug: string;
+  title: string;
+  updatedAt?: string;
+}
+
+async function fetchAllStories(): Promise<StoryItem[]> {
+  const res = await fetch(`${API_BASE}/story-list`, { next: { revalidate: 3600 } });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return Array.isArray(data?.stories) ? (data.stories as StoryItem[]) : [];
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: BASE_URL,           lastModified: new Date(), changeFrequency: 'daily',  priority: 1.0 },
-    { url: `${BASE_URL}/view`, lastModified: new Date(), changeFrequency: 'daily',  priority: 0.9 },
-    { url: `${BASE_URL}/stories`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
+    { url: BASE_URL,              lastModified: new Date(), changeFrequency: 'daily',  priority: 1.0 },
+    { url: `${BASE_URL}/stories`, lastModified: new Date(), changeFrequency: 'daily',  priority: 0.7 },
   ];
 
   // Fetch dynamic profiles and build profile routes
@@ -56,12 +69,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     profileRoutes = profileNames.map((slug) => ({
       url: `${BASE_URL}/profile?name=${encodeURIComponent(slug)}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'daily' as const,
       priority: 0.8,
     }));
   } catch (error) {
-    console.error('Sitemap generation error:', error);
+    console.error('Sitemap profile generation error:', error);
   }
 
-  return [...staticRoutes, ...profileRoutes];
+  // Fetch all stories and build story routes
+  let storyRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const stories = await fetchAllStories();
+    storyRoutes = stories.map((story) => ({
+      url: `${BASE_URL}/stories/entertainment?id=${encodeURIComponent(story.PK)}`,
+      lastModified: story.updatedAt ? new Date(story.updatedAt) : new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }));
+  } catch (error) {
+    console.error('Sitemap story generation error:', error);
+  }
+
+  return [...staticRoutes, ...profileRoutes, ...storyRoutes];
 }
