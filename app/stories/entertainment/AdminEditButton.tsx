@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function AdminEditButton() {
+export default function AdminEditButton({ slug }: { slug: string }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
@@ -18,7 +18,7 @@ export default function AdminEditButton() {
 
   return (
     <button
-      onClick={() => router.push('/admin/stories/edit/puri-raat-sapne-mein')}
+      onClick={() => router.push(`/admin/stories/edit/${encodeURIComponent(slug)}`)}
       className="fixed bottom-4 right-4 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-full shadow-lg z-50 flex items-center gap-2 transition-transform hover:scale-105"
     >
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

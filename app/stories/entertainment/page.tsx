@@ -1,29 +1,46 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import storyDataFallback from '@/public/data/story_1.json'
 import ReadingProgress from './ReadingProgress'
 import StoryImg from './StoryImg'
 import AdminEditButton from './AdminEditButton'
 
-const STORY_ID = 'story-002'
-const LAMBDA_BASE = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp'
-
-async function fetchStory(): Promise<typeof storyDataFallback> {
-  try {
-    const res = await fetch(`${LAMBDA_BASE}/story?id=${STORY_ID}`, {
-      next: { revalidate: 60 },
-    })
-    if (!res.ok) throw new Error(`Lambda ${res.status}`)
-    const data = await res.json()
-    // Lambda returns the item directly in body (not wrapped)
-    if (data && data.id) return data
-    throw new Error('Empty story')
-  } catch {
-    return storyDataFallback
-  }
+async function fetchStory(storyId: string): Promise<StoryData | null> {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const res = await fetch(
+    `${base}/bff/api/stories?id=${encodeURIComponent(storyId)}`,
+    { next: { revalidate: 60 } },
+  )
+  if (!res.ok) return null
+  const json = await res.json()
+  return json?.data ?? null
 }
 
 /* ─── Types ─────────────────────────────────────────────────── */
+interface StoryMeta {
+  author: string
+  summary: string
+  hook: string
+  genre: string
+  subGenre: string
+  rating: string
+  language: string
+  readingTimeMinutes: number
+  wordCount: number
+  themes: string[]
+  keywords: string[]
+  contentWarnings: string[]
+  coverImage: string
+  bannerImage: string
+  setting: string
+  tone: string
+  period: string
+  audience: string
+  createdAt: string
+  updatedAt: string
+  published?: boolean
+  featured?: boolean
+}
+
 interface StoryImage {
   id: string
   src: string
@@ -59,9 +76,28 @@ interface Character {
   arc: string
 }
 
+interface StoryData {
+  PK?: string
+  slug?: string
+  title: string
+  metadata: StoryMeta
+  paragraphs: Paragraph[]
+  images: StoryImage[]
+  characters: Character[]
+}
+
 /* ─── SEO Metadata ───────────────────────────────────────────── */
-export async function generateMetadata(): Promise<Metadata> {
-  const story = await fetchStory()
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ title?: string; id?: string }>
+}): Promise<Metadata> {
+  const params = await searchParams
+  const storyId = params.id || 'story-001'
+  const story = await fetchStory(storyId)
+  if (!story) {
+    return { title: 'Story not found' }
+  }
   return {
     title: story.title,
     description: story.metadata.summary,
@@ -172,8 +208,24 @@ function CharacterCard({ character }: { character: Character }) {
 }
 
 /* ─── Page ───────────────────────────────────────────────────── */
-export default async function EntertainmentStoryPage() {
-  const story = await fetchStory()
+export default async function EntertainmentStoryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ title?: string; id?: string }>
+}) {
+  const params = await searchParams
+  const storyId = params.id || 'story-001'
+  const story = await fetchStory(storyId)
+
+  if (!story) {
+    return (
+      <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center">
+        <h1 className="text-3xl font-bold mb-4">Story not found</h1>
+        <Link href="/stories" className="text-rose-400 hover:underline">← Back to Stories</Link>
+      </div>
+    )
+  }
+
   const { metadata: meta, paragraphs, images, characters } = story
 
   const imageMap = Object.fromEntries(
@@ -187,7 +239,7 @@ export default async function EntertainmentStoryPage() {
       <ReadingProgress />
 
       {/* Floating Edit Button (visible only to admins) */}
-      <AdminEditButton />
+      <AdminEditButton slug={story.slug || storyId} />
 
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="relative min-h-[92vh] flex flex-col justify-end overflow-hidden">
@@ -303,7 +355,7 @@ export default async function EntertainmentStoryPage() {
           .sort((a, b) => a.order - b.order)
           .map((para) => {
             const style    = getMoodStyle(para.mood)
-            const paraImgs = para.imageRefs
+            const paraImgs = (para.imageRefs ?? [])
               .map((ref) => imageMap[ref])
               .filter(Boolean) as StoryImage[]
 

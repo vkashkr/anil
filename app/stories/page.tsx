@@ -35,12 +35,21 @@ interface StorySummary {
   images: StoryImage[]
 }
 
-/* ─── Known slug → page URL map ────────────────────────────────── */
-function slugToUrl(slug: string): string {
-  const map: Record<string, string> = {
-    'puri-raat-sapne-mein': '/stories/entertainment',
-  }
-  return map[slug] ?? '/stories/entertainment'
+interface StoryListResponse {
+  success: boolean
+  stories: StorySummary[]
+  page: number
+  limit: number
+  total: number
+  totalPages: number
+}
+
+const PAGE_SIZE = 5
+
+/* ─── Story URL builder ────────────────────────────────────────── */
+function storyUrl(story: StorySummary): string {
+  const pk = story.PK ?? story.id ?? story.slug
+  return `/stories/entertainment?title=${encodeURIComponent(story.title)}&id=${encodeURIComponent(pk)}`
 }
 
 /* ─── SEO ───────────────────────────────────────────────────────── */
@@ -58,25 +67,23 @@ export const metadata: Metadata = {
 }
 
 
-async function fetchStories(): Promise<StorySummary[]> {
-  try {
-    const res = await fetch('http://localhost:3000/bff/api/stories/list', {
-      next: { revalidate: 60 },
-    })
-    if (!res.ok) throw new Error(`BFF ${res.status}`)
-    const json = await res.json()
-    const stories: StorySummary[] = Array.isArray(json?.stories) ? json.stories : []
-    return stories.filter((s) => s.metadata?.published !== false)
-  } catch {
-    return []
+async function fetchStories(page: number): Promise<StoryListResponse> {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const res = await fetch(
+    `${base}/bff/api/stories/list?page=${page}&limit=${PAGE_SIZE}`,
+    { next: { revalidate: 60 } },
+  )
+  if (!res.ok) {
+    return { success: false, stories: [], page, limit: PAGE_SIZE, total: 0, totalPages: 0 }
   }
+  return res.json()
 }
 
 /* ─── Story Card ────────────────────────────────────────────────── */
 function StoryCard({ story }: { story: StorySummary }) {
   const meta = story.metadata
   const coverImg = story.images?.find((i) => i.id === meta.coverImage)
-  const url = slugToUrl(story.slug)
+  const url = storyUrl(story)
 
   return (
     <Link
@@ -184,8 +191,14 @@ function StoryCard({ story }: { story: StorySummary }) {
 }
 
 /* ─── Page ──────────────────────────────────────────────────────── */
-export default async function StoriesPage() {
-  const stories = await fetchStories()
+export default async function StoriesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const params = await searchParams
+  const currentPage = Math.max(1, Number(params.page) || 1)
+  const { stories, total, totalPages } = await fetchStories(currentPage)
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
@@ -216,13 +229,16 @@ export default async function StoriesPage() {
         {/* Stats strip */}
         <div className="flex gap-6 mt-8 text-sm text-zinc-500">
           <span>
-            <span className="text-white font-semibold">{stories.length}</span>{' '}
-            {stories.length === 1 ? 'story' : 'stories'}
+            <span className="text-white font-semibold">{total}</span>{' '}
+            {total === 1 ? 'story' : 'stories'}
+          </span>
+          <span className="text-zinc-700">·</span>
+          <span>
+            Page <span className="text-white font-semibold">{currentPage}</span> of{' '}
+            <span className="text-white font-semibold">{totalPages}</span>
           </span>
           <span className="text-zinc-700">·</span>
           <span>Adult · 18+</span>
-          <span className="text-zinc-700">·</span>
-          <span>Updated regularly</span>
         </div>
       </header>
 
@@ -247,6 +263,53 @@ export default async function StoriesPage() {
             ))}
           </div>
         )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <nav className="flex items-center justify-center gap-4 mt-12" aria-label="Pagination">
+            {currentPage > 1 ? (
+              <Link
+                href={`/stories?page=${currentPage - 1}`}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-800 text-zinc-200 hover:bg-rose-700 hover:text-white transition-colors text-sm font-medium"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+              </Link>
+            ) : (
+              <span className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-900 text-zinc-600 text-sm font-medium cursor-not-allowed">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+              </span>
+            )}
+
+            <span className="text-sm text-zinc-400">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            {currentPage < totalPages ? (
+              <Link
+                href={`/stories?page=${currentPage + 1}`}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-800 text-zinc-200 hover:bg-rose-700 hover:text-white transition-colors text-sm font-medium"
+              >
+                Next
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            ) : (
+              <span className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-900 text-zinc-600 text-sm font-medium cursor-not-allowed">
+                Next
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            )}
+          </nav>
+        )}
       </main>
 
       {/* JSON-LD */}
@@ -263,7 +326,7 @@ export default async function StoriesPage() {
             hasPart: stories.map((s) => ({
               '@type': 'Article',
               headline: s.title,
-              url: `https://ahmedabad.aliyaescort.com${slugToUrl(s.slug)}`,
+              url: `https://ahmedabad.aliyaescort.com${storyUrl(s)}`,
             })),
           }),
         }}

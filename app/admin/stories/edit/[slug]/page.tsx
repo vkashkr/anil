@@ -192,11 +192,6 @@ function S3BrowserModal({
   );
 }
 
-/* ─── Slug → story-id map (extend as more stories are added) ────────── */
-const SLUG_TO_ID: Record<string, string> = {
-  'puri-raat-sapne-mein': 'story-002',
-};
-
 /* ─── Helper: textarea auto-grow ──────────────────────────────────── */
 function AutoTextarea({
   value,
@@ -305,23 +300,32 @@ export default function StoryEditPage() {
 
   /* ── Load story ── */
   useEffect(() => {
-    const storyId = SLUG_TO_ID[slug];
-    if (!storyId) {
-      setLoading(false);
-      return;
-    }
+    async function loadStory() {
+      try {
+        // First try fetching the story list to find PK by slug
+        const listRes = await fetch('/bff/api/stories/list?limit=200');
+        const listJson = await listRes.json();
+        const stories: { PK?: string; slug?: string }[] = listJson?.stories ?? [];
+        const match = stories.find((s) => s.slug === slug);
 
-    fetch(`/bff/api/stories?id=${encodeURIComponent(storyId)}`)
-      .then((r) => r.json())
-      .then((res) => {
-        if (!res?.data) throw new Error('Story not found in DynamoDB');
-        setStory(structuredClone(res.data as StoryData));
-        setRawJson(JSON.stringify(res.data, null, 2));
-      })
-      .catch((err: Error) => {
-        setSaveMsg({ ok: false, text: err.message ?? 'Failed to load story' });
-      })
-      .finally(() => setLoading(false));
+        if (!match?.PK) {
+          setLoading(false);
+          return;
+        }
+
+        const res = await fetch(`/bff/api/stories?id=${encodeURIComponent(match.PK)}`);
+        const json = await res.json();
+        if (!json?.data) throw new Error('Story not found in DynamoDB');
+        setStory(structuredClone(json.data as StoryData));
+        setRawJson(JSON.stringify(json.data, null, 2));
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Failed to load story';
+        setSaveMsg({ ok: false, text: message });
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadStory();
   }, [slug]);
 
   /* ── Keep raw JSON in sync when tab switches to json ── */
@@ -679,7 +683,7 @@ export default function StoryEditPage() {
                     <label className="block text-xs font-medium text-gray-400 mb-1">Image Refs (comma-sep)</label>
                     <input
                       type="text"
-                      value={para.imageRefs.join(', ')}
+                      value={(para.imageRefs ?? []).join(', ')}
                       onChange={(e) =>
                         updateParagraph(idx, 'imageRefs', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))
                       }
@@ -690,7 +694,7 @@ export default function StoryEditPage() {
 
                 <TagEditor
                   label="Themes"
-                  tags={para.themes}
+                  tags={para.themes ?? []}
                   onChange={(v) => updateParagraph(idx, 'themes', v)}
                 />
               </div>
