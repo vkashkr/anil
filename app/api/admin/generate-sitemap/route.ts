@@ -9,13 +9,13 @@ export async function POST(request: Request) {
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://www.aliyaescort.com/</loc>
+        <loc>https://ahmedabad.aliyaescort.com/</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     ${profiles.map(p => `
     <url>
-        <loc>https://www.aliyaescort.com/profiles/${p.id}.html</loc>
+        <loc>https://ahmedabad.aliyaescort.com/profile?name=${encodeURIComponent((p.name || '').trim().toLowerCase().replace(/\s+/g, '-'))}</loc>
         <lastmod>${p.updatedAt || new Date().toISOString()}</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>

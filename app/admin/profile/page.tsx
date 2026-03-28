@@ -69,6 +69,9 @@ function AdminProfileEditorContent() {
   const [showSeoTitleEmoji, setShowSeoTitleEmoji] = useState(false);
   const [showSeoDescEmoji, setShowSeoDescEmoji] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [seoSuggestions, setSeoSuggestions] = useState<{id: number; title: string; description: string}[]>([]);
+  const [showSeoSuggest, setShowSeoSuggest] = useState(false);
+  const [seoSuggestQuery, setSeoSuggestQuery] = useState('');
   const [showSource, setShowSource] = useState(false);
   const descInitialized = React.useRef(false);
 
@@ -150,6 +153,14 @@ function AdminProfileEditorContent() {
     const { name, value } = e.target;
     setProfile(prev => ({ ...prev, [name]: value }));
   };
+
+  // Load SEO suggestions from seo.json
+  useEffect(() => {
+    fetch('/data/seo.json')
+      .then(res => res.json())
+      .then(data => setSeoSuggestions(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, []);
 
   // Initialize WYSIWYG editor content (only once after data loads)
   useEffect(() => {
@@ -501,7 +512,16 @@ function AdminProfileEditorContent() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">SEO Title</label>
                 <div className="flex gap-1 items-center">
-                  <input ref={seoTitleRef} type="text" name="seoTitle" value={profile.seoTitle} onChange={handleChange} className="flex-1 border border-gray-300 rounded-md shadow-sm p-2" placeholder="e.g. Pooja - Premium Escort in Ahmedabad" />
+                  <input
+                    ref={seoTitleRef}
+                    type="text"
+                    name="seoTitle"
+                    value={profile.seoTitle}
+                    onChange={handleChange}
+                    onFocus={() => { if (!profile.seoTitle) setShowSeoSuggest(true); }}
+                    className="flex-1 border border-gray-300 rounded-md shadow-sm p-2"
+                    placeholder="e.g. Pooja - Premium Escort in Ahmedabad"
+                  />
                   <div className="relative">
                     <button type="button" onClick={() => { setShowSeoTitleEmoji(prev => !prev); setShowSeoDescEmoji(false); }} className="px-2 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100 text-sm">😊</button>
                     {showSeoTitleEmoji && (
@@ -512,15 +532,79 @@ function AdminProfileEditorContent() {
                       </div>
                     )}
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => { setShowSeoSuggest(prev => !prev); setSeoSuggestQuery(''); }}
+                    className="px-3 py-2 bg-yellow-50 border border-yellow-300 rounded-md hover:bg-yellow-100 text-sm text-yellow-700 whitespace-nowrap"
+                    title="Suggest from SEO library"
+                  >💡 Suggest</button>
                 </div>
                 {profile.seoTitle && <div className="mt-1 text-xs text-gray-500">{profile.seoTitle.length}/200 characters {profile.seoTitle.length > 200 ? '⚠️ Too long' : '✅'}</div>}
               </div>
+
+              {/* SEO Suggestion Panel */}
+              {showSeoSuggest && (
+                <div className="border border-yellow-300 rounded-lg bg-yellow-50 p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-yellow-800">💡 SEO Suggestions ({seoSuggestions.length} available)</span>
+                    <button type="button" onClick={() => setShowSeoSuggest(false)} className="text-gray-400 hover:text-gray-700 text-lg leading-none">&times;</button>
+                  </div>
+                  <input
+                    type="text"
+                    value={seoSuggestQuery}
+                    onChange={(e) => setSeoSuggestQuery(e.target.value)}
+                    placeholder="Search suggestions..."
+                    className="w-full border border-yellow-300 rounded-md p-2 text-sm mb-2 bg-white"
+                  />
+                  <div className="max-h-64 overflow-y-auto space-y-2 pr-1">
+                    {seoSuggestions
+                      .filter(s =>
+                        !seoSuggestQuery ||
+                        s.title.toLowerCase().includes(seoSuggestQuery.toLowerCase()) ||
+                        s.description.toLowerCase().includes(seoSuggestQuery.toLowerCase())
+                      )
+                      .map(s => (
+                        <button
+                          key={s.id}
+                          type="button"
+                          onClick={() => {
+                            setProfile(prev => ({ ...prev, seoTitle: s.title, seoDescription: s.description }));
+                            setShowSeoSuggest(false);
+                            setSeoSuggestQuery('');
+                          }}
+                          className="w-full text-left p-2 rounded-md bg-white border border-yellow-200 hover:bg-yellow-100 hover:border-yellow-400 transition"
+                        >
+                          <div className="text-xs font-bold text-yellow-700 mb-0.5">#{s.id}</div>
+                          <div className="text-sm font-semibold text-gray-800 leading-snug">{s.title}</div>
+                          <div className="text-xs text-gray-500 mt-1 line-clamp-2">{s.description.substring(0, 120)}…</div>
+                        </button>
+                      ))
+                    }
+                    {seoSuggestions.filter(s =>
+                      !seoSuggestQuery ||
+                      s.title.toLowerCase().includes(seoSuggestQuery.toLowerCase()) ||
+                      s.description.toLowerCase().includes(seoSuggestQuery.toLowerCase())
+                    ).length === 0 && (
+                      <div className="text-sm text-gray-400 text-center py-4">No suggestions match your search.</div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* SEO Description */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">SEO Description</label>
                 <div className="flex gap-1 items-start">
-                  <textarea ref={seoDescRef} name="seoDescription" value={profile.seoDescription} onChange={handleChange} rows={2} className="flex-1 border border-gray-300 rounded-md shadow-sm p-2" placeholder="e.g. Book Pooja for premium escort services in Ahmedabad. Verified, independent call girl..." />
+                  <textarea
+                    ref={seoDescRef}
+                    name="seoDescription"
+                    value={profile.seoDescription}
+                    onChange={handleChange}
+                    onFocus={() => { if (!profile.seoDescription) setShowSeoSuggest(true); }}
+                    rows={2}
+                    className="flex-1 border border-gray-300 rounded-md shadow-sm p-2"
+                    placeholder="e.g. Book Pooja for premium escort services in Ahmedabad. Verified, independent call girl..."
+                  />
                   <div className="relative">
                     <button type="button" onClick={() => { setShowSeoDescEmoji(prev => !prev); setShowSeoTitleEmoji(false); }} className="px-2 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100 text-sm">😊</button>
                     {showSeoDescEmoji && (

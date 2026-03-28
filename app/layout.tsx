@@ -20,12 +20,12 @@ export const metadata: Metadata = {
   description: "Looking for call girls in Ahmedabad? Aliya Escort provides genuine, independent, and high-profile call girls directly to your hotel or home. 100% safe & trusted service.",
   keywords: ["call girls in ahmedabad", "ahmedabad call girls", "escort service ahmedabad", "independent call girls", "college girls ahmedabad", "housewife escort", "vip escort service", "russian call girls", "night out girls", "female escort ahmedabad"],
   alternates: {
-    canonical: 'https://www.aliyaescort.com',
+    canonical: 'https://ahmedabad.aliyaescort.com',
   },
   openGraph: {
     title: "Call Girls in Ahmedabad | Aliya Escort Service",
     description: "Book specific verified call girls in Ahmedabad. No advance needed. 24/7 service available.",
-    url: 'https://www.aliyaescort.com',
+    url: 'https://ahmedabad.aliyaescort.com',
     siteName: 'Aliya Escort Ahmedabad',
     locale: 'en_IN',
     type: 'website',
@@ -47,9 +47,9 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "AdultEntertainment", // Or "LocalBusiness" if preferred
   "name": "Aliya Escort Ahmedabad",
-  "image": "https://www.aliyaescort.com/aliya-logo-A-4-improved.svg",
+  "image": "https://ahmedabad.aliyaescort.com/aliya-logo-A-4-improved.svg",
   "description": "Premium call girl and escort agency in Ahmedabad offering independent and high-profile companions.",
-  "url": "https://www.aliyaescort.com",
+  "url": "https://ahmedabad.aliyaescort.com",
   "telephone": "+919974599843",
   "address": {
     "@type": "PostalAddress",

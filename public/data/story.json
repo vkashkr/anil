@@ -1,0 +1,155 @@
+{
+  "id": "story-001",
+  "slug": "moonlit-train-journey",
+  "title": "The Moonlit Train Journey",
+
+  "metadata": {
+    "author": "Anil",
+    "createdAt": "2026-03-08",
+    "updatedAt": "2026-03-08",
+    "language": "en",
+    "genre": "mystery",
+    "subGenre": "psychological thriller",
+    "audience": "adult",
+    "rating": "PG-13",
+    "contentWarnings": ["mild suspense", "emotional tension"],
+    "themes": ["journey", "memory", "night", "identity"],
+    "tone": "melancholic",
+    "setting": "India, 1998, overnight express train",
+    "period": "historical",
+    "summary": "A traveler boards the last train of the night and finds a sealed envelope addressed to him in handwriting he recognizes from ten years ago — a dead man's hand.",
+    "hook": "The envelope was sealed. The sender had been dead for a decade.",
+    "readingTimeMinutes": 5,
+    "wordCount": 820,
+    "keywords": ["train", "letter", "night", "mystery", "ghost"],
+    "published": true,
+    "featured": false,
+    "coverImage": "img-cover",
+    "bannerImage": "img-banner"
+  },
+
+  "characters": [
+    {
+      "id": "char-1",
+      "name": "Arun",
+      "role": "protagonist",
+      "age": 34,
+      "occupation": "archivist",
+      "motivation": "Running away from a past he never reconciled",
+      "wound": "Lost his closest friend under circumstances he blames himself for",
+      "flaw": "Avoids confrontation; destroys evidence of pain rather than processing it",
+      "arc": "From avoidance to reluctant reckoning"
+    },
+    {
+      "id": "char-2",
+      "name": "Deepak",
+      "role": "ghost / antagonist",
+      "age": 33,
+      "occupation": "journalist (deceased)",
+      "motivation": "Left something unfinished; the letter is his last act",
+      "wound": "Died without being believed",
+      "flaw": "Trusted the wrong people",
+      "arc": "Revealed slowly through the letter's contents"
+    }
+  ],
+
+  "paragraphs": [
+    {
+      "id": "p1",
+      "order": 1,
+      "text": "Arun boarded the last train just as the station clock struck eleven. The platform was nearly empty, and a pale mist drifted between the iron pillars like something that had forgotten how to leave.",
+      "themes": ["journey", "night", "dread"],
+      "mood": "tense",
+      "characterRefs": ["char-1"],
+      "imageRefs": ["img-p1"]
+    },
+    {
+      "id": "p2",
+      "order": 2,
+      "text": "He chose a window seat in a carriage that smelled faintly of rain and old paper. On the seat beside him lay an envelope. His name was written on the front in blue ink — a hand he had not seen in ten years, and had never expected to see again.",
+      "themes": ["mystery", "memory", "identity"],
+      "mood": "unsettled",
+      "characterRefs": ["char-1", "char-2"],
+      "imageRefs": ["img-p2"]
+    },
+    {
+      "id": "p3",
+      "order": 3,
+      "text": "Deepak had been buried in the winter of 1988. Arun himself had stood at the graveside, collar up against the cold, telling himself it was not his fault. He had almost believed it by now.",
+      "themes": ["memory", "guilt", "grief"],
+      "mood": "sorrowful",
+      "characterRefs": ["char-1", "char-2"],
+      "imageRefs": []
+    },
+    {
+      "id": "p4",
+      "order": 4,
+      "text": "When he opened the letter, the train lurched forward, and the city lights began to fall away into darkness. The first line read: *I know what you told them. I know what you left out.*",
+      "themes": ["revelation", "guilt", "journey"],
+      "mood": "dread",
+      "characterRefs": ["char-1", "char-2"],
+      "imageRefs": ["img-p4"]
+    }
+  ],
+
+  "images": [
+    {
+      "id": "img-cover",
+      "src": "/images/stories/moonlit-train-cover.jpg",
+      "alt": "A lone train cutting through a fog-covered valley at night",
+      "caption": "The Moonlit Train Journey",
+      "type": "cover",
+      "usage": "cover",
+      "themes": ["night", "journey"],
+      "width": 1200,
+      "height": 630
+    },
+    {
+      "id": "img-banner",
+      "src": "/images/stories/night-train-wide.jpg",
+      "alt": "Night train moving through fog",
+      "caption": "An overnight train disappears into the dark",
+      "type": "scene",
+      "usage": "banner",
+      "themes": ["night", "journey"],
+      "width": 1920,
+      "height": 600
+    },
+    {
+      "id": "img-p1",
+      "src": "/images/stories/train-platform.jpg",
+      "alt": "Empty train platform at night under a single lamp",
+      "caption": "The station was nearly empty when Arun arrived.",
+      "type": "scene",
+      "usage": "inline",
+      "paragraphId": "p1",
+      "themes": ["night", "journey"],
+      "width": 800,
+      "height": 500
+    },
+    {
+      "id": "img-p2",
+      "src": "/images/stories/blue-envelope.jpg",
+      "alt": "A sealed envelope with a name written in blue ink resting on a train seat",
+      "caption": "The letter appeared where no one had been sitting.",
+      "type": "object",
+      "usage": "inline",
+      "paragraphId": "p2",
+      "themes": ["mystery", "memory"],
+      "width": 800,
+      "height": 500
+    },
+    {
+      "id": "img-p4",
+      "src": "/images/stories/letter-hands.jpg",
+      "alt": "Aged hands unfolding a handwritten letter by dim light",
+      "caption": "The first line erased ten years of careful forgetting.",
+      "type": "object",
+      "usage": "inline",
+      "paragraphId": "p4",
+      "themes": ["revelation", "guilt"],
+      "width": 800,
+      "height": 500
+    }
+  ]
+}

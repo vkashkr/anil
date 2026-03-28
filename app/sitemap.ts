@@ -1,87 +1,66 @@
 import { MetadataRoute } from 'next';
 
-type Profile = {
-  id: string | number;
-  name: string;
-  filename?: string;
-  metadata?: any;
-};
+const BASE_URL = 'https://ahmedabad.aliyaescort.com';
+const API_BASE = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp';
+
+async function fetchAllProfileNames(): Promise<string[]> {
+  const names = new Set<string>();
+  let nextToken: string | null = null;
+
+  // Paginate through all profiles
+  do {
+    const url: string = nextToken
+      ? `${API_BASE}/view?limit=100&next_token=${encodeURIComponent(nextToken)}`
+      : `${API_BASE}/view?limit=100`;
+
+    const res: Response = await fetch(url, { next: { revalidate: 3600 } });
+    if (!res.ok) break;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data: any = await res.json();
+    if (!data?.images || !Array.isArray(data.images)) break;
+
+    // Collect unique names from metadata
+    const seenIds = new Set<string>();
+    for (const img of data.images) {
+      const id = String(
+        (img.metadata && img.metadata.id) ||
+        (img.filename ? img.filename.split('/')[0] : '')
+      );
+      const name: string = img.metadata?.name || '';
+      if (id && name && name !== '-' && !seenIds.has(id)) {
+        seenIds.add(id);
+        const slug = name.trim().toLowerCase().replace(/\s+/g, '-');
+        if (slug) names.add(slug);
+      }
+    }
+
+    nextToken = data.next_token || null;
+  } while (nextToken);
+
+  return Array.from(names);
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://www.aliyaescort.com'; // Adjust domain as needed
-
   // Static routes
-  const staticRoutes = [
-    '',
-    '/login',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date(),
-    changeFrequency: 'daily' as const,
-    priority: route === '' ? 1 : 0.5,
-  }));
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url: BASE_URL,           lastModified: new Date(), changeFrequency: 'daily',  priority: 1.0 },
+    { url: `${BASE_URL}/view`, lastModified: new Date(), changeFrequency: 'daily',  priority: 0.9 },
+    { url: `${BASE_URL}/stories`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
+  ];
 
-  // Fetch dynamic profiles
+  // Fetch dynamic profiles and build profile routes
   let profileRoutes: MetadataRoute.Sitemap = [];
   try {
-    const apiGatewayUrl = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp/view';
-    // Revalidation: 3600 seconds (1 hour) to keep sitemap fresh but performant
-    const res = await fetch(apiGatewayUrl, { next: { revalidate: 3600 } });
-    
-    if (!res.ok) {
-        throw new Error(`Failed to fetch profiles: ${res.status}`);
-    }
-
-    const data = await res.json();
-    
-    if (data && data.images && Array.isArray(data.images)) {
-        // Map raw data to Profile type (Mirroring logic from page.tsx)
-        const mapped = data.images.map((img: any) => ({
-            id: (img.metadata && img.metadata.id) || (img.filename ? img.filename.split('/')[0] : img.filename),
-            name: img.metadata?.name || "-",
-            filename: img.filename,
-            metadata: img.metadata || {},
-        }));
-
-        // Group by id to get unique profiles
-        const grouped: { [id: string]: Profile[] } = {};
-        const metaById: { [id: string]: any } = {};
-
-        mapped.forEach((profile: Profile) => {
-            const pid = String(profile.id);
-            if (!grouped[pid]) grouped[pid] = [];
-            grouped[pid].push(profile);
-
-            // Prioritize metadata from 'profile.jpg' if available (same logic as main page)
-            if (profile.filename && profile.filename.endsWith('profile.jpg')) {
-                metaById[pid] = profile.metadata;
-            }
-        });
-
-        // Now we have unique IDs. We need one entry per ID.
-        // We take the first image or the one with metadata (after consolidation logic)
-        // Since we just need the Name and ID for the URL, we can pick the representative profile.
-        
-        profileRoutes = Object.keys(grouped).map((id) => {
-            // Apply metadata if found (to get correct name)
-            let representative = grouped[id][0];
-            if (metaById[id]) {
-                representative = { ...representative, ...metaById[id] };
-            }
-            
-            const slug = (representative.name || 'profile').replace(/\s+/g, '-').toLowerCase();
-            
-            return {
-                url: `${baseUrl}/profile?id=${id}&amp;name=${encodeURIComponent(slug)}`,
-                lastModified: new Date(),
-                changeFrequency: 'daily' as const,
-                priority: 0.8,
-            };
-        });
-    }
-
+    const profileNames = await fetchAllProfileNames();
+    profileRoutes = profileNames.map((slug) => ({
+      url: `${BASE_URL}/profile?name=${encodeURIComponent(slug)}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }));
   } catch (error) {
-    console.error('Error generating sitemap:', error);
+    console.error('Sitemap generation error:', error);
   }
 
   return [...staticRoutes, ...profileRoutes];

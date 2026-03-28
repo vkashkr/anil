@@ -6,6 +6,7 @@ import logging
 from datetime import datetime
 from review import handle_add_review
 from user_auth import handle_signup, handle_verify_otp, handle_user_login, handle_resend_otp, handle_google_signin
+from services.story import save_story, get_story_by_pk, get_all_stories_by_pk, list_all_stories
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -16,6 +17,7 @@ dynamodb = boto3.resource('dynamodb')
 BUCKET = os.environ.get('BUCKET_NAME', 'gif-gif')
 SITE_BUCKET = os.environ.get('SITE_BUCKET_NAME', 'www.aliyaescort.com')
 TABLE_NAME = os.environ.get('TABLE_NAME', 'gif-gif')
+STORY_TABLE_NAME = os.environ.get('STORY_TABLE_NAME', 'story-gif')
 table = dynamodb.Table(TABLE_NAME)
 
 def lambda_handler(event, context):
@@ -43,6 +45,30 @@ def lambda_handler(event, context):
         return admin_handler(event)
     elif routeKey == 'POST /user-auth':
         return user_auth_handler(event)
+    elif routeKey == 'POST /story':
+        return save_story(event)
+    elif routeKey == 'GET /story':
+        qs = event.get('queryStringParameters') or {}
+        pk = qs.get('id')
+        if not pk:
+            return {"statusCode": 400, "body": json.dumps({"error": "Missing 'id'"})}
+        item = get_story_by_pk(pk)
+        if not item:
+            return {"statusCode": 404, "body": json.dumps({"error": "Story not found"})}
+        return {"statusCode": 200, "body": json.dumps(item, default=str)}
+    elif routeKey == 'GET /stories':
+        qs = event.get('queryStringParameters') or {}
+        pk = qs.get('id')
+        if not pk:
+            return {"statusCode": 400, "body": json.dumps({"error": "Missing 'id'"})}
+        items = get_all_stories_by_pk(pk)
+        return {"statusCode": 200, "body": json.dumps(items, default=str)}
+    elif routeKey == 'GET /story-list':
+        try:
+            items = list_all_stories()
+            return {"statusCode": 200, "body": json.dumps({"stories": items}, default=str)}
+        except Exception as e:
+            return {"statusCode": 500, "body": json.dumps({"error": str(e)})}
     else:
         return {"statusCode": 405, "body": "Method Not Allowed"}
 

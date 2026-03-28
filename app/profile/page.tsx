@@ -417,7 +417,7 @@ function ProfileContent() {
                   </div>
                   <div className="flex gap-0.5">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <span key={i} className={i < review.rating ? 'text-yellow-400' : 'text-gray-600'}>★</span>
+                      <span key={i} className={i < Number(review.rating) ? 'text-yellow-400' : 'text-gray-600'}>★</span>
                     ))}
                   </div>
                 </div>
@@ -427,7 +427,7 @@ function ProfileContent() {
           </div>
           {/* Overall Rating */}
           {(() => {
-            const avg = reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
+            const avg = reviews.reduce((s, r) => s + Number(r.rating), 0) / reviews.length;
             const rounded = Math.round(avg * 10) / 10;
             const full = Math.round(avg);
             return (

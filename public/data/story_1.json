@@ -1,0 +1,298 @@
+{
+ "PK": "story-002",
+ "characters": [
+  {
+   "age": 28,
+   "arc": "From emotional shutdown to experiencing herself fully — even if only in a dream",
+   "flaw": "Mistakes numbness for control",
+   "id": "char-1",
+   "motivation": "Craves intimacy she has taught herself not to ask for",
+   "name": "Priya Deshmukh",
+   "occupation": "graphic designer, works from home",
+   "role": "protagonist",
+   "wound": "Ended a two-year relationship by staying silent when she should have spoken; has confused self-suppression with strength ever since"
+  }
+ ],
+ "images": [
+  {
+   "alt": "A woman's silhouette against a moonlit window in a dark room",
+   "caption": "Puri Raat Sapne Mein",
+   "height": 630,
+   "id": "img-cover",
+   "src": "/images/story/1/cover.svg",
+   "themes": [
+    "night",
+    "woman",
+    "desire"
+   ],
+   "type": "cover",
+   "usage": "cover",
+   "width": 1200
+  },
+  {
+   "alt": "Soft warm light spilling across tangled bedsheets at night",
+   "caption": "Ek raat jo sirf uski thi",
+   "height": 600,
+   "id": "img-banner",
+   "src": "/images/story/1/banner.svg",
+   "themes": [
+    "night",
+    "intimacy",
+    "dreams"
+   ],
+   "type": "scene",
+   "usage": "banner",
+   "width": 1920
+  },
+  {
+   "alt": "A small apartment room in summer heat, fan still, single window open",
+   "caption": "Bijli gayi thi. Raat ruki si thi.",
+   "height": 500,
+   "id": "img-p1",
+   "paragraphId": "p1",
+   "src": "/images/story/1/p1.svg",
+   "themes": [
+    "loneliness",
+    "night",
+    "stillness"
+   ],
+   "type": "scene",
+   "usage": "inline",
+   "width": 800
+  },
+  {
+   "alt": "Soft blue diffused light as if seen through glass in a dream state",
+   "caption": "Neend aayi sheeshe ke peeche se roshni ki tarah.",
+   "height": 500,
+   "id": "img-p2",
+   "paragraphId": "p2",
+   "src": "/images/story/1/p2.svg",
+   "themes": [
+    "dreams",
+    "softness",
+    "opening"
+   ],
+   "type": "mood",
+   "usage": "inline",
+   "width": 800
+  },
+  {
+   "alt": "A woman's bare silhouette standing in warm amber light, unguarded",
+   "caption": "Sab layers utar gayi thi. Jo bach gayi, woh Priya thi.",
+   "height": 500,
+   "id": "img-p3",
+   "paragraphId": "p3",
+   "src": "/images/story/1/p3.svg",
+   "themes": [
+    "liberation",
+    "identity",
+    "self-discovery"
+   ],
+   "type": "character",
+   "usage": "inline",
+   "width": 800
+  },
+  {
+   "alt": "Close-up of warm amber light falling across skin — abstract and intimate",
+   "caption": "Body keh rahi thi: main hoon. Tujhe allow hai.",
+   "height": 500,
+   "id": "img-p4",
+   "paragraphId": "p4",
+   "src": "/images/story/1/p4.svg",
+   "themes": [
+    "desire",
+    "permission",
+    "warmth"
+   ],
+   "type": "mood",
+   "usage": "inline",
+   "width": 800
+  },
+  {
+   "alt": "A woman lying still in the dark, face relaxed, lit by faint moonlight",
+   "caption": "Na koi aaya. Na koi gaya. Bas woh thi.",
+   "height": 500,
+   "id": "img-p5",
+   "paragraphId": "p5",
+   "src": "/images/story/1/p5.svg",
+   "themes": [
+    "night",
+    "self",
+    "freedom"
+   ],
+   "type": "character",
+   "usage": "inline",
+   "width": 800
+  },
+  {
+   "alt": "A woman holding her own face gently in the early morning light",
+   "caption": "Main hoon. Aur yahi kaafi hai.",
+   "height": 500,
+   "id": "img-p6",
+   "paragraphId": "p6",
+   "src": "/images/story/1/p6.svg",
+   "themes": [
+    "waking",
+    "self-acceptance",
+    "warmth"
+   ],
+   "type": "character",
+   "usage": "inline",
+   "width": 800
+  }
+ ],
+ "metadata": {
+  "audience": "adult",
+  "author": "Anil",
+  "bannerImage": "img-banner",
+  "contentWarnings": [
+   "sensual content",
+   "adult desire",
+   "intimate dreams",
+   "emotional longing"
+  ],
+  "coverImage": "img-cover",
+  "createdAt": "2026-03-08",
+  "featured": true,
+  "genre": "dark romance",
+  "hook": "Sapne mein koi aaya nahi. Woh khud aayi — apne andar se.",
+  "keywords": [
+   "sapna",
+   "raat",
+   "desire",
+   "loneliness",
+   "woman",
+   "dream",
+   "self",
+   "Pune",
+   "hinglish"
+  ],
+  "language": "hinglish",
+  "period": "contemporary",
+  "published": true,
+  "rating": "18+",
+  "readingTimeMinutes": 6,
+  "setting": "India, present day, a woman's apartment in a mid-size city",
+  "subGenre": "literary drama",
+  "summary": "Priya, a 28-year-old woman living alone in Pune, has been holding herself together for months after a quiet heartbreak. One sweltering summer night she falls into a dream so vivid, so entirely her own, that she wakes up changed — raw, trembling, and finally honest with herself.",
+  "themes": [
+   "desire",
+   "loneliness",
+   "dreams",
+   "self-discovery",
+   "forbidden longing"
+  ],
+  "tone": "sensual, melancholic, intimate",
+  "updatedAt": "2026-03-08",
+  "wordCount": 950
+ },
+ "paragraphs": [
+  {
+   "characterRefs": [
+    "char-1"
+   ],
+   "id": "p1",
+   "imageRefs": [
+    "img-p1"
+   ],
+   "mood": "quiet, heavy",
+   "order": 1,
+   "text": "June ka aakhri hapta tha. Pune mein bijli gayi thi, aur Priya apne chote se kamre mein akeli leti thi, ceiling fan bhi bandh, sirf ek khidki se warm, still air andar aa rahi thi. Usne apna phone neeche rakh diya — koi message nahi tha, koi reason nahi tha uski raah dekhne ka. Aankhein band karte waqt usne sirf yahi socha: kal subah office call hai. Bas itna.",
+   "themes": [
+    "loneliness",
+    "night",
+    "stillness"
+   ]
+  },
+  {
+   "characterRefs": [
+    "char-1"
+   ],
+   "id": "p2",
+   "imageRefs": [
+    "img-p2"
+   ],
+   "mood": "soft, opening",
+   "order": 2,
+   "text": "Neend aayi slowly — sheeshe ke peeche se aati hui roshni ki tarah. Sapna koi jagah nahi tha. Koi plot nahi tha, koi chehra nahi tha. Sirf ek feeling thi — jaise uska apna body ek baar phir uska tha. Haath apne the. Skin apni thi. Aur pehli baar kai mahino mein, woh apni hi skin mein comfortable thi.",
+   "themes": [
+    "dreams",
+    "body",
+    "self-possession"
+   ]
+  },
+  {
+   "characterRefs": [
+    "char-1"
+   ],
+   "id": "p3",
+   "imageRefs": [
+    "img-p3"
+   ],
+   "mood": "warm, raw",
+   "order": 3,
+   "text": "Sapne mein woh nagi thi — lekin yeh vulnerability nahi thi. Yeh kuch aur tha. Jaise sab layers utar gayi hon — woh jo hamesha theek rehti thi, woh jo kisi ko pareshaan nahi karti thi, woh jo last slice of pizza nahi leti thi kyunki dusre ko chahiye hogi. Woh sab kahin gayi. Aur jo bach gayi, woh sirf Priya thi — asli, bhari-puri, seedhi.",
+   "themes": [
+    "self-discovery",
+    "liberation",
+    "identity"
+   ]
+  },
+  {
+   "characterRefs": [
+    "char-1"
+   ],
+   "id": "p4",
+   "imageRefs": [
+    "img-p4"
+   ],
+   "mood": "intimate, certain",
+   "order": 4,
+   "text": "Usne khud ko chhua — bina darr ke, bina apology ke. Haath kaanpe nahi. Sapne mein ek bhi thought nahi aaya ki yeh sahi hai ya galat, koi dekh raha hai ya nahi. Sirf sensation thi — har nerve ending par ek slow, certain warmth — jaise body keh rahi ho: main hoon. Main yahan hoon. Tujhe allow hai.",
+   "themes": [
+    "desire",
+    "self-permission",
+    "pleasure"
+   ]
+  },
+  {
+   "characterRefs": [
+    "char-1"
+   ],
+   "id": "p5",
+   "imageRefs": [
+    "img-p5"
+   ],
+   "mood": "free, playful, deep",
+   "order": 5,
+   "text": "Puri raat aise hi rahi. Na koi aaya, na koi gaya. Bas woh thi aur uski apni breath — kabhi tez, kabhi slow. Kabhi woh hasti thi sapne mein khud se — ek natkhat, secret si hansi — aur kabhi bilkul chup ho jaati thi, aankhein band, sirf feel karti hui. Yeh sapna romantic nahi tha. Yeh kuch aur tha — zyada honest, zyada hers.",
+   "themes": [
+    "dreams",
+    "desire",
+    "self",
+    "night"
+   ]
+  },
+  {
+   "characterRefs": [
+    "char-1"
+   ],
+   "id": "p6",
+   "imageRefs": [
+    "img-p6"
+   ],
+   "mood": "grounded, quietly triumphant",
+   "order": 6,
+   "text": "Subah 5:43 pe aankhein khuli. Bahar chipchipaati garmi thi, ceiling fan phir bhi band. Priya kuch der ceiling dekhti rahi. Uska dil dhadak raha tha — lekin kisi darr se nahi. Kisi anjaani jagah se — jo abhi abhi milI thi, jo hamesha si thi, jo sirf ussi ki thi. Usne apni palms apne cheek par rakh liye. Warm the. Real the. *Main hoon,* usne socha. *Aur yahi kaafi hai.*",
+   "themes": [
+    "waking",
+    "self-acceptance",
+    "warmth",
+    "identity"
+   ]
+  }
+ ],
+ "slug": "puri-raat-sapne-mein",
+ "title": "Puri Raat Sapne Mein",
+ "updatedAt": "2026-03-08T09:43:08.335650"
+}
