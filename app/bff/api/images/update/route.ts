@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
 export async function PUT(req: NextRequest) {
+  const cookieStore = await cookies();
+  if (!cookieStore.get('auth_token')) {
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     const body = await req.json();
     const { filename, image, metadata } = body;

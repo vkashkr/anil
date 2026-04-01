@@ -4,6 +4,8 @@ import ReadingProgress from './ReadingProgress'
 import StoryImg from './StoryImg'
 import AdminEditButton from './AdminEditButton'
 
+const BASE_URL = 'https://ahmedabad.aliyaescort.com'
+
 async function fetchStory(storyId: string): Promise<StoryData | null> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   const res = await fetch(
@@ -98,12 +100,18 @@ export async function generateMetadata({
   if (!story) {
     return { title: 'Story not found' }
   }
+  // Fix #8 — canonical on every story page (prevents duplicate-content issues)
+  const storyUrl = `${BASE_URL}/stories/entertainment/${story.slug ?? storyId}`
   return {
     title: story.title,
     description: story.metadata.summary,
     keywords: story.metadata.keywords,
     robots: { index: true, follow: true },
+    alternates: {
+      canonical: storyUrl,
+    },
     openGraph: {
+      url: storyUrl,
       title: story.title,
       description: story.metadata.hook,
       type: 'article',

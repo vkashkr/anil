@@ -47,9 +47,9 @@ interface StoryListResponse {
 const PAGE_SIZE = 5
 
 /* ─── Story URL builder ────────────────────────────────────────── */
+// Fix #6 — path-based URL instead of ?id= query param (better for SEO indexing)
 function storyUrl(story: StorySummary): string {
-  const pk = story.PK ?? story.id ?? story.slug
-  return `/stories/entertainment?title=${encodeURIComponent(story.title)}&id=${encodeURIComponent(pk)}`
+  return `/stories/entertainment/${story.slug ?? story.PK ?? story.id}`
 }
 
 /* ─── SEO ───────────────────────────────────────────────────────── */
@@ -58,7 +58,12 @@ export const metadata: Metadata = {
   description:
     'Read original Hinglish short stories exploring desire, loneliness, and self-discovery. Sensual, melancholic, and beautifully written.',
   robots: { index: true, follow: true },
+  // Fix #7 — missing canonical on stories listing page
+  alternates: {
+    canonical: 'https://ahmedabad.aliyaescort.com/stories',
+  },
   openGraph: {
+    url: 'https://ahmedabad.aliyaescort.com/stories',
     title: 'Stories — Dark Romance & Literary Drama',
     description:
       'Read original Hinglish short stories exploring desire, loneliness, and self-discovery.',

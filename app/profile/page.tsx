@@ -80,10 +80,11 @@ function ProfileContent() {
   }, [queryId, queryName]);
 
   useEffect(() => {
-    // Check if user is admin - using localStorage to avoid network calls
-    if (typeof window !== 'undefined' && localStorage.getItem("admin_auth_ui_flag") === "true") {
-      setIsAdmin(true);
-    }
+    // Verify admin status via server-side cookie check
+    fetch('/api/admin/status')
+      .then((r) => r.json())
+      .then((data) => { if (data.isAdmin) setIsAdmin(true); })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {

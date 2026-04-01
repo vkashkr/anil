@@ -47,7 +47,7 @@ function ViewProfilesClient() {
           setProfiles([]);
           setError("No profiles found.");
         }
-      } catch (err: any) {
+      } catch {
         setError("Failed to load profiles.");
       } finally {
         setLoading(false);
@@ -92,8 +92,8 @@ function ViewProfilesClient() {
       } else {
         setResult(data.error || 'Update failed');
       }
-    } catch (err: any) {
-      setResult(err.message || 'Update failed');
+    } catch (e: unknown) {
+      setResult(e instanceof Error ? e.message : 'Update failed');
     }
   };
 

@@ -1,4 +1,3 @@
-// export const dynamic = "force-static" // This line is commented out to fix the runtime error for API route
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -18,7 +17,9 @@ export async function GET(req: NextRequest) {
     } catch (jsonError) {
       return NextResponse.json({ success: false, error: data }, { status: 502 });
     }
-    return NextResponse.json({ success: true, data });
+    return NextResponse.json({ success: true, data }, {
+      headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=600' },
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json({ success: false, error: message }, { status: 500 });

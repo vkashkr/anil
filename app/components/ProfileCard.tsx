@@ -36,20 +36,13 @@ export default function ProfileCard({ id, images }: ProfileCardProps) {
   // Safe slug generation
   const slug = (profile.name || 'profile').replace(/\s+/g, '-').toLowerCase();
 
-  const handleProfileClick = () => {
-    if (typeof window !== 'undefined') {
-       localStorage.setItem(`profile_id_${slug}`, String(profile.id));
-    }
-  };
-
   return (
     <div className="relative bg-white rounded-xl shadow-lg overflow-hidden flex flex-col group transition-transform duration-200 hover:scale-105">
       <div className="relative aspect-[3/4] w-full flex items-center justify-center bg-gray-100">
         {profile.full_path ? (
           <div className="relative w-full h-[440px] flex items-center justify-center">
             <Link 
-              href={`/profile?name=${encodeURIComponent(slug)}`} 
-              onClick={handleProfileClick}
+              href={`/profile/${encodeURIComponent(slug)}`} 
               className="block w-full h-full relative"
             >
               <Image

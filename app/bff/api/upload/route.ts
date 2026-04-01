@@ -1,5 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';  
+import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+
 export async function POST(req: NextRequest) {
+  const cookieStore = await cookies();
+  if (!cookieStore.get('auth_token')) {
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     const apiGatewayUrl = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp/upload';
     const requestBody = await req.text();

@@ -4,7 +4,10 @@ import { cookies } from 'next/headers';
 export async function POST(request: Request) {
   try {
     const { password } = await request.json();
-    const adminPassword = process.env.ADMIN_PASSWORD || 'adminAnil123';
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    if (!adminPassword) {
+      return NextResponse.json({ success: false, message: 'Server configuration error' }, { status: 500 });
+    }
 
     if (password === adminPassword) {
       // Set a cookie to indicate authentication

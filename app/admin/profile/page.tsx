@@ -37,6 +37,7 @@ function AdminProfileEditorContent() {
                 setProfile(p);
             }
         })
+        .catch(err => console.error('[AdminProfile] load error:', err))
         .finally(() => setLoading(false));
     }
   }, [id]);
@@ -129,23 +130,9 @@ function AdminProfileEditorContent() {
   
   // Ensure we don't switch from controlled to uncontrolled
   // The state initialization handles this, but let's double check data fetching doesn't introduce undefineds
-  useEffect(() => {
-    setProfile(p => ({
-        ...p,
-        name: p.name || '',
-        age: p.age || '',
-        country: p.country || 'India',
-        state: p.state || 'Gujarat',
-        district: p.district || '',
-        city: p.city || 'Ahmedabad',
-        place: p.place || '',
-        location: p.location || '',
-        description: p.description || '',
-        customCss: p.customCss || '',
-        seoTitle: p.seoTitle || '',
-        seoDescription: p.seoDescription || '',
-    }));
-  }, [profile.id]); // Re-run sanitization when ID changes (which triggers fetch)
+  // NOTE: The sanitization useEffect below was removed (fix #16) — it was redundant
+  // because the fetch useEffect above already applies defaults, and running setProfile
+  // on every profile.id change caused unnecessary re-renders.
 
 
   // Handle Input Changes
@@ -453,23 +440,130 @@ function AdminProfileEditorContent() {
             </div>
           </div>
 
-          {/* Extra Properties */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Extra Properties (Key-Value)</label>
-            <div className="flex gap-2 mt-1 mb-2">
-              <input type="text" value={newPropKey} onChange={(e) => setNewPropKey(e.target.value)} className="flex-1 border border-gray-300 rounded-md p-2" placeholder="Key (e.g. Height)" />
-              <input type="text" value={newPropValue} onChange={(e) => setNewPropValue(e.target.value)} className="flex-1 border border-gray-300 rounded-md p-2" placeholder="Value (e.g. 5'6)" />
-              <button onClick={addExtraProperty} className="bg-purple-500 text-white px-4 py-2 rounded">Add</button>
-            </div>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {profile.extraProperties && Object.entries(profile.extraProperties).map(([key, value]) => (
-                <div key={key} className="flex justify-between items-center bg-gray-50 border border-gray-200 p-2 rounded">
-                  <span className="font-semibold text-gray-700">{key}:</span>
-                  <span className="text-gray-600">{value}</span>
-                  <button onClick={() => removeExtraProperty(key)} className="text-red-500 font-bold ml-2">&times;</button>
+          {/* ── Physical Details ── */}
+          <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <h3 className="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <span className="text-pink-500">◆</span> Physical Details
+              <span className="text-xs text-gray-400 font-normal">(displayed on profile page)</span>
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {[
+                { key: 'height',      label: 'Height',      placeholder: "e.g. 5'4\" (163 cm)" },
+                { key: 'weight',      label: 'Weight',      placeholder: 'e.g. 52 kg' },
+                { key: 'hair',        label: 'Hair Colour', placeholder: 'e.g. Black' },
+                { key: 'eyes',        label: 'Eye Colour',  placeholder: 'e.g. Brown' },
+                { key: 'body_type',   label: 'Body Type',   placeholder: 'e.g. Slim / Curvy' },
+                { key: 'nationality', label: 'Nationality', placeholder: 'e.g. Indian' },
+                { key: 'ethnicity',   label: 'Ethnicity',   placeholder: 'e.g. South Asian' },
+              ].map(({ key, label, placeholder }) => (
+                <div key={key}>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+                  <input
+                    type="text"
+                    value={profile.extraProperties?.[key] ?? ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setProfile(prev => {
+                        const next = { ...prev.extraProperties };
+                        if (val) next[key] = val; else delete next[key];
+                        return { ...prev, extraProperties: next };
+                      });
+                    }}
+                    placeholder={placeholder}
+                    className="w-full border border-gray-300 rounded-md p-2 text-sm bg-white"
+                  />
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* ── Rates ── */}
+          <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <h3 className="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <span className="text-yellow-500">◆</span> Rates
+              <span className="text-xs text-gray-400 font-normal">(shown in yellow rates box)</span>
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {[
+                { key: 'rate_30min',   label: '30 Min',        placeholder: 'e.g. ₹1,500' },
+                { key: 'rate_1hr',     label: '1 Hour',         placeholder: 'e.g. ₹3,000' },
+                { key: 'rate_2hr',     label: '2 Hours',        placeholder: 'e.g. ₹5,000' },
+                { key: 'rate_night',   label: 'Full Night',     placeholder: 'e.g. ₹15,000' },
+                { key: 'rate_overnight', label: 'Overnight',   placeholder: 'e.g. ₹18,000' },
+                { key: 'incall',       label: 'Incall',         placeholder: 'e.g. Available' },
+                { key: 'outcall',      label: 'Outcall',        placeholder: 'e.g. Available' },
+              ].map(({ key, label, placeholder }) => (
+                <div key={key}>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+                  <input
+                    type="text"
+                    value={profile.extraProperties?.[key] ?? ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setProfile(prev => {
+                        const next = { ...prev.extraProperties };
+                        if (val) next[key] = val; else delete next[key];
+                        return { ...prev, extraProperties: next };
+                      });
+                    }}
+                    placeholder={placeholder}
+                    className="w-full border border-gray-300 rounded-md p-2 text-sm bg-white"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Languages ── */}
+          <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <h3 className="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <span className="text-blue-500">◆</span> Languages Spoken
+            </h3>
+            <input
+              type="text"
+              value={profile.extraProperties?.['languages'] ?? ''}
+              onChange={(e) => {
+                const val = e.target.value;
+                setProfile(prev => {
+                  const next = { ...prev.extraProperties };
+                  if (val) next['languages'] = val; else delete next['languages'];
+                  return { ...prev, extraProperties: next };
+                });
+              }}
+              placeholder="e.g. Hindi, English, Gujarati"
+              className="w-full border border-gray-300 rounded-md p-2 text-sm bg-white"
+            />
+          </div>
+
+          {/* ── Other Extra Properties (freeform) ── */}
+          <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <h3 className="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <span className="text-purple-500">◆</span> Other Properties
+              <span className="text-xs text-gray-400 font-normal">(custom key-value pairs)</span>
+            </h3>
+            <div className="flex gap-2 mb-3">
+              <input type="text" value={newPropKey} onChange={(e) => setNewPropKey(e.target.value)} className="flex-1 border border-gray-300 rounded-md p-2 text-sm bg-white" placeholder="Key (e.g. Tattoo)" />
+              <input type="text" value={newPropValue} onChange={(e) => setNewPropValue(e.target.value)} className="flex-1 border border-gray-300 rounded-md p-2 text-sm bg-white" placeholder="Value (e.g. None)" />
+              <button onClick={addExtraProperty} className="bg-purple-500 text-white px-4 py-2 rounded text-sm">Add</button>
+            </div>
+            {/* Show only freeform keys (not the structured ones above) */}
+            {(() => {
+              const structured = new Set(['height','weight','hair','eyes','body_type','nationality','ethnicity','rate_30min','rate_1hr','rate_2hr','rate_night','rate_overnight','incall','outcall','languages']);
+              const freeform = Object.entries(profile.extraProperties ?? {}).filter(([k]) => !structured.has(k));
+              return freeform.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {freeform.map(([key, value]) => (
+                    <div key={key} className="flex justify-between items-center bg-white border border-gray-200 p-2 rounded text-sm">
+                      <span className="font-semibold text-gray-700">{key}:</span>
+                      <span className="text-gray-600 mx-2 flex-1">{value}</span>
+                      <button onClick={() => removeExtraProperty(key)} className="text-red-500 font-bold">&times;</button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-gray-400">No custom properties yet.</p>
+              );
+            })()}
           </div>
 
           {/* Advanced / Styling */}

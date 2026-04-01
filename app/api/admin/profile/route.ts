@@ -18,6 +18,6 @@ export async function POST(request: Request) {
     return NextResponse.json(result);
   } catch (error) {
     console.error('Admin API Error:', error);
-    return NextResponse.json({ success: false, message: 'Failed to process request' + error }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Failed to process request' }, { status: 500 });
   }
 }

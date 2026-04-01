@@ -6,7 +6,7 @@ type Profile = {
   id: string | number;
   name: string;
   full_path: string;
-  [key: string]: any;
+  [key: string]: string | number | boolean | undefined | null;
 };
 
 export default function ProfileMarquee({ profiles }: { profiles: Profile[] }) {

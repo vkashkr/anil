@@ -76,9 +76,6 @@ function LoginForm() {
       const data = await res.json();
 
       if (data.success) {
-        if (data.user?.role === 'admin') {
-          localStorage.setItem('admin_auth_ui_flag', 'true');
-        }
         router.push(callbackUrl);
         router.refresh();
       } else {

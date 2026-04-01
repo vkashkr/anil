@@ -56,12 +56,12 @@ export function generateProfileHtml(profile: any) {
     </style>
 </head>
 <body class="bg-zinc-900 text-gray-100 font-sans">
-    <nav className="p-4 bg-black/50 backdrop-blur-md sticky top-0 z-50 border-b border-white/10">
-        <div className="max-w-6xl mx-auto flex justify-between items-center px-4 py-3">
-          <a href="/" className="text-pink-400 font-bold text-xl flex items-center gap-2 hover:text-pink-300 transition">
+    <nav class="p-4 bg-black/50 backdrop-blur-md sticky top-0 z-50 border-b border-white/10">
+        <div class="max-w-6xl mx-auto flex justify-between items-center px-4 py-3">
+          <a href="/" class="text-pink-400 font-bold text-xl flex items-center gap-2 hover:text-pink-300 transition">
             <span>←</span> Back to Home
           </a>
-          <div className="text-lg font-bold text-white">
+          <div class="text-lg font-bold text-white">
             ${profile.name}
           </div>
         </div>
@@ -126,7 +126,7 @@ export function generateProfileHtml(profile: any) {
                         <a href="tel:+919974599843" class="block w-full text-center bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200 mb-4">
                             Details: 📞 Call Now
                         </a>
-                         <a href="https://wa.me/9199999999" class="block w-full text-center bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-400 hover:to-teal-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200">
+                         <a href="https://wa.me/919974599843" class="block w-full text-center bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-400 hover:to-teal-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200">
                             💬 WhatsApp Me
                         </a>
                         <p class="text-center text-xs text-gray-500 mt-4">

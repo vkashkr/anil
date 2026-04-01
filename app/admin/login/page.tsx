@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
       });
 
       if (res.ok) {
-        localStorage.setItem('admin_auth_ui_flag', 'true');
+        // Fix #1 — httpOnly cookie is set server-side; no localStorage flag needed
         router.push('/admin/profile');
         router.refresh();
       } else {

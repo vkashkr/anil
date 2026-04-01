@@ -15,7 +15,6 @@ export default function UploadImagePage() {
   const [result, setResult] = useState<string | null>(null);
 
   const handleLogout = async () => {
-    if (typeof window !== 'undefined') localStorage.removeItem("admin_auth_ui_flag");
     await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/login');
   };
@@ -76,8 +75,8 @@ export default function UploadImagePage() {
       } else {
         setResult(data.error || "Upload failed.");
       }
-    } catch (err: any) {
-      setResult(err.message || "Error uploading.");
+    } catch (e: unknown) {
+      setResult(e instanceof Error ? e.message : 'Error uploading.');
     } finally {
       setUploading(false);
     }

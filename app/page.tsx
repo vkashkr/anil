@@ -64,10 +64,8 @@ export default function Home() {
   };
 
   const navigateToProfile = (id: string, name: string) => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(`profile_id_${name}`, id);
-    }
-    router.push(`/profile?id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}`);
+    void id;
+    router.push(`/profile/${encodeURIComponent(name)}`);
     setSearchQuery('');
     setSearchFocused(false);
   };

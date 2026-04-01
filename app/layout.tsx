@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://ahmedabad.aliyaescort.com'),
   title: {
     default: "Call Girls in Ahmedabad | Premium Escort Service | Aliya Escort",
     template: "%s | Aliya Escort Ahmedabad",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
   description: "Looking for call girls in Ahmedabad? Aliya Escort provides genuine, independent, and high-profile call girls directly to your hotel or home. 100% safe & trusted service.",
   keywords: ["call girls in ahmedabad", "ahmedabad call girls", "escort service ahmedabad", "independent call girls", "college girls ahmedabad", "housewife escort", "vip escort service", "russian call girls", "night out girls", "female escort ahmedabad"],
   alternates: {
-    canonical: 'https://ahmedabad.aliyaescort.com',
+    canonical: 'https://ahmedabad.aliyaescort.com/',
   },
   openGraph: {
     title: "Call Girls in Ahmedabad | Aliya Escort Service",
     description: "Book specific verified call girls in Ahmedabad. No advance needed. 24/7 service available.",
-    url: 'https://ahmedabad.aliyaescort.com',
+    url: 'https://ahmedabad.aliyaescort.com/',
     siteName: 'Aliya Escort Ahmedabad',
     locale: 'en_IN',
     type: 'website',
@@ -45,11 +46,12 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "AdultEntertainment", // Or "LocalBusiness" if preferred
+  "@type": "LocalBusiness",
+  "@id": "https://ahmedabad.aliyaescort.com/#business",
   "name": "Aliya Escort Ahmedabad",
   "image": "https://ahmedabad.aliyaescort.com/aliya-logo-A-4-improved.svg",
   "description": "Premium call girl and escort agency in Ahmedabad offering independent and high-profile companions.",
-  "url": "https://ahmedabad.aliyaescort.com",
+  "url": "https://ahmedabad.aliyaescort.com/",
   "telephone": "+919974599843",
   "address": {
     "@type": "PostalAddress",
@@ -64,20 +66,16 @@ const jsonLd = {
     "latitude": 23.0225,
     "longitude": 72.5714
   },
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday"
-    ],
-    "opens": "00:00",
-    "closes": "23:59"
-  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+      ],
+      "opens": "00:00",
+      "closes": "23:59"
+    }
+  ],
   "priceRange": "₹1000 - ₹10000"
 };
 
@@ -88,13 +86,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-gradient-to-br from-black via-fuchsia-950 to-gray-900`}
-      >
+      <head>
+        {/* JSON-LD structured data in <head> for optimal crawler discovery */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+      </head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-gradient-to-br from-black via-fuchsia-950 to-gray-900`}
+      >
         <main className="relative z-10 min-h-screen flex flex-col">
           {children}
         </main>

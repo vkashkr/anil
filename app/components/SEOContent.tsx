@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { PHONE_DISPLAY } from '@/app/lib/constants';
 

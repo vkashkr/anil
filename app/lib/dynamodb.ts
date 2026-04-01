@@ -1,5 +1,3 @@
-const TABLE_NAME = "gif-gif";
-
 export interface Profile {
   id: string; // Partition Key
   name: string;
@@ -26,21 +24,28 @@ export interface Profile {
 
 const API_URL = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp/admin';
 
-async function callApi(body: any) {
-    const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-    });
+async function callApi(body: Record<string, unknown>) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10_000);
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+            signal: controller.signal,
+        });
+        clearTimeout(timeout);
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`API Gateway Error: ${response.status} ${errorText}`);
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`API Gateway Error: ${response.status} ${errorText}`);
+        }
+
+        return response.json();
+    } catch (error) {
+        clearTimeout(timeout);
+        throw error;
     }
-
-    return response.json();
 }
 
 export async function saveProfileToDynamoDB(profile: Profile, action: string = 'save') {

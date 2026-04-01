@@ -8,10 +8,11 @@ export default function AdminEditButton({ slug }: { slug: string }) {
   const router = useRouter();
 
   useEffect(() => {
-    const isAdminFlag = localStorage.getItem('admin_auth_ui_flag');
-    if (isAdminFlag === 'true') {
-      setIsAdmin(true);
-    }
+    // Fix #1 — verify admin status via server-side cookie check, not localStorage
+    fetch('/api/admin/status')
+      .then((r) => r.json())
+      .then((data) => { if (data.isAdmin) setIsAdmin(true); })
+      .catch(() => {});
   }, []);
 
   if (!isAdmin) return null;
