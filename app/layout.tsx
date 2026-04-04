@@ -15,17 +15,17 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://ahmedabad.aliyaescort.com'),
   title: {
-    default: "Call Girls in Ahmedabad | Premium Escort Service | Aliya Escort",
+    default: "Ahmedabad Escort | Call Girls in Ahmedabad | Aliya Escort",
     template: "%s | Aliya Escort Ahmedabad",
   },
-  description: "Looking for call girls in Ahmedabad? Aliya Escort provides genuine, independent, and high-profile call girls directly to your hotel or home. 100% safe & trusted service.",
+  description: "Ahmedabad escort service — verified independent call girls available 24/7. Hotel & home delivery, no advance payment, real photos. Book now on Aliya Escort.",
   keywords: ["ahmedabad escort", "escort service ahmedabad", "call girls in ahmedabad", "ahmedabad call girls", "ahmedabad escort service", "independent call girls ahmedabad", "college girls ahmedabad", "housewife escort ahmedabad", "vip escort service", "russian call girls ahmedabad", "night out girls ahmedabad", "female escort ahmedabad", "local call girls ahmedabad", "escort girls ahmedabad", "cheap escort ahmedabad"],
   alternates: {
     canonical: 'https://ahmedabad.aliyaescort.com/',
   },
   openGraph: {
-    title: "Call Girls in Ahmedabad | Aliya Escort Service",
-    description: "Book specific verified call girls in Ahmedabad. No advance needed. 24/7 service available.",
+    title: "Ahmedabad Escort | Call Girls in Ahmedabad | Aliya Escort",
+    description: "Ahmedabad escort service — verified independent call girls 24/7. No advance, real photos, incall & outcall.",
     url: 'https://ahmedabad.aliyaescort.com/',
     siteName: 'Aliya Escort Ahmedabad',
     locale: 'en_IN',
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Call Girls in Ahmedabad | Aliya Escort Service',
-    description: 'Book verified call girls in Ahmedabad. No advance needed. 24/7 service available.',
+    title: 'Ahmedabad Escort | Call Girls in Ahmedabad | Aliya Escort',
+    description: 'Verified call girls in Ahmedabad 24/7. No advance, real photos, incall & outcall.',
     site: '@AliyaEscort',
   },
   robots: {
@@ -106,6 +106,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Preconnect to external origins for faster LCP */}
+        <link rel="preconnect" href="https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com" />
+        <link rel="dns-prefetch" href="//4k1gg1dlc3.execute-api.us-east-1.amazonaws.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         {/* JSON-LD structured data in <head> for optimal crawler discovery */}
         <script
           type="application/ld+json"
