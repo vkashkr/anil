@@ -489,6 +489,7 @@ function AdminProfileEditorContent() {
                 ref={descEditorRef}
                 contentEditable
                 suppressContentEditableWarning
+                suppressHydrationWarning
                 onInput={syncDescription}
                 onBlur={syncDescription}
                 className="block w-full border border-gray-300 border-t-0 rounded-b-md shadow-sm p-3 min-h-[160px] bg-white prose prose-sm max-w-none focus:outline-none focus:ring-2 focus:ring-pink-500/30"
