@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const profile = await loadProfile(slug);
   if (!profile) return { title: 'Profile Not Found' };
 
-  const url = `${BASE_URL}/profile/${slug}`;
+  const url = `${BASE_URL}/ahmedabad-escort/${slug}`;
   const title =
     profile.seoTitle || `${profile.name} — Call Girl in Ahmedabad | Aliya Escort`;
   const description =
@@ -58,6 +58,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    keywords: [
+      profile.name,
+      `${profile.name} escort`,
+      `call girl ${profile.city || 'ahmedabad'}`,
+      `escort ${profile.city || 'ahmedabad'}`,
+      'ahmedabad escort',
+      'call girls ahmedabad',
+      'escort service ahmedabad',
+    ],
     alternates: { canonical: url },
     openGraph: {
       url,
@@ -66,6 +75,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: profile.images?.length ? [{ url: profile.images[0] }] : [],
       type: 'profile',
     },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: profile.images?.length ? [profile.images[0]] : [],
+    },
+    robots: { index: true, follow: true },
   };
 }
 
@@ -77,7 +93,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
   const cookieStore = await cookies();
   const isAdmin = cookieStore.get('auth_token')?.value === 'authenticated';
 
-  const canonicalUrl = `${BASE_URL}/profile/${slug}`;
+  const canonicalUrl = `${BASE_URL}/ahmedabad-escort/${slug}`;
   const whatsappText = encodeURIComponent(`hello, ${profile.name} I saw your profile on Aliya Escort`);
   const reviews = profile.reviews ?? [];
 
@@ -108,8 +124,35 @@ export default async function ProfileSlugPage({ params }: PageProps) {
     } catch { /* noop */ }
   }
 
+  const personJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: profile.name,
+    url: canonicalUrl,
+    image: profile.images?.[0] ?? undefined,
+    description: profile.seoDescription || profile.description?.replace(/<[^>]+>/g, '').slice(0, 160) || undefined,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: profile.city || profile.location || 'Ahmedabad',
+      addressRegion: profile.state || 'Gujarat',
+      addressCountry: 'IN',
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Ahmedabad Escorts', item: `${BASE_URL}/ahmedabad-escort` },
+      { '@type': 'ListItem', position: 3, name: profile.name, item: canonicalUrl },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-zinc-900 text-gray-100 font-sans pb-14 md:pb-0">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       {profile.customCss && (
         <style dangerouslySetInnerHTML={{ __html: profile.customCss }} />
       )}

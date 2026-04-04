@@ -65,7 +65,7 @@ export default function Home() {
 
   const navigateToProfile = (id: string, name: string) => {
     void id;
-    router.push(`/profile/${encodeURIComponent(name)}`);
+    router.push(`/ahmedabad-escort/${encodeURIComponent(name)}`);
     setSearchQuery('');
     setSearchFocused(false);
   };

@@ -89,7 +89,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const slugs = await fetchAllProfileSlugs();
     // Fix #5 — clean path-based URLs instead of ?name= query params (better for indexing)
     profileRoutes = slugs.map((slug) => ({
-      url: `${BASE_URL}/profile/${slug}`,
+      url: `${BASE_URL}/ahmedabad-escort/${slug}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.8,

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | Aliya Escort Ahmedabad",
   },
   description: "Looking for call girls in Ahmedabad? Aliya Escort provides genuine, independent, and high-profile call girls directly to your hotel or home. 100% safe & trusted service.",
-  keywords: ["call girls in ahmedabad", "ahmedabad call girls", "escort service ahmedabad", "independent call girls", "college girls ahmedabad", "housewife escort", "vip escort service", "russian call girls", "night out girls", "female escort ahmedabad"],
+  keywords: ["ahmedabad escort", "escort service ahmedabad", "call girls in ahmedabad", "ahmedabad call girls", "ahmedabad escort service", "independent call girls ahmedabad", "college girls ahmedabad", "housewife escort ahmedabad", "vip escort service", "russian call girls ahmedabad", "night out girls ahmedabad", "female escort ahmedabad", "local call girls ahmedabad", "escort girls ahmedabad", "cheap escort ahmedabad"],
   alternates: {
     canonical: 'https://ahmedabad.aliyaescort.com/',
   },
