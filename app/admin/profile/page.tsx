@@ -8,6 +8,9 @@ function AdminProfileEditorContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
   
   useEffect(() => {
     if (id) {
@@ -127,6 +130,68 @@ function AdminProfileEditorContent() {
   const [newImageUrl, setNewImageUrl] = useState('');
   const [newPropKey, setNewPropKey] = useState('');
   const [newPropValue, setNewPropValue] = useState('');
+  const [imageTab, setImageTab] = useState<'url' | 'local'>('url');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadImageError, setUploadImageError] = useState('');
+  const localImageRef = React.useRef<HTMLInputElement>(null);
+
+  const uploadLocalImages = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    if (!profile.id) { setUploadImageError('Save the profile ID first.'); return; }
+    setUploadingImage(true);
+    setUploadImageError('');
+    try {
+      const toBase64 = (f: File) => new Promise<string>((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res((r.result as string).split(',')[1] ?? (r.result as string));
+        r.onerror = rej;
+        r.readAsDataURL(f);
+      });
+      const metadata = {
+        id: profile.id,
+        name: profile.name,
+        age: profile.age,
+        gender: profile.gender,
+        city: profile.city,
+        location: profile.location,
+      };
+      const payload = await Promise.all(
+        Array.from(files).map(async (file) => ({
+          image: await toBase64(file),
+          filename: file.name,
+          metadata,
+        }))
+      );
+      const res = await fetch('/bff/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      // Lambda returns [{ success, filename }] — no full_path/url in response.
+      // Count actual failures (explicit success: false).
+      const results: { success?: boolean; error?: string }[] = Array.isArray(data) ? data : [data];
+      const failed = results.filter(r => r.success === false);
+      if (failed.length > 0) {
+        setUploadImageError(`${failed.length} file(s) failed: ${failed.map(r => r.error || 'unknown').join(', ')}`);
+      }
+      if (failed.length < results.length) {
+        // At least some succeeded — re-fetch images to get real full_path URLs from S3
+        const profileRes = await fetch(`/bff/api/get-profiles?id=${encodeURIComponent(profile.id)}`);
+        const profileData = await profileRes.json();
+        const freshImages: { full_path: string }[] = profileData?.data?.images ?? (Array.isArray(profileData?.data) ? profileData.data : []);
+        const freshPaths = freshImages.map(img => img.full_path).filter(Boolean);
+        if (freshPaths.length > 0) {
+          setProfile(prev => ({ ...prev, images: freshPaths }));
+        }
+      }
+    } catch (err) {
+      setUploadImageError(err instanceof Error ? err.message : 'Upload failed.');
+    } finally {
+      setUploadingImage(false);
+      if (localImageRef.current) localImageRef.current.value = '';
+    }
+  };
   
   // Ensure we don't switch from controlled to uncontrolled
   // The state initialization handles this, but let's double check data fetching doesn't introduce undefineds
@@ -228,6 +293,49 @@ function AdminProfileEditorContent() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!profile.id) return;
+    setDeleting(true);
+    try {
+      // 1. Fetch all S3 images for this profile
+      const res = await fetch(`/bff/api/get-profiles?id=${encodeURIComponent(profile.id)}`);
+      const { data } = await res.json();
+      const images: { filename?: string }[] = Array.isArray(data) ? data : (data?.images ?? []);
+
+      // 2. Delete each S3 image file
+      await Promise.allSettled(
+        images
+          .filter(img => img.filename)
+          .map(img =>
+            fetch(`/bff/api/delete?filename=${encodeURIComponent(img.filename!)}`, { method: 'DELETE' })
+          )
+      );
+
+      // 3. Delete from DynamoDB + delete published S3 HTML via Lambda
+      const delRes = await fetch('/api/admin/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete_profile', id: profile.id }),
+      });
+      const delData = await delRes.json();
+      if (!delData.success) {
+        alert('S3 images deleted but profile DB delete failed: ' + (delData.message || 'unknown error'));
+        return;
+      }
+
+      // 4. Revalidate cache
+      await fetch('/api/admin/revalidate', { method: 'POST' }).catch(() => {});
+
+      alert(`Profile "${profile.name}" fully deleted.`);
+      router.push('/admin/add-profile');
+    } catch (err) {
+      alert('Delete failed: ' + (err instanceof Error ? err.message : String(err)));
+    } finally {
+      setDeleting(false);
+      setShowDeleteModal(false);
     }
   };
 
@@ -406,35 +514,117 @@ function AdminProfileEditorContent() {
           
            {/* Images */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Image URLs (AWS S3)</label>
-            <div className="flex flex-col gap-2 mt-1 mb-2">
-              <select
-                id="s3BucketSelect"
-                className="border border-gray-300 rounded-md p-2 text-sm bg-white"
-                defaultValue="https://gif-gif.s3.amazonaws.com/"
+            <label className="block text-sm font-medium text-gray-700 mb-2">Images</label>
+
+            {/* Tabs */}
+            <div className="flex border-b border-gray-200 mb-3">
+              <button
+                type="button"
+                onClick={() => setImageTab('url')}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition ${
+                  imageTab === 'url' ? 'border-pink-500 text-pink-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
               >
-                <option value="https://gif-gif.s3.amazonaws.com/">gif-gif (Images Bucket)</option>
-                <option value="https://www.aliyaescort.com/">www.aliyaescort.com (Site Bucket)</option>
-                <option value="https://gif.aliyaescort.com/img/">gif.aliyaescort.com/img</option>
-                <option value="">Custom URL (no prefix)</option>
-              </select>
-              <div className="flex gap-2">
-                <input type="text" value={newImageUrl} onChange={(e) => setNewImageUrl(e.target.value)} className="flex-1 border border-gray-300 rounded-md p-2" placeholder="path/to/image.jpg  or full https://..." />
-                <button onClick={() => {
-                  if (!newImageUrl.trim()) return;
-                  const select = document.getElementById('s3BucketSelect') as HTMLSelectElement;
-                  const prefix = select?.value || '';
-                  const url = newImageUrl.startsWith('http') ? newImageUrl : prefix + newImageUrl;
-                  setProfile(prev => ({ ...prev, images: [...prev.images, url] }));
-                  setNewImageUrl('');
-                }} className="bg-green-500 text-white px-4 py-2 rounded">Add</button>
-              </div>
+                🔗 URL
+              </button>
+              <button
+                type="button"
+                onClick={() => setImageTab('local')}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition ${
+                  imageTab === 'local' ? 'border-pink-500 text-pink-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                📁 Upload from device
+              </button>
             </div>
-             <div className="flex flex-wrap gap-2">
+
+            {imageTab === 'url' && (
+              <div className="flex flex-col gap-2 mb-3">
+                <select
+                  id="s3BucketSelect"
+                  className="border border-gray-300 rounded-md p-2 text-sm bg-white"
+                  defaultValue="https://gif-gif.s3.amazonaws.com/"
+                >
+                  <option value="https://gif-gif.s3.amazonaws.com/">gif-gif (Images Bucket)</option>
+                  <option value="https://www.aliyaescort.com/">www.aliyaescort.com (Site Bucket)</option>
+                  <option value="https://gif.aliyaescort.com/img/">gif.aliyaescort.com/img</option>
+                  <option value="">Custom URL (no prefix)</option>
+                </select>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newImageUrl}
+                    onChange={(e) => setNewImageUrl(e.target.value)}
+                    className="flex-1 border border-gray-300 rounded-md p-2 text-sm"
+                    placeholder="path/to/image.jpg  or full https://..."
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!newImageUrl.trim()) return;
+                      const select = document.getElementById('s3BucketSelect') as HTMLSelectElement;
+                      const prefix = select?.value || '';
+                      const url = newImageUrl.startsWith('http') ? newImageUrl : prefix + newImageUrl;
+                      setProfile(prev => ({ ...prev, images: [...prev.images, url] }));
+                      setNewImageUrl('');
+                    }}
+                    className="bg-green-500 text-white px-4 py-2 rounded text-sm"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {imageTab === 'local' && (
+              <div className="mb-3">
+                <input
+                  ref={localImageRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={(e) => uploadLocalImages(e.target.files)}
+                />
+                <button
+                  type="button"
+                  onClick={() => localImageRef.current?.click()}
+                  disabled={uploadingImage}
+                  className="w-full border-2 border-dashed border-gray-300 rounded-lg py-6 flex flex-col items-center gap-2 text-gray-500 hover:border-pink-400 hover:text-gray-700 transition disabled:opacity-50"
+                >
+                  {uploadingImage ? (
+                    <>
+                      <span className="w-6 h-6 border-2 border-gray-300 border-t-pink-500 rounded-full animate-spin" />
+                      <span className="text-sm">Uploading to S3…</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span className="text-sm">Click to select photos from device</span>
+                      <span className="text-xs text-gray-400">Multiple files supported — uploaded directly to S3</span>
+                    </>
+                  )}
+                </button>
+                {uploadImageError && (
+                  <p className="mt-2 text-xs text-red-500">{uploadImageError}</p>
+                )}
+              </div>
+            )}
+
+            {/* Thumbnail grid */}
+            <div className="flex flex-wrap gap-2">
               {profile.images.map((img, idx) => (
-                <div key={idx} className="relative w-24 h-24">
+                <div key={idx} className="relative w-24 h-24 group">
                   <img src={img} alt="preview" className="w-full h-full object-cover rounded bg-gray-200" />
-                  <button onClick={() => removeImage(idx)} className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">&times;</button>
+                  <button
+                    type="button"
+                    onClick={() => removeImage(idx)}
+                    className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+                  >
+                    &times;
+                  </button>
                 </div>
               ))}
             </div>
@@ -730,7 +920,52 @@ function AdminProfileEditorContent() {
             >
              {loading ? 'Publishing...' : 'Publish'}
             </button>
+            <button
+              onClick={() => { setDeleteConfirmText(''); setShowDeleteModal(true); }}
+              disabled={loading || deleting || !id}
+              className="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700 transition disabled:opacity-40"
+              title="Delete this profile"
+            >
+              🗑 Delete
+            </button>
           </div>
+
+          {/* ── Delete Confirmation Modal ── */}
+          {showDeleteModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4">
+                <h2 className="text-lg font-bold text-red-600 mb-2">Delete Profile?</h2>
+                <p className="text-gray-600 text-sm mb-1">
+                  This will permanently delete <strong>{profile.name || profile.id}</strong> and all their photos from S3.
+                </p>
+                <p className="text-gray-500 text-xs mb-4">This action cannot be undone.</p>
+                <p className="text-sm text-gray-700 mb-2">Type <strong>DELETE</strong> to confirm:</p>
+                <input
+                  type="text"
+                  value={deleteConfirmText}
+                  onChange={e => setDeleteConfirmText(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-red-400"
+                  placeholder="DELETE"
+                  autoFocus
+                />
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowDeleteModal(false)}
+                    className="flex-1 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 transition text-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    disabled={deleteConfirmText !== 'DELETE' || deleting}
+                    className="flex-1 py-2 rounded-lg bg-red-600 text-white font-bold hover:bg-red-700 transition text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    {deleting ? 'Deleting…' : 'Yes, Delete'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
         </div>
       </div>

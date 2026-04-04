@@ -1,11 +1,23 @@
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { saveProfileToDynamoDB, Profile } from '@/app/lib/dynamodb';
+import { saveProfileToDynamoDB, deleteProfileFromDynamoDB, Profile } from '@/app/lib/dynamodb';
 
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-    const { action, profile } = data; // action: 'save' | 'publish'
+    const { action, profile, id } = data;
+
+    // Delete profile: remove from DynamoDB + S3 HTML (via Lambda)
+    if (action === 'delete_profile') {
+      const profileId = id || profile?.id;
+      if (!profileId) {
+        return NextResponse.json({ success: false, message: 'Missing id' }, { status: 400 });
+      }
+      const result = await deleteProfileFromDynamoDB(profileId);
+      revalidatePath('/');
+      revalidatePath('/ahmedabad-escort');
+      return NextResponse.json(result);
+    }
 
     if (!profile || !profile.id) {
       return NextResponse.json({ success: false, message: 'Invalid profile data' }, { status: 400 });

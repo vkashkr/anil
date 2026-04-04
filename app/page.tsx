@@ -19,44 +19,61 @@ export type HomeProfile = {
   metadata?: { [key: string]: string | number | boolean | undefined | null };
 };
 
+type RawImage = {
+  filename?: string;
+  full_path: string;
+  metadata?: { [key: string]: string | number | boolean | undefined | null };
+};
+
 async function fetchInitialProfiles(): Promise<{
   profilesById: Record<string, HomeProfile[]>;
   nextToken: string | null;
 }> {
   try {
-    const res = await fetch(`${API_BASE}/view?limit=100`, { next: { revalidate: 300 } });
-    if (!res.ok) return { profilesById: {}, nextToken: null };
-    const data = await res.json();
-    if (!data?.images || !Array.isArray(data.images)) return { profilesById: {}, nextToken: null };
-
     const profilesById: Record<string, HomeProfile[]> = {};
+    let cursor: string | null = null;
 
-    for (const img of data.images) {
-      const id = String(img.metadata?.id || img.filename?.split('/')[0] || '');
-      const name: string = img.metadata?.name || '-';
-      if (!id || name === '-') continue;
+    // Paginate through ALL S3 objects so no profile is missed regardless of
+    // how many images earlier profiles have (S3 sorts keys lexicographically).
+    do {
+      const url: string = cursor
+        ? `${API_BASE}/view?limit=100&next_token=${encodeURIComponent(cursor)}`
+        : `${API_BASE}/view?limit=100`;
+      const res: Response = await fetch(url, { next: { revalidate: 60 } });
+      if (!res.ok) break;
+      const data: { images?: RawImage[]; next_token?: string } = await res.json();
+      if (!data?.images || !Array.isArray(data.images)) break;
 
-      const profile: HomeProfile = {
-        id,
-        name,
-        age: img.metadata?.age || '-',
-        gender: img.metadata?.gender,
-        description: img.metadata?.description,
-        location: img.metadata?.location,
-        filename: img.filename,
-        full_path: img.full_path,
-        metadata: img.metadata || {},
-      };
+      for (const img of data.images) {
+        const id = String(img.metadata?.id ?? img.filename?.split('/')[0] ?? '');
+        const name = String(img.metadata?.name ?? '-');
+        if (!id || name === '-') continue;
 
-      if (!profilesById[id]) profilesById[id] = [];
-      if (img.filename?.endsWith('profile.jpg')) {
-        profilesById[id].unshift(profile);
-      } else {
-        profilesById[id].push(profile);
+        const profile: HomeProfile = {
+          id,
+          name,
+          age: img.metadata?.age != null ? (img.metadata.age as string | number) : '-',
+          gender: img.metadata?.gender != null ? String(img.metadata.gender) : undefined,
+          description: img.metadata?.description != null ? String(img.metadata.description) : undefined,
+          location: img.metadata?.location != null ? String(img.metadata.location) : undefined,
+          filename: img.filename,
+          full_path: img.full_path,
+          metadata: img.metadata || {},
+        };
+
+        if (!profilesById[id]) profilesById[id] = [];
+        if (img.filename?.endsWith('profile.jpg')) {
+          profilesById[id].unshift(profile);
+        } else {
+          profilesById[id].push(profile);
+        }
       }
-    }
 
-    return { profilesById, nextToken: data.next_token || null };
+      cursor = data.next_token || null;
+    } while (cursor);
+
+    // Return null nextToken — HomeProfileGrid handles its own pagination client-side
+    return { profilesById, nextToken: null };
   } catch {
     return { profilesById: {}, nextToken: null };
   }

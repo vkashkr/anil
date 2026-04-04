@@ -166,6 +166,39 @@ def lambda_handler(event, context):
     if action == 'add_review':
         return handle_add_review(body, table)
     
+    # Handle delete_profile: remove from DynamoDB + delete published S3 HTML
+    if action == 'delete_profile':
+        profile_id = body.get('id') or (body.get('profile') or {}).get('id')
+        if not profile_id:
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'success': False, 'message': 'Missing profile id'})
+            }
+        try:
+            table.delete_item(Key={'id': profile_id})
+            print(f"Deleted profile {profile_id} from DynamoDB")
+            # Delete published HTML from S3 (ignore if not found)
+            try:
+                s3.delete_object(Bucket=BUCKET_NAME, Key=f"profiles/{profile_id}.html")
+                print(f"Deleted S3 HTML for profile {profile_id}")
+            except Exception as s3_err:
+                print(f"S3 HTML delete skipped: {s3_err}")
+            return {
+                'statusCode': 200,
+                'headers': {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Allow-Methods': 'OPTIONS,POST'
+                },
+                'body': json.dumps({'success': True, 'message': 'Profile deleted'})
+            }
+        except Exception as e:
+            print(f"Error deleting profile: {str(e)}")
+            return {
+                'statusCode': 500,
+                'body': json.dumps({'success': False, 'message': str(e)})
+            }
+
     profile = body.get('profile')
     
     if not profile or not profile.get('id'):
