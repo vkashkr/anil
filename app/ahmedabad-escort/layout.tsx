@@ -37,8 +37,18 @@ export const metadata: Metadata = {
     title: 'Ahmedabad Escort Service | Aliya Escort',
     description:
       '1000+ verified ahmedabad escort profiles. Book independent call girls in Ahmedabad 24/7.',
+    site: '@AliyaEscort',
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function AhmedabadEscortLayout({ children }: { children: React.ReactNode }) {

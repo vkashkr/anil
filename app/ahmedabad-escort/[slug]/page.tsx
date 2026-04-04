@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description =
     profile.seoDescription ||
     profile.description?.replace(/<[^>]+>/g, '').slice(0, 160) ||
-    `View ${profile.name}'s escort profile in Ahmedabad.`;
+    `Meet ${profile.name}${profile.age ? `, age ${profile.age}` : ''} — verified independent call girl in ${profile.city || 'Ahmedabad'}, Gujarat. Real photos, 24/7 available, no advance payment. Book now on Aliya Escort.`;
 
   return {
     title,
@@ -83,6 +83,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       images: profile.images?.length ? [profile.images[0]] : [],
+      site: '@AliyaEscort',
     },
     robots: { index: true, follow: true },
   };

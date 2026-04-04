@@ -91,26 +91,6 @@ export default async function AhmedabadEscortPage() {
     ],
   };
 
-  // ── JSON-LD: LocalBusiness ───────────────────────────────────────────────
-  const localBusinessJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    name: 'Aliya Escort Ahmedabad',
-    description:
-      'Verified ahmedabad escort service. Independent call girls available 24/7 for incall and outcall across Ahmedabad, Gujarat.',
-    url: `${BASE_URL}/ahmedabad-escort`,
-    telephone: '+919974599843',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Ahmedabad',
-      addressRegion: 'Gujarat',
-      addressCountry: 'IN',
-    },
-    areaServed: { '@type': 'City', name: 'Ahmedabad' },
-    priceRange: '₹₹',
-    openingHours: 'Mo-Su 00:00-23:59',
-  };
-
   // ── JSON-LD: ItemList (profile listings) ────────────────────────────────
   const itemListJsonLd = {
     '@context': 'https://schema.org',
@@ -179,7 +159,6 @@ export default async function AhmedabadEscortPage() {
 
       {/* ── JSON-LD ── */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
@@ -261,11 +240,13 @@ export default async function AhmedabadEscortPage() {
             <Link href="/" className="text-pink-400 hover:text-pink-300 underline text-sm">Back to Home</Link>
           </div>
         ) : (
-          profiles.map((p) => {
+          profiles.map((p, profileIndex) => {
             const profileSlug = slug(p.name);
             const profileUrl = `/ahmedabad-escort/${encodeURIComponent(profileSlug)}`;
             const mainImage = p.images[0] || null;
             const thumbs = p.images.slice(1, 4); // up to 3 extra thumbnails
+            // First card's main image is likely the LCP — never lazy-load it
+            const isFirst = profileIndex === 0;
 
             return (
               <article
@@ -282,7 +263,8 @@ export default async function AhmedabadEscortPage() {
                         src={mainImage}
                         alt={`${p.name} escort in Ahmedabad`}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
+                        loading={isFirst ? 'eager' : 'lazy'}
+                        fetchPriority={isFirst ? 'high' : 'auto'}
                       />
                     ) : (
                       <div className="w-full h-full bg-zinc-800 flex flex-col items-center justify-center gap-1 text-gray-600">
