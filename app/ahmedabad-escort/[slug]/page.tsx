@@ -174,9 +174,9 @@ export default async function ProfileSlugPage({ params }: PageProps) {
           </div>
           <div className="flex flex-wrap items-center gap-1 text-sm text-gray-400">
             <Link href="/" className="hover:text-pink-300 transition">Home</Link>
-            {profile.country && <><span className="text-gray-600">›</span><span className="text-gray-300">{profile.country}</span></>}
-            {profile.state && <><span className="text-gray-600">›</span><span className="text-gray-300">{profile.state}</span></>}
-            {profile.city && <><span className="text-gray-600">›</span><span className="text-gray-300">{profile.city}</span></>}
+            <span className="text-gray-600">›</span><span className="text-gray-300">{profile.country || 'India'}</span>
+            <span className="text-gray-600">›</span><span className="text-gray-300">{profile.state || 'Gujarat'}</span>
+            <span className="text-gray-600">›</span><span className="text-gray-300">{profile.city || 'Ahmedabad'}</span>
             {profile.place && <><span className="text-gray-600">›</span><span className="text-pink-300">{profile.place}</span></>}
           </div>
         </div>

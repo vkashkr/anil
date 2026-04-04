@@ -19,11 +19,10 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      {open && (
-        <div className="px-4 py-3 text-gray-200 text-sm md:text-base leading-relaxed bg-black/30 border-t border-white/5">
-          {a}
-        </div>
-      )}
+      {/* Answer always in DOM (CSS visibility) so Google indexes all FAQ text */}
+      <div className={`px-4 py-3 text-gray-200 text-sm md:text-base leading-relaxed bg-black/30 border-t border-white/5 ${open ? '' : 'hidden'}`}>
+        {a}
+      </div>
     </div>
   );
 }

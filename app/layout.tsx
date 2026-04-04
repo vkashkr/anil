@@ -31,6 +31,12 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Call Girls in Ahmedabad | Aliya Escort Service',
+    description: 'Book verified call girls in Ahmedabad. No advance needed. 24/7 service available.',
+    site: '@AliyaEscort',
+  },
   robots: {
     index: true,
     follow: true,
@@ -42,6 +48,19 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+};
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Are your call girls in Ahmedabad real and verified?', acceptedAnswer: { '@type': 'Answer', text: 'Yes, every profile on Aliya Escort is 100% genuine and manually verified. We conduct identity checks and ensure all photos are recent and unedited.' } },
+    { '@type': 'Question', name: 'Is my privacy safe when booking an escort in Ahmedabad?', acceptedAnswer: { '@type': 'Answer', text: 'Absolutely. We maintain strict confidentiality — your personal details, booking history, and contact information are never shared with anyone.' } },
+    { '@type': 'Question', name: 'How fast can I book a call girl in Ahmedabad?', acceptedAnswer: { '@type': 'Answer', text: 'Our average delivery time is just 30 minutes within Ahmedabad city limits. We operate 24/7 including holidays.' } },
+    { '@type': 'Question', name: 'What payment methods are accepted for Ahmedabad escort service?', acceptedAnswer: { '@type': 'Answer', text: 'We accept cash payment on delivery only. No advance payment or online transfer is required. You pay only when satisfied.' } },
+    { '@type': 'Question', name: 'Do you offer both incall and outcall escort services in Ahmedabad?', acceptedAnswer: { '@type': 'Answer', text: 'Yes, we offer both. Incall means you visit our private location. Outcall means the escort visits your hotel, home, or any private location of your choice in Ahmedabad.' } },
+    { '@type': 'Question', name: 'What areas in Ahmedabad do you serve?', acceptedAnswer: { '@type': 'Answer', text: 'We serve all major areas including SG Highway, Satellite, Vastrapur, Prahlad Nagar, Bodakdev, Navrangpura, Maninagar, Ellisbridge, Paldi, Thaltej, Ambawadi, Chandkheda, Bopal, Gota, and more.' } },
+  ],
 };
 
 const jsonLd = {
@@ -91,6 +110,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       </head>
       <body
