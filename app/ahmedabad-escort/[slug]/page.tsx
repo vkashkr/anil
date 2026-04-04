@@ -8,6 +8,9 @@ import { PHONE_TEL, PHONE_DISPLAY, WHATSAPP_URL } from '@/app/lib/constants';
 import ProfileGallery from './ProfileGallery';
 import ReviewForm from './ReviewForm';
 
+// Always re-render from origin on each request after on-demand revalidation
+export const revalidate = 0;
+
 const BASE_URL = 'https://ahmedabad.aliyaescort.com';
 
 interface PageProps {
@@ -24,7 +27,7 @@ const loadProfile = cache(async (slug: string): Promise<Profile | undefined> => 
   try {
     const s3Res = await fetch(
       `${base}/bff/api/get-profiles?id=${encodeURIComponent(profile.id)}`,
-      { next: { revalidate: 300 } },
+      { cache: 'no-store' },
     );
     if (s3Res.ok) {
       const s3Data = await s3Res.json();
