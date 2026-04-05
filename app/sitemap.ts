@@ -11,7 +11,7 @@ async function fetchAllProfileSlugs(): Promise<string[]> {
     for (const p of profiles) {
       if (!p.id || seen.has(p.id)) continue;
       seen.add(p.id);
-      const raw = p.seoTitle || p.name || '';
+      const raw = p.seoTitle;
       if (!raw || raw === '-') continue;
       const slug = raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       if (slug) slugs.push(slug);
