@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-const BASE_URL = 'https://aliyaescort.com';
+const BASE_URL = 'https://www.aliyaescort.com';
 
 export const metadata: Metadata = {
   title: 'Ahmedabad Escort Service | Call Girls in Ahmedabad | Aliya Escort',

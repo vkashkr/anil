@@ -60,10 +60,10 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   // Fix #7 — missing canonical on stories listing page
   alternates: {
-    canonical: 'https://aliyaescort.com/ahmedabad/stories',
+    canonical: 'https://www.aliyaescort.com/stories',
   },
   openGraph: {
-    url: 'https://aliyaescort.com/ahmedabad/stories',
+    url: 'https://www.aliyaescort.com/stories',
     title: 'Stories — Dark Romance & Literary Drama',
     description:
       'Read original Hinglish short stories exploring desire, loneliness, and self-discovery.',
@@ -327,11 +327,11 @@ export default async function StoriesPage({
             name: 'Stories — Dark Romance & Literary Drama',
             description:
               'Original Hinglish short stories exploring desire, loneliness, and self-discovery.',
-            url: 'https://aliyaescort.com/ahmedabad/stories',
+            url: 'https://www.aliyaescort.com/stories',
             hasPart: stories.map((s) => ({
               '@type': 'Article',
               headline: s.title,
-              url: `https://aliyaescort.com/ahmedabad${storyUrl(s)}`,
+              url: `https://www.aliyaescort.com/ahmedabad${storyUrl(s)}`,
             })),
           }),
         }}

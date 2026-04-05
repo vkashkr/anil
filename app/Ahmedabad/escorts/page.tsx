@@ -79,7 +79,7 @@ export default async function AhmedabadEscortPage() {
   const profiles = await fetchProfiles();
   const slug = (name: string) => name.trim().toLowerCase().replace(/\s+/g, '-');
 
-  const BASE_URL = 'https://aliyaescort.com';
+  const BASE_URL = 'https://www.aliyaescort.com';
 
   // ── JSON-LD: BreadcrumbList ──────────────────────────────────────────────
   const breadcrumbJsonLd = {
