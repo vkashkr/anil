@@ -9,7 +9,7 @@ import ReadingProgress from '../ReadingProgress';
 import StoryImg from '../StoryImg';
 import AdminEditButton from '../AdminEditButton';
 
-const BASE_URL = 'https://ahmedabad.aliyaescort.com';
+const BASE_URL = 'https://aliyaescort.com';
 
 /* ─── Types ──────────────────────────────────────────────────── */
 interface StoryMeta {

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://ahmedabad.aliyaescort.com'),
+  metadataBase: new URL('https://aliyaescort.com'),
   title: {
     default: "Aliya Escort Ahmedabad | Premium Call Girl Service in Gujarat",
     template: "%s | Aliya Escort Ahmedabad",
@@ -21,12 +21,12 @@ export const metadata: Metadata = {
   description: "Aliya Escort — Ahmedabad's most trusted escort directory since 2020. Browse real, verified independent call girls for incall & outcall across Gujarat. 24/7, no advance payment.",
   keywords: ["ahmedabad escort", "escort service ahmedabad", "call girls in ahmedabad", "ahmedabad call girls", "ahmedabad escort service", "independent call girls ahmedabad", "college girls ahmedabad", "housewife escort ahmedabad", "vip escort service", "russian call girls ahmedabad", "night out girls ahmedabad", "female escort ahmedabad", "local call girls ahmedabad", "escort girls ahmedabad", "cheap escort ahmedabad"],
   alternates: {
-    canonical: 'https://ahmedabad.aliyaescort.com/',
+    canonical: 'https://aliyaescort.com/ahmedabad/',
   },
   openGraph: {
     title: "Aliya Escort Ahmedabad | Premium Call Girl Service",
     description: "Aliya Escort — Ahmedabad's most trusted escort directory. Real profiles, verified photos, 24/7 incall & outcall across Gujarat.",
-    url: 'https://ahmedabad.aliyaescort.com/',
+    url: 'https://aliyaescort.com/ahmedabad/',
     siteName: 'Aliya Escort Ahmedabad',
     locale: 'en_IN',
     type: 'website',
@@ -53,11 +53,11 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "@id": "https://ahmedabad.aliyaescort.com/#business",
+  "@id": "https://aliyaescort.com/ahmedabad/#business",
   "name": "Aliya Escort Ahmedabad",
-  "image": "https://ahmedabad.aliyaescort.com/aliya-logo-A-4-improved.svg",
+  "image": "https://aliyaescort.com/ahmedabad/aliya-logo-A-4-improved.svg",
   "description": "Premium call girl and escort agency in Ahmedabad offering independent and high-profile companions.",
-  "url": "https://ahmedabad.aliyaescort.com/",
+  "url": "https://aliyaescort.com/ahmedabad/",
   "telephone": "+919974599843",
   "address": {
     "@type": "PostalAddress",
@@ -91,15 +91,15 @@ const jsonLd = {
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  '@id': 'https://ahmedabad.aliyaescort.com/#website',
-  'url': 'https://ahmedabad.aliyaescort.com/',
+  '@id': 'https://aliyaescort.com/ahmedabad/#website',
+  'url': 'https://aliyaescort.com/ahmedabad/',
   'name': 'Aliya Escort Ahmedabad',
   'description': 'Ahmedabad escort service – verified independent call girls 24/7.',
   'potentialAction': {
     '@type': 'SearchAction',
     'target': {
       '@type': 'EntryPoint',
-      'urlTemplate': 'https://ahmedabad.aliyaescort.com/escorts?search={search_term_string}',
+      'urlTemplate': 'https://aliyaescort.com/ahmedabad/escorts?search={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
@@ -123,8 +123,8 @@ export default function RootLayout({
         <meta name="geo.position" content="23.0225;72.5714" />
         <meta name="ICBM" content="23.0225, 72.5714" />
         {/* hreflang for Indian English audiences */}
-        <link rel="alternate" hrefLang="en-IN" href="https://ahmedabad.aliyaescort.com/" />
-        <link rel="alternate" hrefLang="x-default" href="https://ahmedabad.aliyaescort.com/" />
+        <link rel="alternate" hrefLang="en-IN" href="https://aliyaescort.com/ahmedabad/" />
+        <link rel="alternate" hrefLang="x-default" href="https://aliyaescort.com/ahmedabad/" />
         {/* JSON-LD structured data in <head> for optimal crawler discovery */}
         <script
           type="application/ld+json"

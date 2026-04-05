@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://ahmedabad.aliyaescort.com';
+  const baseUrl = 'https://aliyaescort.com';
 
   return {
     rules: [
@@ -9,9 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: [
           '/',
-          '/escorts',
-          '/escorts/',
-          '/escorts/*',
+          '/Ahmedabad/*',
         ],
         disallow: ['/admin/', '/api/', '/login/', '/upload/', '/view/'],
       },
@@ -22,7 +20,7 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: 'Bingbot',
-        allow: ['/escorts/', '/escorts/*', '/'],
+        allow: ['/Ahmedabad/*', '/ahmedabad/'],
         disallow: ['/admin/', '/api/', '/login/', '/upload/', '/view/'],
       },
     ],

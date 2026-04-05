@@ -168,9 +168,9 @@ export default async function Home() {
               <h3 className="text-lg font-bold text-white mb-4">Quick Links</h3>
               <ul className="space-y-2 text-sm">
                 <li><a href="/" className="text-gray-400 hover:text-pink-300 transition">Home</a></li>
-                <li><a href="/escorts" className="text-gray-400 hover:text-pink-300 transition">Ahmedabad Escort Service</a></li>
-                <li><a href="/escorts" className="text-gray-400 hover:text-pink-300 transition">VIP Escorts</a></li>
-                <li><a href="/escorts" className="text-gray-400 hover:text-pink-300 transition">New Arrivals</a></li>
+                <li><a href="/Ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">Ahmedabad Escort Service</a></li>
+                <li><a href="/Ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">VIP Escorts</a></li>
+                <li><a href="/Ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">New Arrivals</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-pink-300 transition">Privacy Policy</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-pink-300 transition">Terms of Service</a></li>
               </ul>

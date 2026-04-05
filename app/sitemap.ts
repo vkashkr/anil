@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const BASE_URL = 'https://ahmedabad.aliyaescort.com';
+const BASE_URL = 'https://aliyaescort.com';
 const API_BASE = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp';
 
 // Fix #3 / #14 — AbortController timeout prevents sitemap generation from hanging

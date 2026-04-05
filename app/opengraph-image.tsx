@@ -102,7 +102,7 @@ export default function Image() {
             display: 'flex',
           }}
         >
-          ahmedabad.aliyaescort.com
+          aliyaescort.com/ahmedabad
         </div>
       </div>
     ),

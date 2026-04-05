@@ -11,7 +11,7 @@ import ReviewForm from './ReviewForm';
 // Always re-render from origin on each request after on-demand revalidation
 export const revalidate = 0;
 
-const BASE_URL = 'https://ahmedabad.aliyaescort.com';
+const BASE_URL = 'https://aliyaescort.com';
 
 interface PageProps {
   params: Promise<{ slug: string }>;

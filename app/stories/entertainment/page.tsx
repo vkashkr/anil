@@ -1,7 +1,7 @@
 ﻿import type { Metadata } from 'next'
 import Link from 'next/link'
 
-const BASE_URL = 'https://ahmedabad.aliyaescort.com'
+const BASE_URL = 'https://aliyaescort.com'
 const PAGE_SIZE = 9
 
 /* ─── Types ──────────────────────────────────────────────────── */

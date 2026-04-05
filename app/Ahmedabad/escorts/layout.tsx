@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-const BASE_URL = 'https://ahmedabad.aliyaescort.com';
+const BASE_URL = 'https://aliyaescort.com';
 
 export const metadata: Metadata = {
   title: 'Ahmedabad Escort Service | Call Girls in Ahmedabad | Aliya Escort',
@@ -21,13 +21,13 @@ export const metadata: Metadata = {
     'local call girls ahmedabad',
   ],
   alternates: {
-    canonical: `${BASE_URL}/escorts`,
+    canonical: `${BASE_URL}/Ahmedabad/escorts`,
   },
   openGraph: {
     title: 'Ahmedabad Escort Service | 1000+ Verified Profiles',
     description:
       'Browse genuine, verified ahmedabad escort profiles. Independent call girls available 24/7. No advance payment. Real photos only.',
-    url: `${BASE_URL}/escorts`,
+    url: `${BASE_URL}/Ahmedabad/escorts`,
     siteName: 'Aliya Escort Ahmedabad',
     locale: 'en_IN',
     type: 'website',
