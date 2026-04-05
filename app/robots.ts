@@ -12,8 +12,6 @@ export default function robots(): MetadataRoute.Robots {
           '/ahmedabad-escort',
           '/ahmedabad-escort/',
           '/ahmedabad-escort/*',
-          '/stories/',
-          '/stories/*',
         ],
         disallow: ['/admin/', '/api/', '/login/', '/upload/', '/view/'],
       },

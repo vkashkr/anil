@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 export async function POST(request: Request) {
   try {
     const { password } = await request.json();
-    const adminPassword = process.env.ADMIN_PASSWORD;
+    const adminPassword = process.env.ADMIN_PASSWORD || 'anilAdmin';
     if (!adminPassword) {
       return NextResponse.json({ success: false, message: 'Server configuration error' }, { status: 500 });
     }

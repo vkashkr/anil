@@ -81,8 +81,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/`,                          lastModified: new Date(), changeFrequency: 'daily',  priority: 1.0 },
     { url: `${BASE_URL}/ahmedabad-escort`,          lastModified: new Date(), changeFrequency: 'daily',  priority: 0.95 },
-    { url: `${BASE_URL}/stories`,                   lastModified: new Date(), changeFrequency: 'daily',  priority: 0.7 },
-    { url: `${BASE_URL}/stories/entertainment`,     lastModified: new Date(), changeFrequency: 'daily',  priority: 0.65 },
   ];
 
   // Fetch dynamic profiles and build profile routes
@@ -100,20 +98,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Sitemap profile generation error:', error);
   }
 
-  // Fetch all stories and build story routes
-  let storyRoutes: MetadataRoute.Sitemap = [];
-  try {
-    const stories = await fetchAllStories();
-    // Fix #6 — clean path-based URLs instead of ?id= query params (better for indexing)
-    storyRoutes = stories.map((story) => ({
-      url: `${BASE_URL}/stories/entertainment/${story.slug || story.PK}`,
-      lastModified: story.updatedAt ? new Date(story.updatedAt) : new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.6,
-    }));
-  } catch (error) {
-    console.error('Sitemap story generation error:', error);
-  }
-
-  return [...staticRoutes, ...profileRoutes, ...storyRoutes];
+  return [...staticRoutes, ...profileRoutes];
 }
