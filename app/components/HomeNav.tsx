@@ -7,6 +7,7 @@ type HomeProfile = {
   id: string | number;
   name: string;
   location?: string;
+  seoTitle?: string;
   full_path: string;
   metadata?: { city?: string; [key: string]: unknown };
 };
@@ -62,8 +63,10 @@ export default function HomeNav({ initialProfilesById }: HomeNavProps) {
     });
   };
 
-  const navigateToProfile = (name: string) => {
-    router.push(`/Ahmedabad/escorts/${encodeURIComponent(name.trim().toLowerCase().replace(/\s+/g, '-'))}-independent-escort`);
+  const navigateToProfile = (name: string, seoTitle?: string) => {
+    const rawSlug = seoTitle || name;
+    const slug = rawSlug.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    router.push(`/ahmedabad/escorts/${encodeURIComponent(slug)}-independent-escort`);
     setSearchQuery('');
     setSearchFocused(false);
   };
@@ -125,7 +128,7 @@ export default function HomeNav({ initialProfilesById }: HomeNavProps) {
 
           {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-4 text-sm flex-shrink-0">
-            <a href="/Ahmedabad/escorts" className="text-gray-300 hover:text-pink-300 transition flex items-center gap-1">
+            <a href="/ahmedabad/escorts" className="text-gray-300 hover:text-pink-300 transition flex items-center gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               Profiles
             </a>
@@ -167,7 +170,7 @@ export default function HomeNav({ initialProfilesById }: HomeNavProps) {
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   const results = getFilteredProfiles();
-                  if (results.length === 1) navigateToProfile(results[0][1][0].name);
+                  if (results.length === 1) navigateToProfile(results[0][1][0].name, results[0][1][0].seoTitle);
                 }
               }}
               placeholder="Search girls..."
@@ -186,7 +189,7 @@ export default function HomeNav({ initialProfilesById }: HomeNavProps) {
                   {results.slice(0, 8).map(([id, images]) => {
                     const p = images[0];
                     return (
-                      <button key={id} onClick={() => navigateToProfile(p.name)} className="w-full flex items-center gap-3 px-3 py-2 hover:bg-white/10 transition text-left">
+                      <button key={id} onClick={() => navigateToProfile(p.name, p.seoTitle)} className="w-full flex items-center gap-3 px-3 py-2 hover:bg-white/10 transition text-left">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={p.full_path} alt={p.name} className="w-9 h-9 rounded-full object-cover border border-white/20" />
                         <div className="min-w-0">
@@ -205,7 +208,7 @@ export default function HomeNav({ initialProfilesById }: HomeNavProps) {
         {/* Mobile menu dropdown */}
         {mobileMenuOpen && (
           <div className="md:hidden mt-2 pt-2 border-t border-white/10 grid grid-cols-4 gap-2">
-            <a href="/Ahmedabad/escorts" onClick={() => setMobileMenuOpen(false)} className="flex flex-col items-center gap-1 py-2 rounded-lg hover:bg-white/10 transition">
+            <a href="/ahmedabad/escorts" onClick={() => setMobileMenuOpen(false)} className="flex flex-col items-center gap-1 py-2 rounded-lg hover:bg-white/10 transition">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               <span className="text-gray-300 text-xs">Profiles</span>
             </a>

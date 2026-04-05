@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const profile = await loadProfile(slug);
   if (!profile) return { title: 'Profile Not Found' };
 
-  const url = `${BASE_URL}/escorts/${slug}`;
+  const url = `${BASE_URL}/ahmedabad/escorts/${profile.seoTitle ? profile.seoTitle.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : slug}`;
   const title =
     profile.seoTitle || `${profile.name} — Call Girl in Ahmedabad | Aliya Escort`;
   const description =
@@ -99,7 +99,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
   const cookieStore = await cookies();
   const isAdmin = cookieStore.get('auth_token')?.value === 'authenticated';
 
-  const canonicalUrl = `${BASE_URL}/escorts/${slug}`;
+  const canonicalUrl = `${BASE_URL}/ahmedabad/escorts/${profile.seoTitle ? profile.seoTitle.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : slug}`;
   const whatsappText = encodeURIComponent(`hello, ${profile.name} I saw your profile on Aliya Escort`);
   const reviews = profile.reviews ?? [];
 
@@ -150,7 +150,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Ahmedabad Escorts', item: `${BASE_URL}/escorts` },
+      { '@type': 'ListItem', position: 2, name: 'Ahmedabad Escorts', item: `${BASE_URL}/ahmedabad/escorts` },
       { '@type': 'ListItem', position: 3, name: profile.name, item: canonicalUrl },
     ],
   };

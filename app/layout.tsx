@@ -99,7 +99,7 @@ const websiteJsonLd = {
     '@type': 'SearchAction',
     'target': {
       '@type': 'EntryPoint',
-      'urlTemplate': 'https://www.aliyaescort.com/Ahmedabad/escorts?search={search_term_string}',
+      'urlTemplate': 'https://www.aliyaescort.com/ahmedabad/escorts?search={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },

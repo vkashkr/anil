@@ -10,6 +10,7 @@ type HomeProfile = {
   gender?: string;
   description?: string;
   location?: string;
+  seoTitle?: string;
   filename?: string;
   full_path: string;
   metadata?: Record<string, unknown>;
@@ -41,6 +42,7 @@ export default function HomeProfileGrid({ initialProfilesById, initialNextToken 
         gender: img.metadata?.gender as string | undefined,
         description: img.metadata?.description as string | undefined,
         location: img.metadata?.location as string | undefined,
+        seoTitle: img.metadata?.seoTitle as string | undefined,
         filename: img.filename,
         full_path: img.full_path,
         metadata: (img.metadata as Record<string, unknown>) || {},

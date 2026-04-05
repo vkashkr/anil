@@ -65,8 +65,14 @@ export async function getAllProfilesFromDynamoDB() {
 export async function getProfileByNameFromDynamoDB(nameSlug: string): Promise<Profile | undefined> {
     const result = await callApi({ action: 'scan_profiles' });
     const profiles = result.profiles as Profile[];
-    const normalize = (s: string) => s.trim().toLowerCase().replace(/\s+/g, '-');
-    return profiles.find((p) => normalize(p.name || '') === normalize(nameSlug));
+    const normalize = (s: string) =>
+        s.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const target = normalize(nameSlug);
+    return profiles.find(
+        (p) =>
+            normalize(p.name || '') === target ||
+            (p.seoTitle ? normalize(p.seoTitle) === target : false),
+    );
 }
 
 export async function deleteProfileFromDynamoDB(id: string) {

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
 import { PHONE_TEL, WHATSAPP_URL } from '@/app/lib/constants';
 
 const API_BASE = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp';
@@ -6,78 +7,59 @@ const API_BASE = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp';
 interface ImageEntry {
   filename?: string;
   full_path: string;
-  metadata?: {
-    id?: string;
-    name?: string;
-    age?: string | number;
-    location?: string;
-    city?: string;
-  };
+  metadata?: { id?: string; name?: string };
 }
 
-interface Profile {
-  id: string;
-  name: string;
-  age: string | number;
-  location: string;
-  images: string[]; // all image URLs for this profile
-}
-
-async function fetchProfiles(): Promise<Profile[]> {
-  const profilesById: Record<string, Profile> = {};
-  const profileOrder: string[] = [];
-
+async function fetchS3ImagesByProfileId(): Promise<Record<string, string[]>> {
+  const imagesByid: Record<string, string[]> = {};
   let nextToken: string | null = null;
   do {
     const url = nextToken
       ? `${API_BASE}/view?limit=100&next_token=${encodeURIComponent(nextToken)}`
       : `${API_BASE}/view?limit=100`;
-
     let res: Response;
-    try {
-      res = await fetch(url, { next: { revalidate: 300 } });
-    } catch {
-      break;
-    }
+    try { res = await fetch(url, { next: { revalidate: 300 } }); } catch { break; }
     if (!res.ok) break;
-
     const data = await res.json();
     if (!data?.images || !Array.isArray(data.images)) break;
-
     for (const img of data.images as ImageEntry[]) {
       const id = String(img.metadata?.id || img.filename?.split('/')[0] || '');
-      if (!id) continue;
-      const name = img.metadata?.name || '';
-      if (!name || name === '-') continue;
-
-      if (!profilesById[id]) {
-        profilesById[id] = {
-          id,
-          name,
-          age: img.metadata?.age || '',
-          location: img.metadata?.location || img.metadata?.city || 'Ahmedabad',
-          images: [],
-        };
-        profileOrder.push(id);
-      }
-
-      // put profile.jpg first in the images array
+      if (!id || !img.full_path) continue;
+      if (!imagesByid[id]) imagesByid[id] = [];
+      // put profile.jpg first
       if (img.filename?.endsWith('profile.jpg')) {
-        profilesById[id].images.unshift(img.full_path);
+        imagesByid[id].unshift(img.full_path);
       } else {
-        profilesById[id].images.push(img.full_path);
+        imagesByid[id].push(img.full_path);
       }
     }
-
     nextToken = data.next_token || null;
   } while (nextToken);
-
-  return profileOrder.map((id) => profilesById[id]);
+  return imagesByid;
 }
+
+async function fetchProfiles() {
+  try {
+    const [dbProfiles, s3Images] = await Promise.all([
+      getAllProfilesFromDynamoDB(),
+      fetchS3ImagesByProfileId(),
+    ]);
+    return dbProfiles
+      .filter((p) => p.isVisible !== false && p.name && p.name !== '-')
+      .map((p) => ({
+        ...p,
+        images: s3Images[p.id]?.length ? s3Images[p.id] : (p.images ?? []),
+      }));
+  } catch {
+    return [];
+  }
+}
+
+const makeSlug = (raw: string) =>
+  raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 export default async function AhmedabadEscortPage() {
   const profiles = await fetchProfiles();
-  const slug = (name: string) => name.trim().toLowerCase().replace(/\s+/g, '-');
 
   const BASE_URL = 'https://www.aliyaescort.com';
 
@@ -87,7 +69,7 @@ export default async function AhmedabadEscortPage() {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Ahmedabad Escort', item: `${BASE_URL}/Ahmedabad/escorts` },
+      { '@type': 'ListItem', position: 2, name: 'Ahmedabad Escort', item: `${BASE_URL}/ahmedabad/escorts` },
     ],
   };
 
@@ -96,12 +78,12 @@ export default async function AhmedabadEscortPage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Ahmedabad Escort Profiles',
-    url: `${BASE_URL}/Ahmedabad/escorts`,
+    url: `${BASE_URL}/ahmedabad/escorts`,
     numberOfItems: profiles.length,
     itemListElement: profiles.slice(0, 50).map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${BASE_URL}/Ahmedabad/escorts/${encodeURIComponent(slug(p.name))}-independent-escort`,
+      url: `${BASE_URL}/ahmedabad/escorts/${encodeURIComponent(makeSlug(p.seoTitle || p.name))}-independent-escort`,
       name: p.name,
     })),
   };
@@ -241,8 +223,8 @@ export default async function AhmedabadEscortPage() {
           </div>
         ) : (
           profiles.map((p, profileIndex) => {
-            const profileSlug = slug(p.name);
-            const profileUrl = `/Ahmedabad/escorts/${encodeURIComponent(profileSlug)}-independent-escort`;
+            const profileSlug = makeSlug(p.seoTitle || p.name);
+            const profileUrl = `/ahmedabad/escorts/${encodeURIComponent(profileSlug)}-independent-escort`;
             const mainImage = p.images[0] || null;
             const thumbs = p.images.slice(1, 4); // up to 3 extra thumbnails
             // First card's main image is likely the LCP — never lazy-load it

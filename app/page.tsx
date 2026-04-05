@@ -14,6 +14,7 @@ export type HomeProfile = {
   gender?: string;
   description?: string;
   location?: string;
+  seoTitle?: string;
   filename?: string;
   full_path: string;
   metadata?: { [key: string]: string | number | boolean | undefined | null };
@@ -56,6 +57,7 @@ async function fetchInitialProfiles(): Promise<{
           gender: img.metadata?.gender != null ? String(img.metadata.gender) : undefined,
           description: img.metadata?.description != null ? String(img.metadata.description) : undefined,
           location: img.metadata?.location != null ? String(img.metadata.location) : undefined,
+          seoTitle: img.metadata?.seoTitle != null ? String(img.metadata.seoTitle) : undefined,
           filename: img.filename,
           full_path: img.full_path,
           metadata: img.metadata || {},
@@ -168,9 +170,9 @@ export default async function Home() {
               <h3 className="text-lg font-bold text-white mb-4">Quick Links</h3>
               <ul className="space-y-2 text-sm">
                 <li><a href="/" className="text-gray-400 hover:text-pink-300 transition">Home</a></li>
-                <li><a href="/Ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">Ahmedabad Escort Service</a></li>
-                <li><a href="/Ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">VIP Escorts</a></li>
-                <li><a href="/Ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">New Arrivals</a></li>
+                <li><a href="/ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">Ahmedabad Escort Service</a></li>
+                <li><a href="/ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">VIP Escorts</a></li>
+                <li><a href="/ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">New Arrivals</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-pink-300 transition">Privacy Policy</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-pink-300 transition">Terms of Service</a></li>
               </ul>

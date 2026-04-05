@@ -8,6 +8,7 @@ type Profile = {
   name: string;
   age: string | number;
   location?: string;
+  seoTitle?: string;
   full_path: string;
 };
 
@@ -33,8 +34,9 @@ export default function ProfileCard({ id, images }: ProfileCardProps) {
     setIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
-  // Safe slug generation
-  const slug = (profile.name || 'profile').replace(/\s+/g, '-').toLowerCase();
+  // Safe slug generation — prefer seoTitle for SEO-rich URLs
+  const rawSlug = profile.seoTitle || profile.name || 'profile';
+  const slug = rawSlug.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
   return (
     <div className="relative bg-white rounded-xl shadow-lg overflow-hidden flex flex-col group transition-transform duration-200 hover:scale-105">
@@ -42,7 +44,7 @@ export default function ProfileCard({ id, images }: ProfileCardProps) {
         {profile.full_path ? (
           <div className="relative w-full h-[440px] flex items-center justify-center">
             <Link 
-              href={`/Ahmedabad/escorts/${encodeURIComponent(slug)}-independent-escort`} 
+              href={`/ahmedabad/escorts/${encodeURIComponent(slug)}-independent-escort`} 
               className="block w-full h-full relative"
             >
               <Image
