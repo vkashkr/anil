@@ -140,6 +140,8 @@ export async function generateMetadata({
   if (!story) return { title: 'Story Not Found' };
 
   const url = `${BASE_URL}/stories/entertainment/${slug}`;
+  const coverImg = story.images?.find((img) => img.id === story.metadata.coverImage);
+  const ogImages = coverImg?.src ? [{ url: coverImg.src, alt: coverImg.alt }] : [];
   return {
     title: story.title,
     description: story.metadata.summary,
@@ -155,6 +157,14 @@ export async function generateMetadata({
       locale: 'hi_IN',
       publishedTime: story.metadata.createdAt,
       tags: story.metadata.themes,
+      images: ogImages,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: story.title,
+      description: story.metadata.hook,
+      images: coverImg?.src ? [coverImg.src] : [],
+      site: '@AliyaEscort',
     },
   };
 }

@@ -3,8 +3,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   //output: 'export',
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'gif-gif.s3.amazonaws.com',
+      },
+    ],
   },
+  // Note: add remotePatterns here when removing per-component `unoptimized` props
   async headers() {
     return [
       // Security + crawl-hint headers on every response

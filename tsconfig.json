@@ -32,7 +32,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    // ...existing code...
     "**/*.mts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"

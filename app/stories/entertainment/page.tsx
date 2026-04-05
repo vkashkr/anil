@@ -1,461 +1,343 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import Link from 'next/link'
-import ReadingProgress from './ReadingProgress'
-import StoryImg from './StoryImg'
-import AdminEditButton from './AdminEditButton'
 
 const BASE_URL = 'https://ahmedabad.aliyaescort.com'
+const PAGE_SIZE = 9
 
-async function fetchStory(storyId: string): Promise<StoryData | null> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-  const res = await fetch(
-    `${base}/bff/api/stories?id=${encodeURIComponent(storyId)}`,
-    { next: { revalidate: 60 } },
-  )
-  if (!res.ok) return null
-  const json = await res.json()
-  return json?.data ?? null
-}
-
-/* ─── Types ─────────────────────────────────────────────────── */
+/* ─── Types ──────────────────────────────────────────────────── */
 interface StoryMeta {
-  author: string
-  summary: string
-  hook: string
   genre: string
   subGenre: string
   rating: string
   language: string
+  summary: string
+  hook: string
   readingTimeMinutes: number
   wordCount: number
   themes: string[]
-  keywords: string[]
-  contentWarnings: string[]
   coverImage: string
-  bannerImage: string
-  setting: string
-  tone: string
-  period: string
-  audience: string
-  createdAt: string
-  updatedAt: string
   published?: boolean
   featured?: boolean
+  createdAt: string
 }
 
 interface StoryImage {
   id: string
   src: string
   alt: string
-  caption: string
-  type: string
-  usage: string
-  paragraphId?: string
-  themes: string[]
   width: number
   height: number
 }
 
-interface Paragraph {
-  id: string
-  order: number
-  text: string
-  themes: string[]
-  mood: string
-  characterRefs: string[]
-  imageRefs: string[]
-}
-
-interface Character {
-  id: string
-  name: string
-  role: string
-  age: number
-  occupation: string
-  motivation: string
-  wound: string
-  flaw: string
-  arc: string
-}
-
-interface StoryData {
+interface StorySummary {
   PK?: string
-  slug?: string
+  id?: string
+  slug: string
   title: string
   metadata: StoryMeta
-  paragraphs: Paragraph[]
   images: StoryImage[]
-  characters: Character[]
 }
 
-/* ─── SEO Metadata ───────────────────────────────────────────── */
-export async function generateMetadata({
-  searchParams,
-}: {
-  searchParams: Promise<{ title?: string; id?: string }>
-}): Promise<Metadata> {
-  const params = await searchParams
-  const storyId = params.id || 'story-001'
-  const story = await fetchStory(storyId)
-  if (!story) {
-    return { title: 'Story not found' }
+interface StoryListResponse {
+  success: boolean
+  stories: StorySummary[]
+  page: number
+  limit: number
+  total: number
+  totalPages: number
+}
+
+/* ─── Story URL builder ───────────────────────────────────────── */
+function storyUrl(story: StorySummary): string {
+  return `/stories/entertainment/${story.slug ?? story.PK ?? story.id}`
+}
+
+/* ─── SEO ─────────────────────────────────────────────────────── */
+export const metadata: Metadata = {
+  title: 'Entertainment Stories — Dark Romance & Literary Drama',
+  description:
+    'Read original Hinglish short stories exploring desire, loneliness, and self-discovery. Sensual, melancholic, and beautifully written.',
+  robots: { index: true, follow: true },
+  alternates: {
+    canonical: `${BASE_URL}/stories/entertainment`,
+  },
+  openGraph: {
+    url: `${BASE_URL}/stories/entertainment`,
+    title: 'Entertainment Stories — Dark Romance & Literary Drama',
+    description:
+      'Original Hinglish short stories exploring desire, loneliness, and self-discovery.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Entertainment Stories — Dark Romance & Literary Drama',
+    description: 'Original Hinglish dark romance and literary drama stories.',
+    site: '@AliyaEscort',
+  },
+}
+
+/* ─── Data fetching ───────────────────────────────────────────── */
+async function fetchStories(page: number): Promise<StoryListResponse> {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const res = await fetch(
+    `${base}/bff/api/stories/list?page=${page}&limit=${PAGE_SIZE}`,
+    { next: { revalidate: 60 } },
+  )
+  if (!res.ok) {
+    return { success: false, stories: [], page, limit: PAGE_SIZE, total: 0, totalPages: 0 }
   }
-  // Fix #8 — canonical on every story page (prevents duplicate-content issues)
-  const storyUrl = `${BASE_URL}/stories/entertainment/${story.slug ?? storyId}`
-  return {
-    title: story.title,
-    description: story.metadata.summary,
-    keywords: story.metadata.keywords,
-    robots: { index: true, follow: true },
-    alternates: {
-      canonical: storyUrl,
-    },
-    openGraph: {
-      url: storyUrl,
-      title: story.title,
-      description: story.metadata.hook,
-      type: 'article',
-      locale: 'hi_IN',
-      publishedTime: story.metadata.createdAt,
-      tags: story.metadata.themes,
-    },
-  }
+  return res.json()
 }
 
-/* ─── Mood → accent colour map ───────────────────────────────── */
-const moodAccent: Record<string, { border: string; glow: string; badge: string }> = {
-  'quiet, heavy':              { border: 'border-zinc-500',   glow: 'shadow-zinc-900',   badge: 'bg-zinc-700 text-zinc-300' },
-  'soft, opening':             { border: 'border-blue-400',   glow: 'shadow-blue-950',   badge: 'bg-blue-900/50 text-blue-300' },
-  'warm, raw':                 { border: 'border-amber-400',  glow: 'shadow-amber-950',  badge: 'bg-amber-900/40 text-amber-300' },
-  'intimate, certain':         { border: 'border-rose-400',   glow: 'shadow-rose-950',   badge: 'bg-rose-900/40 text-rose-300' },
-  'free, playful, deep':       { border: 'border-violet-400', glow: 'shadow-violet-950', badge: 'bg-violet-900/40 text-violet-300' },
-  'grounded, quietly triumphant': { border: 'border-emerald-400', glow: 'shadow-emerald-950', badge: 'bg-emerald-900/40 text-emerald-300' },
-}
+/* ─── Story Card ──────────────────────────────────────────────── */
+function StoryCard({ story }: { story: StorySummary }) {
+  const meta = story.metadata
+  const coverImg = story.images?.find((i) => i.id === meta.coverImage)
+  const url = storyUrl(story)
 
-function getMoodStyle(mood: string) {
-  return moodAccent[mood] ?? { border: 'border-zinc-600', glow: 'shadow-zinc-900', badge: 'bg-zinc-700 text-zinc-400' }
-}
-
-/* ─── Inline *italic* renderer ───────────────────────────────── */
-function RenderText({ text }: { text: string }) {
-  const parts = text.split(/(\*[^*]+\*)/g)
   return (
-    <>
-      {parts.map((part, i) =>
-        part.startsWith('*') && part.endsWith('*') ? (
-          <em key={i} className="not-italic text-rose-300 font-medium">
-            {part.slice(1, -1)}
-          </em>
+    <Link
+      href={url}
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-rose-700/60 hover:bg-zinc-900 transition-all duration-300 shadow-lg hover:shadow-rose-950/40 hover:shadow-xl"
+    >
+      {/* Cover image */}
+      <div className="relative aspect-[3/2] w-full overflow-hidden bg-zinc-900">
+        {coverImg?.src ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={coverImg.src}
+            alt={coverImg.alt ?? story.title}
+            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+          />
         ) : (
-          <span key={i}>{part}</span>
-        )
-      )}
-    </>
-  )
-}
-
-/* ─── Paragraph Image ────────────────────────────────────────── */
-function ParagraphImage({ image }: { image: StoryImage }) {
-  return (
-    <figure className="my-8 rounded-2xl overflow-hidden border border-zinc-800 shadow-xl">
-      <div
-        className="relative w-full bg-gradient-to-br from-zinc-900 via-rose-950/30 to-zinc-900"
-        style={{ aspectRatio: `${image.width}/${image.height}` }}
-      >
-        <StoryImg
-          src={image.src}
-          alt={image.alt}
-          className="absolute inset-0 w-full h-full object-cover opacity-90"
-          loading="lazy"
-        />
-        {/* overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-      </div>
-      {image.caption && (
-        <figcaption className="px-5 py-3 text-sm text-zinc-400 italic bg-zinc-900/80 border-t border-zinc-800">
-          {image.caption}
-        </figcaption>
-      )}
-    </figure>
-  )
-}
-
-/* ─── Character Card ─────────────────────────────────────────── */
-function CharacterCard({ character }: { character: Character }) {
-  return (
-    <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 backdrop-blur-sm p-6 space-y-3">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs uppercase tracking-widest text-rose-400 mb-1">
-            {character.role}
-          </p>
-          <h3 className="text-xl font-bold text-white">{character.name}</h3>
-          <p className="text-sm text-zinc-400">
-            {character.age} — {character.occupation}
-          </p>
-        </div>
-        <span className="shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-rose-700 to-amber-600 flex items-center justify-center text-white font-bold text-lg">
-          {character.name[0]}
-        </span>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-sm">
-        {[
-          { label: 'Wants',          value: character.motivation },
-          { label: 'Wound',          value: character.wound },
-          { label: 'Flaw',           value: character.flaw },
-          { label: 'Arc',            value: character.arc },
-        ].map(({ label, value }) => (
-          <div key={label} className="bg-zinc-800/50 rounded-xl p-3">
-            <p className="text-xs text-zinc-500 uppercase tracking-wider mb-1">{label}</p>
-            <p className="text-zinc-300 leading-snug">{value}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-/* ─── Page ───────────────────────────────────────────────────── */
-export default async function EntertainmentStoryPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ title?: string; id?: string }>
-}) {
-  const params = await searchParams
-  const storyId = params.id || 'story-001'
-  const story = await fetchStory(storyId)
-
-  if (!story) {
-    return (
-      <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center">
-        <h1 className="text-3xl font-bold mb-4">Story not found</h1>
-        <Link href="/stories" className="text-rose-400 hover:underline">← Back to Stories</Link>
-      </div>
-    )
-  }
-
-  const { metadata: meta, paragraphs, images, characters } = story
-
-  const imageMap = Object.fromEntries(
-    (images as StoryImage[]).map((img) => [img.id, img])
-  )
-  const bannerImage = imageMap[meta.bannerImage]
-  const coverImage  = imageMap[meta.coverImage]
-
-  return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
-      <ReadingProgress />
-
-      {/* Floating Edit Button (visible only to admins) */}
-      <AdminEditButton slug={story.slug || storyId} />
-
-      {/* ── Hero ──────────────────────────────────────────────── */}
-      <section className="relative min-h-[92vh] flex flex-col justify-end overflow-hidden">
-
-        {/* Banner background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/30 via-zinc-950/50 to-zinc-950">
-          {bannerImage && (
-            <StoryImg
-              src={bannerImage.src}
-              alt={bannerImage.alt}
-              className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-luminosity"
-            />
-          )}
-          {/* ambient glow */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(244,63,94,0.08)_0%,_transparent_70%)]" />
-        </div>
-
-        {/* Back nav */}
-        <div className="absolute top-6 left-6 z-10">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-rose-400 transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          <div className="absolute inset-0 bg-gradient-to-br from-rose-950 via-zinc-900 to-zinc-950 flex items-center justify-center">
+            <svg
+              className="w-14 h-14 text-zinc-700"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              />
             </svg>
-            Back
-          </Link>
+          </div>
+        )}
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/20 to-transparent" />
+
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-rose-600 text-white shadow">
+            {meta.rating}
+          </span>
+          {meta.featured && (
+            <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/20 border border-amber-500/40 text-amber-300">
+              Featured
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-col flex-1 p-5 space-y-3">
+        {/* Genre */}
+        <div className="flex items-center gap-2 text-xs text-zinc-500">
+          <span className="uppercase tracking-widest">{meta.genre}</span>
+          <span>·</span>
+          <span>{meta.language}</span>
         </div>
 
-        {/* Hero content */}
-        <div className="relative z-10 max-w-3xl mx-auto w-full px-6 pb-16 pt-24">
-          {/* Badges */}
-          <div className="flex flex-wrap items-center gap-2 mb-6">
-            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-rose-600 text-white">
-              {meta.rating}
-            </span>
-            <span className="px-3 py-1 rounded-full text-xs uppercase tracking-wide bg-zinc-800 text-zinc-300 border border-zinc-700">
-              {meta.genre}
-            </span>
-            <span className="px-3 py-1 rounded-full text-xs uppercase tracking-wide bg-zinc-800 text-zinc-300 border border-zinc-700">
-              {meta.subGenre}
-            </span>
-            <span className="px-3 py-1 rounded-full text-xs uppercase tracking-wide bg-zinc-800 text-zinc-400 border border-zinc-700">
-              {meta.language}
-            </span>
-          </div>
+        {/* Title */}
+        <h2 className="text-xl font-black text-white leading-snug group-hover:text-rose-300 transition-colors">
+          {story.title}
+        </h2>
 
-          {/* Title */}
-          <h1 className="text-5xl sm:text-6xl font-black text-white leading-tight tracking-tight mb-4">
-            {story.title}
-          </h1>
+        {/* Hook */}
+        <p className="text-sm text-amber-300/80 italic leading-relaxed border-l-2 border-amber-600/40 pl-3">
+          &ldquo;{meta.hook}&rdquo;
+        </p>
 
-          {/* Hook */}
-          <p className="text-xl sm:text-2xl text-amber-300 italic font-light leading-relaxed mb-8 border-l-2 border-amber-500 pl-4">
-            &ldquo;{meta.hook}&rdquo;
-          </p>
+        {/* Summary */}
+        <p className="text-sm text-zinc-400 leading-relaxed line-clamp-3">
+          {meta.summary}
+        </p>
 
-          {/* Meta strip */}
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-zinc-400 mb-6">
-            <span className="flex items-center gap-1.5">
-              <svg className="w-3.5 h-3.5 text-rose-400" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
-              </svg>
-              {meta.author}
-            </span>
-            <span className="flex items-center gap-1.5">
+        {/* Footer */}
+        <div className="flex items-center justify-between pt-2 mt-auto">
+          <div className="flex items-center gap-3 text-xs text-zinc-500">
+            <span className="flex items-center gap-1">
               <svg className="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               {meta.readingTimeMinutes} min read
             </span>
-            <span>{meta.wordCount.toLocaleString()} words</span>
-            <span>{new Date(meta.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+            <span>{(meta.wordCount ?? 0).toLocaleString()} words</span>
           </div>
-
-          {/* Content warnings */}
-          <div className="rounded-xl border border-rose-900/60 bg-rose-950/30 px-4 py-3">
-            <p className="text-xs font-semibold uppercase tracking-widest text-rose-400 mb-2">
-              Content Warnings
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {meta.contentWarnings.map((w) => (
-                <span
-                  key={w}
-                  className="px-2.5 py-1 rounded-full text-xs bg-rose-900/40 text-rose-300 border border-rose-800/50"
-                >
-                  {w}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Story Body ────────────────────────────────────────── */}
-      <main className="max-w-2xl mx-auto px-5 sm:px-6 py-12 space-y-2">
-
-        {/* Setting note */}
-        <div className="mb-10 flex items-start gap-3 rounded-xl bg-zinc-900/60 border border-zinc-800 px-5 py-4 text-sm text-zinc-400">
-          <svg className="w-4 h-4 mt-0.5 shrink-0 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          <span>
-            <span className="text-zinc-300 font-medium">Setting — </span>
-            {meta.setting}
+          <span className="text-xs text-rose-400 font-medium group-hover:underline">
+            Read →
           </span>
         </div>
 
-        {/* Paragraphs */}
-        {(paragraphs as Paragraph[])
-          .sort((a, b) => a.order - b.order)
-          .map((para) => {
-            const style    = getMoodStyle(para.mood)
-            const paraImgs = (para.imageRefs ?? [])
-              .map((ref) => imageMap[ref])
-              .filter(Boolean) as StoryImage[]
+        {/* Themes */}
+        {meta.themes?.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {meta.themes.slice(0, 4).map((t) => (
+              <span
+                key={t}
+                className="px-2 py-0.5 rounded-full text-xs bg-zinc-800 text-zinc-400 border border-zinc-700"
+              >
+                #{t}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </Link>
+  )
+}
 
-            return (
-              <article key={para.id} className="group">
-                {/* Paragraph card */}
-                <div
-                  className={`relative border-l-4 ${style.border} pl-6 py-1 mb-2 transition-all duration-300`}
-                >
-                  {/* Mood badge */}
-                  <span className={`inline-block mb-3 px-2.5 py-0.5 rounded-full text-xs ${style.badge}`}>
-                    {para.mood}
-                  </span>
+/* ─── Page ────────────────────────────────────────────────────── */
+export default async function EntertainmentPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const params = await searchParams
+  const currentPage = Math.max(1, Number(params.page) || 1)
+  const { stories, total, totalPages } = await fetchStories(currentPage)
 
-                  <p className="text-lg sm:text-xl text-zinc-200 leading-[1.85] tracking-wide">
-                    <RenderText text={para.text} />
-                  </p>
-                </div>
+  return (
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      {/* Header */}
+      <header className="max-w-5xl mx-auto px-5 sm:px-8 pt-16 pb-10">
+        <Link
+          href="/stories"
+          className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-rose-400 transition-colors mb-8"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          All Stories
+        </Link>
 
-                {/* Inline images after paragraph */}
-                {paraImgs.map((img) => (
-                  <ParagraphImage key={img.id} image={img} />
-                ))}
+        <div className="space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rose-400">
+            Entertainment
+          </p>
+          <h1 className="text-5xl sm:text-6xl font-black text-white leading-tight">
+            Stories
+          </h1>
+          <p className="text-lg text-zinc-400 max-w-xl leading-relaxed">
+            Hinglish dark romance. Desire, loneliness, and the quiet courage it takes to feel something real.
+          </p>
+        </div>
 
-                {/* Divider between paragraphs */}
-                <div className="flex items-center gap-4 my-8 opacity-30">
-                  <div className="flex-1 h-px bg-zinc-700" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-                  <div className="flex-1 h-px bg-zinc-700" />
-                </div>
-              </article>
-            )
-          })}
+        {/* Stats strip */}
+        <div className="flex gap-6 mt-8 text-sm text-zinc-500">
+          <span>
+            <span className="text-white font-semibold">{total}</span>{' '}
+            {total === 1 ? 'story' : 'stories'}
+          </span>
+          <span className="text-zinc-700">·</span>
+          <span>
+            Page <span className="text-white font-semibold">{currentPage}</span> of{' '}
+            <span className="text-white font-semibold">{totalPages}</span>
+          </span>
+          <span className="text-zinc-700">·</span>
+          <span>Adult · 18+</span>
+        </div>
+      </header>
+
+      {/* Divider */}
+      <div className="max-w-5xl mx-auto px-5 sm:px-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-10" />
+      </div>
+
+      {/* Grid */}
+      <main className="max-w-5xl mx-auto px-5 sm:px-8 pb-24">
+        {stories.length === 0 ? (
+          <div className="text-center py-24 text-zinc-600">
+            <svg className="w-12 h-12 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <p className="text-sm">No stories published yet.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {stories.map((story) => (
+              <StoryCard key={story.PK ?? story.id ?? story.slug} story={story} />
+            ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <nav className="flex items-center justify-center gap-4 mt-12" aria-label="Pagination">
+            {currentPage > 1 ? (
+              <Link
+                href={`/stories/entertainment?page=${currentPage - 1}`}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-800 text-zinc-200 hover:bg-rose-700 hover:text-white transition-colors text-sm font-medium"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+              </Link>
+            ) : (
+              <span className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-900 text-zinc-600 text-sm font-medium cursor-not-allowed">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+              </span>
+            )}
+
+            <span className="text-sm text-zinc-400">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            {currentPage < totalPages ? (
+              <Link
+                href={`/stories/entertainment?page=${currentPage + 1}`}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-800 text-zinc-200 hover:bg-rose-700 hover:text-white transition-colors text-sm font-medium"
+              >
+                Next
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            ) : (
+              <span className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-900 text-zinc-600 text-sm font-medium cursor-not-allowed">
+                Next
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            )}
+          </nav>
+        )}
       </main>
 
-      {/* ── Characters ────────────────────────────────────────── */}
-      <section className="max-w-2xl mx-auto px-5 sm:px-6 pb-14">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-5">
-          Characters
-        </h2>
-        <div className="space-y-4">
-          {(characters as Character[]).map((char) => (
-            <CharacterCard key={char.id} character={char} />
-          ))}
-        </div>
-      </section>
-
-      {/* ── Tags ──────────────────────────────────────────────── */}
-      <section className="max-w-2xl mx-auto px-5 sm:px-6 pb-20">
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 px-6 py-5 space-y-4">
-          <div>
-            <p className="text-xs uppercase tracking-widest text-zinc-500 mb-2">Themes</p>
-            <div className="flex flex-wrap gap-2">
-              {meta.themes.map((t) => (
-                <span key={t} className="px-3 py-1 rounded-full text-xs bg-zinc-800 text-zinc-300 border border-zinc-700">
-                  #{t}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-widest text-zinc-500 mb-2">Keywords</p>
-            <div className="flex flex-wrap gap-2">
-              {meta.keywords.map((k) => (
-                <span key={k} className="px-3 py-1 rounded-full text-xs bg-zinc-950 text-zinc-500 border border-zinc-800">
-                  {k}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="pt-1 flex items-center justify-between text-xs text-zinc-600">
-            <span>Tone: {meta.tone}</span>
-            <span>{meta.period} · {meta.audience}</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ── JSON-LD Structured Data ───────────────────────────── */}
+      {/* JSON-LD */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
-            '@type': 'Article',
-            headline: story.title,
-            description: meta.summary,
-            author: { '@type': 'Person', name: meta.author },
-            datePublished: meta.createdAt,
-            dateModified: meta.updatedAt,
-            keywords: meta.keywords.join(', '),
-            inLanguage: meta.language,
-            image: coverImage?.src,
+            '@type': 'CollectionPage',
+            name: 'Entertainment Stories — Dark Romance & Literary Drama',
+            description:
+              'Original Hinglish short stories exploring desire, loneliness, and self-discovery.',
+            url: `${BASE_URL}/stories/entertainment`,
+            hasPart: stories.map((s) => ({
+              '@type': 'Article',
+              headline: s.title,
+              url: `${BASE_URL}${storyUrl(s)}`,
+            })),
           }),
         }}
       />
