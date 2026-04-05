@@ -331,7 +331,7 @@ export default async function StoriesPage({
             hasPart: stories.map((s) => ({
               '@type': 'Article',
               headline: s.title,
-              url: `https://www.aliyaescort.com/ahmedabad${storyUrl(s)}`,
+              url: `https://www.aliyaescort.com${storyUrl(s)}`,
             })),
           }),
         }}
