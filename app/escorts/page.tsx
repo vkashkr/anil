@@ -87,7 +87,7 @@ export default async function AhmedabadEscortPage() {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Ahmedabad Escort', item: `${BASE_URL}/ahmedabad-escort` },
+      { '@type': 'ListItem', position: 2, name: 'Ahmedabad Escort', item: `${BASE_URL}/escorts` },
     ],
   };
 
@@ -96,12 +96,12 @@ export default async function AhmedabadEscortPage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Ahmedabad Escort Profiles',
-    url: `${BASE_URL}/ahmedabad-escort`,
+    url: `${BASE_URL}/escorts`,
     numberOfItems: profiles.length,
     itemListElement: profiles.slice(0, 50).map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${BASE_URL}/ahmedabad-escort/${encodeURIComponent(slug(p.name))}`,
+      url: `${BASE_URL}/escorts/${encodeURIComponent(slug(p.name))}`,
       name: p.name,
     })),
   };
@@ -242,7 +242,7 @@ export default async function AhmedabadEscortPage() {
         ) : (
           profiles.map((p, profileIndex) => {
             const profileSlug = slug(p.name);
-            const profileUrl = `/ahmedabad-escort/${encodeURIComponent(profileSlug)}`;
+            const profileUrl = `/escorts/${encodeURIComponent(profileSlug)}`;
             const mainImage = p.images[0] || null;
             const thumbs = p.images.slice(1, 4); // up to 3 extra thumbnails
             // First card's main image is likely the LCP — never lazy-load it

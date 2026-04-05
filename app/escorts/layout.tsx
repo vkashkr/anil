@@ -21,13 +21,13 @@ export const metadata: Metadata = {
     'local call girls ahmedabad',
   ],
   alternates: {
-    canonical: `${BASE_URL}/ahmedabad-escort`,
+    canonical: `${BASE_URL}/escorts`,
   },
   openGraph: {
     title: 'Ahmedabad Escort Service | 1000+ Verified Profiles',
     description:
       'Browse genuine, verified ahmedabad escort profiles. Independent call girls available 24/7. No advance payment. Real photos only.',
-    url: `${BASE_URL}/ahmedabad-escort`,
+    url: `${BASE_URL}/escorts`,
     siteName: 'Aliya Escort Ahmedabad',
     locale: 'en_IN',
     type: 'website',

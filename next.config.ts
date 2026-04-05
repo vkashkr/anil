@@ -43,25 +43,25 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // Permanent redirect: /ahmedabad-escort?name=priya → /ahmedabad-escort/priya
+      // Permanent redirect: /escorts?name=priya → /escorts/priya
       // Passes link equity and prevents duplicate content indexing
       {
-        source: '/ahmedabad-escort',
+        source: '/escorts',
         has: [{ type: 'query', key: 'name', value: '(?<name>.+)' }],
-        destination: '/ahmedabad-escort/:name',
+        destination: '/escorts/:name',
         permanent: true,
       },
       // Legacy /profile?name= redirect (old URLs before directory rename)
       {
         source: '/profile',
         has: [{ type: 'query', key: 'name', value: '(?<name>.+)' }],
-        destination: '/ahmedabad-escort/:name',
+        destination: '/escorts/:name',
         permanent: true,
       },
       // Legacy /profile/[slug] redirect
       {
         source: '/profile/:slug',
-        destination: '/ahmedabad-escort/:slug',
+        destination: '/escorts/:slug',
         permanent: true,
       },
     ];

@@ -19,7 +19,9 @@ interface PageProps {
 
 // cache() deduplicates: generateMetadata and the page component share one fetch per request
 const loadProfile = cache(async (slug: string): Promise<Profile | undefined> => {
-  const profile = await getProfileByNameFromDynamoDB(slug).catch(() => undefined);
+  // Strip '-independent-escort' suffix to get the profile name for DB lookup
+  const name = slug.replace(/-independent-escort$/, '');
+  const profile = await getProfileByNameFromDynamoDB(name).catch(() => undefined);
   if (!profile) return undefined;
 
   // Fetch images from S3 (stored separately from DynamoDB metadata)
@@ -50,7 +52,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const profile = await loadProfile(slug);
   if (!profile) return { title: 'Profile Not Found' };
 
-  const url = `${BASE_URL}/ahmedabad-escort/${slug}`;
+  const url = `${BASE_URL}/escorts/${slug}`;
   const title =
     profile.seoTitle || `${profile.name} — Call Girl in Ahmedabad | Aliya Escort`;
   const description =
@@ -97,7 +99,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
   const cookieStore = await cookies();
   const isAdmin = cookieStore.get('auth_token')?.value === 'authenticated';
 
-  const canonicalUrl = `${BASE_URL}/ahmedabad-escort/${slug}`;
+  const canonicalUrl = `${BASE_URL}/escorts/${slug}`;
   const whatsappText = encodeURIComponent(`hello, ${profile.name} I saw your profile on Aliya Escort`);
   const reviews = profile.reviews ?? [];
 
@@ -148,7 +150,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Ahmedabad Escorts', item: `${BASE_URL}/ahmedabad-escort` },
+      { '@type': 'ListItem', position: 2, name: 'Ahmedabad Escorts', item: `${BASE_URL}/escorts` },
       { '@type': 'ListItem', position: 3, name: profile.name, item: canonicalUrl },
     ],
   };

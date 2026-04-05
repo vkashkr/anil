@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       }
       const result = await deleteProfileFromDynamoDB(profileId);
       revalidatePath('/');
-      revalidatePath('/ahmedabad-escort');
+      revalidatePath('/escorts');
       return NextResponse.json(result);
     }
 
@@ -30,8 +30,8 @@ export async function POST(request: Request) {
     // Bust the Next.js cache for this profile's slug page so changes appear immediately
     if (result?.success !== false && profile.name) {
       const slug = profile.name.trim().toLowerCase().replace(/\s+/g, '-');
-      revalidatePath(`/ahmedabad-escort/${slug}`);
-      revalidatePath('/ahmedabad-escort');
+      revalidatePath(`/escorts/${slug}`);
+      revalidatePath('/escorts');
     }
 
     // If API Gateway returns success, we just forward the response

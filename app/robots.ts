@@ -9,9 +9,9 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: [
           '/',
-          '/ahmedabad-escort',
-          '/ahmedabad-escort/',
-          '/ahmedabad-escort/*',
+          '/escorts',
+          '/escorts/',
+          '/escorts/*',
         ],
         disallow: ['/admin/', '/api/', '/login/', '/upload/', '/view/'],
       },
@@ -22,7 +22,7 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: 'Bingbot',
-        allow: ['/ahmedabad-escort/', '/ahmedabad-escort/*', '/'],
+        allow: ['/escorts/', '/escorts/*', '/'],
         disallow: ['/admin/', '/api/', '/login/', '/upload/', '/view/'],
       },
     ],

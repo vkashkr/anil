@@ -80,7 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/`,                          lastModified: new Date(), changeFrequency: 'daily',  priority: 1.0 },
-    { url: `${BASE_URL}/ahmedabad-escort`,          lastModified: new Date(), changeFrequency: 'daily',  priority: 0.95 },
+    { url: `${BASE_URL}/escorts`,          lastModified: new Date(), changeFrequency: 'daily',  priority: 0.95 },
   ];
 
   // Fetch dynamic profiles and build profile routes
@@ -89,7 +89,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const slugs = await fetchAllProfileSlugs();
     // Fix #5 — clean path-based URLs instead of ?name= query params (better for indexing)
     profileRoutes = slugs.map((slug) => ({
-      url: `${BASE_URL}/ahmedabad-escort/${slug}`,
+      url: `${BASE_URL}/escorts/${slug}-independent-escort`,
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: 0.8,
