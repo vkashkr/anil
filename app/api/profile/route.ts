@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getProfileFromDynamoDB, getProfileByNameFromDynamoDB } from '@/app/lib/dynamodb';
+import { getProfileFromDynamoDB, getProfileBySeoTitleFromDynamoDB } from '@/app/lib/dynamodb';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -13,7 +13,7 @@ export async function GET(request: Request) {
   try {
     const profile = id
       ? await getProfileFromDynamoDB(id)
-      : await getProfileByNameFromDynamoDB(name!);
+      : await getProfileBySeoTitleFromDynamoDB(name!);
 
     if (profile) {
       return NextResponse.json({ success: true, profile });

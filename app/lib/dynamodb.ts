@@ -62,7 +62,7 @@ export async function getAllProfilesFromDynamoDB() {
     return result.profiles as Profile[];
 }
 
-export async function getProfileByNameFromDynamoDB(nameSlug: string): Promise<Profile | undefined> {
+export async function getProfileBySeoTitleFromDynamoDB(nameSlug: string): Promise<Profile | undefined> {
     const result = await callApi({ action: 'scan_profiles' });
     const profiles = result.profiles as Profile[];
     const normalize = (s: string) =>

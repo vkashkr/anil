@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     </url>
     ${profiles.map(p => `
     <url>
-        <loc>https://www.aliyaescort.com/ahmedabad/escorts/${(p.name || '').trim().toLowerCase().replace(/\s+/g, '-')}-independent-escort</loc>
+        <loc>https://www.aliyaescort.com/ahmedabad/escorts/${(p.name || '').trim().toLowerCase().replace(/\s+/g, '-')}</loc>
         <lastmod>${p.updatedAt || new Date().toISOString()}</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>

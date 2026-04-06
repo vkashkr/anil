@@ -38,25 +38,35 @@ async function fetchS3ImagesByProfileId(): Promise<Record<string, string[]>> {
   return imagesByid;
 }
 
+const makeSlug = (raw: string) =>
+  raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
 async function fetchProfiles() {
   try {
     const [dbProfiles, s3Images] = await Promise.all([
       getAllProfilesFromDynamoDB(),
       fetchS3ImagesByProfileId(),
     ]);
+    const seenSlug = new Set<string>();
+    const seenId = new Set<string>();
     return dbProfiles
       .filter((p) => p.isVisible !== false && p.name && p.name !== '-')
       .map((p) => ({
         ...p,
         images: s3Images[p.id]?.length ? s3Images[p.id] : (p.images ?? []),
-      }));
+      }))
+      .filter((p) => {
+        if (seenId.has(p.id)) return false;
+        seenId.add(p.id);
+        const slug = makeSlug(p.seoTitle || p.name);
+        if (seenSlug.has(slug)) return false;
+        seenSlug.add(slug);
+        return true;
+      });
   } catch {
     return [];
   }
 }
-
-const makeSlug = (raw: string) =>
-  raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 export default async function AhmedabadEscortPage() {
   const profiles = await fetchProfiles();
@@ -83,7 +93,7 @@ export default async function AhmedabadEscortPage() {
     itemListElement: profiles.slice(0, 50).map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${BASE_URL}/ahmedabad/escorts/${encodeURIComponent(makeSlug(p.seoTitle || p.name))}-independent-escort`,
+      url: `${BASE_URL}/ahmedabad/escorts/${encodeURIComponent(makeSlug(p.seoTitle || p.name))}`,
       name: p.name,
     })),
   };
@@ -224,7 +234,7 @@ export default async function AhmedabadEscortPage() {
         ) : (
           profiles.map((p, profileIndex) => {
             const profileSlug = makeSlug(p.seoTitle || p.name);
-            const profileUrl = `/ahmedabad/escorts/${encodeURIComponent(profileSlug)}-independent-escort`;
+            const profileUrl = `/ahmedabad/escorts/${encodeURIComponent(profileSlug)}`;
             const mainImage = p.images[0] || null;
             const thumbs = p.images.slice(1, 4); // up to 3 extra thumbnails
             // First card's main image is likely the LCP — never lazy-load it

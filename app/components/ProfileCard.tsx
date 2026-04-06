@@ -44,7 +44,7 @@ export default function ProfileCard({ id, images }: ProfileCardProps) {
         {profile.full_path ? (
           <div className="relative w-full h-[440px] flex items-center justify-center">
             <Link 
-              href={`/ahmedabad/escorts/${encodeURIComponent(slug)}-independent-escort`} 
+              href={`/ahmedabad/escorts/${encodeURIComponent(slug)}`} 
               className="block w-full h-full relative"
             >
               <Image

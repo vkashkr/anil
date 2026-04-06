@@ -66,7 +66,7 @@ export default function HomeNav({ initialProfilesById }: HomeNavProps) {
   const navigateToProfile = (name: string, seoTitle?: string) => {
     const rawSlug = seoTitle || name;
     const slug = rawSlug.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    router.push(`/ahmedabad/escorts/${encodeURIComponent(slug)}-independent-escort`);
+    router.push(`/ahmedabad/escorts/${encodeURIComponent(slug)}`);
     setSearchQuery('');
     setSearchFocused(false);
   };

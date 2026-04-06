@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
-import { getProfileByNameFromDynamoDB, Profile } from '@/app/lib/dynamodb';
+import { getProfileBySeoTitleFromDynamoDB, Profile } from '@/app/lib/dynamodb';
 import { PHONE_TEL, PHONE_DISPLAY, WHATSAPP_URL } from '@/app/lib/constants';
 import ProfileGallery from './ProfileGallery';
 import ReviewForm from './ReviewForm';
@@ -17,11 +17,13 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+const makeSlug = (raw: string) =>
+  raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
 // cache() deduplicates: generateMetadata and the page component share one fetch per request
 const loadProfile = cache(async (slug: string): Promise<Profile | undefined> => {
-  // Strip '-independent-escort' suffix to get the profile name for DB lookup
-  const name = slug.replace(/-independent-escort$/, '');
-  const profile = await getProfileByNameFromDynamoDB(name).catch(() => undefined);
+  // Strip '-independent-escort' suffix to get the seoTitle/name for DB lookup
+  const profile = await getProfileBySeoTitleFromDynamoDB(slug).catch(() => undefined);
   if (!profile) return undefined;
 
   // Fetch images from S3 (stored separately from DynamoDB metadata)
@@ -52,7 +54,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const profile = await loadProfile(slug);
   if (!profile) return { title: 'Profile Not Found' };
 
-  const url = `${BASE_URL}/ahmedabad/escorts/${profile.seoTitle ? profile.seoTitle.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : slug}`;
+  const url = `${BASE_URL}/ahmedabad/escorts/${makeSlug(profile.seoTitle || profile.name)}-independent-escort`;
   const title =
     profile.seoTitle || `${profile.name} — Call Girl in Ahmedabad | Aliya Escort`;
   const description =
@@ -99,7 +101,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
   const cookieStore = await cookies();
   const isAdmin = cookieStore.get('auth_token')?.value === 'authenticated';
 
-  const canonicalUrl = `${BASE_URL}/ahmedabad/escorts/${profile.seoTitle ? profile.seoTitle.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : slug}`;
+  const canonicalUrl = `${BASE_URL}/ahmedabad/escorts/${makeSlug(profile.seoTitle || profile.name)}-independent-escort`;
   const whatsappText = encodeURIComponent(`hello, ${profile.name} I saw your profile on Aliya Escort`);
   const reviews = profile.reviews ?? [];
 

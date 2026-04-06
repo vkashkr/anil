@@ -48,14 +48,14 @@ const nextConfig: NextConfig = {
       {
         source: '/escorts',
         has: [{ type: 'query', key: 'name', value: '(?<name>.+)' }],
-        destination: '/ahmedabad/escorts/:name-independent-escort',
+        destination: '/ahmedabad/escorts/:name',
         permanent: true,
       },
       // Legacy /profile?name= redirect (old URLs before directory rename)
       {
         source: '/profile',
         has: [{ type: 'query', key: 'name', value: '(?<name>.+)' }],
-        destination: '/ahmedabad/escorts/:name-independent-escort',
+        destination: '/ahmedabad/escorts/:name',
         permanent: true,
       },
       // Legacy /profile/[slug] redirect
