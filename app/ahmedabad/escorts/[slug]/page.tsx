@@ -23,7 +23,8 @@ const makeSlug = (raw: string) =>
 // cache() deduplicates: generateMetadata and the page component share one fetch per request
 const loadProfile = cache(async (slug: string): Promise<Profile | undefined> => {
   // Strip '-independent-escort' suffix to get the seoTitle/name for DB lookup
-  const profile = await getProfileBySeoTitleFromDynamoDB(slug).catch(() => undefined);
+  const cleanSlug = slug.replace(/-independent-escort$/, '');
+  const profile = await getProfileBySeoTitleFromDynamoDB(cleanSlug).catch(() => undefined);
   if (!profile) return undefined;
 
   // Fetch images from S3 (stored separately from DynamoDB metadata)
