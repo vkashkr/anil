@@ -58,7 +58,7 @@ async function fetchProfiles() {
       .filter((p) => {
         if (seenId.has(p.id)) return false;
         seenId.add(p.id);
-        const slug = makeSlug(p.seoTitle || p.name);
+        const slug = makeSlug(p.name);
         if (seenSlug.has(slug)) return false;
         seenSlug.add(slug);
         return true;
@@ -93,7 +93,7 @@ export default async function AhmedabadEscortPage() {
     itemListElement: profiles.slice(0, 50).map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${BASE_URL}/ahmedabad/escorts/${encodeURIComponent(makeSlug(p.seoTitle || p.name))}`,
+      url: `${BASE_URL}/ahmedabad/escorts/${encodeURIComponent(makeSlug(p.name))}`,
       name: p.name,
     })),
   };
@@ -241,7 +241,7 @@ export default async function AhmedabadEscortPage() {
           </div>
         ) : (
           profiles.map((p, profileIndex) => {
-            const profileSlug = makeSlug(p.seoTitle || p.name);
+            const profileSlug = p.name;
             const profileUrl = `/ahmedabad/escorts/${encodeURIComponent(profileSlug)}`;
             const mainImage = p.images[0] || null;
             const thumbs = p.images.slice(1, 4); // up to 3 extra thumbnails
