@@ -1,3 +1,5 @@
 shamefully-hoist=true
 strict-peer-dependencies=false
 build-workspace-packages=true
+ignore-scripts=false
+auto-install-peers=true
