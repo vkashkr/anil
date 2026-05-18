@@ -4,11 +4,13 @@ frontend:
     preBuild:
       commands:
         - corepack enable
-        - npm config set unsafe-perm true
-        - npm install
+        - corepack prepare pnpm@latest --activate
+        - pnpm config set ignore-scripts false
+        - pnpm approve-builds --all || true
+        - pnpm install --shamefully-hoist --no-frozen-lockfile --reporter=append-only
     build:
       commands:
-        - npm run build
+        - pnpm build
   artifacts:
     baseDirectory: .next
     files:
