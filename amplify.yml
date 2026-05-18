@@ -5,8 +5,7 @@ frontend:
       commands:
         - corepack enable
         - corepack prepare pnpm@latest --activate
-        - pnpm config set ignore-scripts false
-        - pnpm install --shamefully-hoist
+        - pnpm install --no-frozen-lockfile --force
     build:
       commands:
         - pnpm build
@@ -18,3 +17,6 @@ frontend:
     paths:
       - node_modules/**/*
       - .pnpm-store/**/*
+  env:
+    variables:
+      NODE_ENV: production
