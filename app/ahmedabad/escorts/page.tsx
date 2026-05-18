@@ -105,6 +105,14 @@ export default async function AhmedabadEscortPage() {
     mainEntity: [
       {
         '@type': 'Question',
+        name: 'Are you searching for ahmedabad escorts?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'I have real profiles that provide you escort service in Ahmedabad, Gujrat, India',
+        },
+      },
+      {
+        '@type': 'Question',
         name: 'How do I book an ahmedabad escort?',
         acceptedAnswer: {
           '@type': 'Answer',
