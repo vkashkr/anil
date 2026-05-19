@@ -7,7 +7,7 @@ frontend:
         - corepack prepare pnpm@latest --activate
         - pnpm config set ignore-scripts false
         - pnpm approve-builds --all || true
-        - pnpm install --shamefully-hoist --no-frozen-lockfile --reporter=append-only
+        - pnpm install --shamefully-hoist --no-frozen-lockfile --reporter=append-only --ignore-scripts=false
     build:
       commands:
         - pnpm build
