@@ -39,7 +39,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let profileRoutes: MetadataRoute.Sitemap = [];
   try {
-    const profiles = await fetchAllProfileSlugs();
+    // Prevent long-running profile fetches from delaying sitemap generation.
+    // If fetching profiles takes longer than `PROFILE_FETCH_TIMEOUT_MS`, fall
+    // back to an empty list so the sitemap still returns quickly. This helps
+    // avoid Google Search Console "Temporary processing error" when the
+    // server is slow or the upstream API is unresponsive.
+    const PROFILE_FETCH_TIMEOUT_MS = 5000;
+    const profiles = (await Promise.race([
+      fetchAllProfileSlugs(),
+      new Promise<{ slug: string; updatedAt?: string }[]>((resolve) =>
+        setTimeout(() => resolve([]), PROFILE_FETCH_TIMEOUT_MS),
+      ),
+    ])) as { slug: string; updatedAt?: string }[];
+
     profileRoutes = profiles.map(({ slug, updatedAt }) => ({
       url: `${BASE_URL}/ahmedabad/escorts/${slug}`,
       lastModified: updatedAt ? new Date(updatedAt) : new Date(),
