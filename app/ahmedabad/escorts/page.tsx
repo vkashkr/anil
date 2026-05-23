@@ -181,14 +181,14 @@ export default async function AhmedabadEscortPage() {
       {/* ── Hero ── */}
       <div className="bg-gradient-to-br from-black via-fuchsia-950/80 to-pink-950/60 px-4 pt-9 pb-7 text-center">
         <h1 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-300 to-yellow-300 mb-2">
-          Ahmedabad Escort Service
+          Escorts in Ahmedabad, Gujarat, India
         </h1>
         <p className="text-gray-400 text-sm md:text-base max-w-xl mx-auto mb-1">
-          Escorts in Ahmedabad, Gujarat, India
+          Find the best independent call girls in Ahmedabad.
         </p>
         <p className="text-gray-300 text-sm max-w-xl mx-auto mb-5">
           We have{' '}
-          <span className="text-pink-300 font-bold">{profiles.length} verified profiles</span>{' '}
+          <span className="text-pink-300 font-bold">more than 100+ verified profiles</span>{' '}
           available in Ahmedabad. Independent call girls, 24/7 — incall &amp; outcall, no advance payment.
         </p>
         <div className="flex justify-center gap-3 flex-wrap">
@@ -339,18 +339,10 @@ export default async function AhmedabadEscortPage() {
                   <div className="flex flex-col sm:flex-row gap-2 mt-auto pt-2">
                     <Link
                       href={profileUrl}
-                      className="flex-1 text-center bg-gradient-to-r from-pink-600 to-fuchsia-600 hover:from-pink-500 hover:to-fuchsia-500 text-white font-semibold text-xs sm:text-sm px-3 py-2 rounded-xl transition shadow"
+                      className="inline-flex justify-center w-auto text-center bg-gradient-to-r from-pink-600 to-fuchsia-600 hover:from-pink-500 hover:to-fuchsia-500 text-white font-semibold text-xs sm:text-sm px-3 py-2 rounded-xl transition shadow"
                     >
                       View Profile &amp; Contact
                     </Link>
-                    <a
-                      href={WHATSAPP_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 text-center bg-zinc-800 hover:bg-zinc-700 border border-white/10 text-white font-semibold text-xs sm:text-sm px-3 py-2 rounded-xl transition"
-                    >
-                      💬 WhatsApp
-                    </a>
                   </div>
                 </div>
               </article>
