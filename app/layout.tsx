@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.aliyaescort.com'),
   title: {
-    default: "Aliya Escort Ahmedabad | Premium Call Girl Service in Gujarat",
+    default: "Ahmedabad escorts, Gujarat, India",
     template: "%s",
   },
   description: "Aliya Escort — Ahmedabad's most trusted escort directory since 2020. Browse real, verified independent call girls for incall & outcall across Gujarat. 24/7, no advance payment.",
