@@ -90,6 +90,8 @@ export default async function Home() {
     return rest;
   });
 
+  const DEFAULT_WHATSAPP_TEXT = encodeURIComponent('Hello Aliya, I am interested in your service');
+
   return (
     <div className="min-h-screen w-full bg-zinc-50 font-sans dark:bg-black flex flex-col pb-14 md:pb-0">
 
@@ -192,7 +194,7 @@ export default async function Home() {
                   <span className="text-green-400 mt-0.5">💬</span>
                   <div>
                     <p className="text-white font-semibold">WhatsApp</p>
-                    <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-pink-300 transition">Chat with us</a>
+                    <a href={`${WHATSAPP_URL}?text=${DEFAULT_WHATSAPP_TEXT}`} target="_blank" rel="noopener noreferrer" className="hover:text-pink-300 transition">Chat with us</a>
                   </div>
                 </li>
                 <li className="flex items-start gap-2">

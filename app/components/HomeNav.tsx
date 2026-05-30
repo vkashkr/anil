@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { PHONE_TEL, WHATSAPP_URL } from '@/app/lib/constants';
 
+const DEFAULT_WHATSAPP_TEXT = encodeURIComponent('Hello Aliya, I am interested in your service');
+
 type HomeProfile = {
   id: string | number;
   name: string;
@@ -143,7 +145,7 @@ export default function HomeNav({ initialProfilesById }: HomeNavProps) {
             <a href={PHONE_TEL} className="bg-gradient-to-r from-pink-500 to-fuchsia-500 text-white font-semibold px-4 py-1.5 rounded-full text-sm hover:from-pink-400 hover:to-fuchsia-400 transition shadow-lg">
               📞 Call Now
             </a>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-green-500 to-teal-500 text-white font-semibold px-4 py-1.5 rounded-full text-sm hover:from-green-400 hover:to-teal-400 transition shadow-lg">
+            <a href={`${WHATSAPP_URL}?text=${DEFAULT_WHATSAPP_TEXT}`} target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-green-500 to-teal-500 text-white font-semibold px-4 py-1.5 rounded-full text-sm hover:from-green-400 hover:to-teal-400 transition shadow-lg">
               💬 WhatsApp
             </a>
           </div>
