@@ -3,11 +3,12 @@ import type { Metadata } from 'next';
 const BASE_URL = 'https://www.aliyaescort.com';
 
 export const metadata: Metadata = {
-  title: 'Ahmedabad Escort Service | Call Girls in Ahmedabad | Aliya Escort',
+  title: 'Escort Ahmedabad, Gujarat, India',
   description:
     'Browse 1000+ verified ahmedabad escort profiles. Independent call girls in Ahmedabad available 24/7 for hotel & home service. No advance, 100% real photos. Book now.',
   keywords: [
     'ahmedabad escort',
+    'ahmedabad escorts',
     'ahmedabad escort service',
     'escort in ahmedabad',
     'call girls in ahmedabad',
@@ -28,13 +29,13 @@ export const metadata: Metadata = {
     description:
       'Browse genuine, verified ahmedabad escort profiles. Independent call girls available 24/7. No advance payment. Real photos only.',
     url: `${BASE_URL}/ahmedabad/escorts`,
-    siteName: 'Aliya Escort Ahmedabad',
+    siteName: 'Escort Ahmedabad',
     locale: 'en_IN',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ahmedabad Escort Service | Aliya Escort',
+    title: 'Ahmedabad Escort Service',
     description:
       '1000+ verified ahmedabad escort profiles. Book independent call girls in Ahmedabad 24/7.',
     site: '@AliyaEscort',
