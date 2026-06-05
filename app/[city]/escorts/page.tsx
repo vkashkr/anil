@@ -78,12 +78,16 @@ async function fetchProfiles() {
   }
 }
 
-export default async function CityEscortPage({ params }: { params?: { city?: string } }) {
+export default async function CityEscortPage({ params }: { params?: any }) {
   const profiles = await fetchProfiles();
-  const cityRaw = String(params?.city ?? 'ahmedabad');
+
+  // `params` is a Promise in the App Router; await to access values
+  const resolvedParams = params ? await params : undefined;
+
+  const cityRaw = String(resolvedParams?.city ?? 'ahmedabad');
   const canonicalSlug = makeSlug(cityRaw || 'ahmedabad');
   // Only perform server redirect when params.city exists (normalize casing/format)
-  if (params?.city && params.city !== canonicalSlug) {
+  if (resolvedParams?.city && resolvedParams.city !== canonicalSlug) {
     redirect(`/${canonicalSlug}/escorts`);
   }
   const citySlug = canonicalSlug;
@@ -176,7 +180,7 @@ export default async function CityEscortPage({ params }: { params?: { city?: str
   return (
     <div className="min-h-screen bg-zinc-950 text-gray-100 font-sans pb-14 md:pb-0">
       {/* Client-side fallback: if `params.city` wasn't provided server-side, normalize from pathname */}
-      {!params?.city && <ClientCityRedirect />}
+      {!resolvedParams?.city && <ClientCityRedirect />}
 
       {/* ── JSON-LD ── */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
