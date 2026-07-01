@@ -1,29 +1,70 @@
 import { MetadataRoute } from 'next';
 import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
+import { makeSlug } from '@/app/lib/city-slugs';
 
 // Re-fetch from DynamoDB on every request — no build-time baking
 export const dynamic = 'force-dynamic';
 
 const BASE_URL = 'https://www.aliyaescort.com';
 
-const makeSlug = (raw: string) =>
-  raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+type SitemapProfileRoute = { city: string; slug: string; updatedAt?: string };
 
-async function fetchAllProfileSlugs(): Promise<{ slug: string; updatedAt?: string }[]> {
+function getProfileCitySlug(profile: { city?: string; location?: string; state?: string }): string | null {
+  const text = [profile.city, profile.location, profile.state]
+    .filter(Boolean)
+    .map((v) => String(v).toLowerCase())
+    .join(' ');
+
+  // Canonicalize common city variants to stable slugs used by routes.
+  if (/(hyderabad|hydrabad|hyderbad|secunderabad|telangana)/i.test(text)) {
+    return 'hyderabad';
+  }
+  if (/(ahmedabad|gujarat)/i.test(text)) {
+    return 'ahmedabad';
+  }
+
+  const candidates = [profile.city, profile.location, profile.state]
+    .filter(Boolean)
+    .map((v) => String(v).split(/[|,/]/)[0]?.trim() || '')
+    .map((v) => makeSlug(v))
+    .filter(Boolean);
+
+  return candidates[0] || null;
+}
+
+async function fetchAllProfileSlugs(): Promise<SitemapProfileRoute[]> {
   try {
     const profiles = await getAllProfilesFromDynamoDB();
     const seenId = new Set<string>();
-    const seenSlug = new Set<string>();
-    const results: { slug: string; updatedAt?: string }[] = [];
+    const seenCitySlug = new Set<string>();
+    const results: SitemapProfileRoute[] = [];
     for (const p of profiles) {
       if (!p.id || seenId.has(p.id)) continue;
       seenId.add(p.id);
+      if (p.isVisible === false) continue;
+
+      const city = getProfileCitySlug(p);
+      if (!city) continue;
+
+      // Match canonical profile route slug strategy.
       const raw = p.seoTitle || p.name;
       if (!raw || raw === '-') continue;
       const slug = makeSlug(raw);
-      if (!slug || seenSlug.has(slug)) continue;
-      seenSlug.add(slug);
-      results.push({ slug, updatedAt: p.updatedAt });
+      if (!slug) continue;
+
+      const targetCities = new Set<string>([city]);
+      // Dual-city sitemap mode for core city clusters.
+      if (city === 'ahmedabad' || city === 'hyderabad') {
+        targetCities.add('ahmedabad');
+        targetCities.add('hyderabad');
+      }
+
+      for (const targetCity of targetCities) {
+        const citySlugKey = `${targetCity}:${slug}`;
+        if (seenCitySlug.has(citySlugKey)) continue;
+        seenCitySlug.add(citySlugKey);
+        results.push({ city: targetCity, slug, updatedAt: p.updatedAt });
+      }
     }
     return results;
   } catch {
@@ -32,11 +73,21 @@ async function fetchAllProfileSlugs(): Promise<{ slug: string; updatedAt?: strin
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${BASE_URL}/`,                     lastModified: new Date(), changeFrequency: 'daily',  priority: 1.0 },
-    { url: `${BASE_URL}/hyderabad/escorts`, lastModified: new Date(), changeFrequency: 'daily',  priority: 0.95 },
+  const now = new Date();
+  const rootRoute: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}/`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
   ];
 
+  // Always include core city listing routes even if profile fetch is empty/timed out.
+  const defaultCitySlugs = ['ahmedabad', 'hyderabad'];
+  const defaultCityRoutes: MetadataRoute.Sitemap = defaultCitySlugs.map((city) => ({
+    url: `${BASE_URL}/${city}/escorts`,
+    lastModified: now,
+    changeFrequency: 'daily' as const,
+    priority: 0.95,
+  }));
+
+  let cityRoutes: MetadataRoute.Sitemap = [];
   let profileRoutes: MetadataRoute.Sitemap = [];
   try {
     // Prevent long-running profile fetches from delaying sitemap generation.
@@ -44,16 +95,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // back to an empty list so the sitemap still returns quickly. This helps
     // avoid Google Search Console "Temporary processing error" when the
     // server is slow or the upstream API is unresponsive.
-    const PROFILE_FETCH_TIMEOUT_MS = 5000;
-    const profiles = (await Promise.race([
-      fetchAllProfileSlugs(),
-      new Promise<{ slug: string; updatedAt?: string }[]>((resolve) =>
-        setTimeout(() => resolve([]), PROFILE_FETCH_TIMEOUT_MS),
-      ),
-    ])) as { slug: string; updatedAt?: string }[];
+    const PROFILE_FETCH_TIMEOUT_MS = 15000;
+    const profiles = process.env.NODE_ENV === 'development'
+      ? await fetchAllProfileSlugs()
+      : ((await Promise.race([
+          fetchAllProfileSlugs(),
+          new Promise<SitemapProfileRoute[]>((resolve) =>
+            setTimeout(() => resolve([]), PROFILE_FETCH_TIMEOUT_MS),
+          ),
+        ])) as SitemapProfileRoute[]);
 
-    profileRoutes = profiles.map(({ slug, updatedAt }) => ({
-      url: `${BASE_URL}/ahmedabad/escorts/${slug}`,
+    const uniqueCities = Array.from(new Set([...defaultCitySlugs, ...profiles.map((p) => p.city)])).sort();
+    cityRoutes = uniqueCities.map((city) => ({
+      url: `${BASE_URL}/${city}/escorts`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.95,
+    }));
+
+    profileRoutes = profiles.map(({ city, slug, updatedAt }) => ({
+      url: `${BASE_URL}/${city}/escorts/${slug}`,
       lastModified: updatedAt ? new Date(updatedAt) : new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.8,
@@ -62,5 +123,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Sitemap profile generation error:', error);
   }
 
-  return [...staticRoutes, ...profileRoutes];
+  const finalCityRoutes = cityRoutes.length > 0 ? cityRoutes : defaultCityRoutes;
+  return [...rootRoute, ...finalCityRoutes, ...profileRoutes];
 }
