@@ -51,6 +51,28 @@ const formatCityName = (raw: string) =>
     .map((w) => (w ? w[0].toUpperCase() + w.slice(1).toLowerCase() : ''))
     .join(' ');
 
+const CITY_AREAS: Record<string, string[]> = {
+  ahmedabad: [
+    'SG Highway', 'Satellite', 'Vastrapur', 'Prahlad Nagar', 'Bodakdev',
+    'Navrangpura', 'Ellisbridge', 'CG Road', 'Maninagar', 'Gota',
+    'Chandkheda', 'Motera', 'Bopal', 'South Bopal', 'Thaltej',
+    'Ambawadi', 'Paldi', 'Vejalpur', 'Iscon', 'Science City',
+  ],
+  hyderabad: [
+    'Banjara Hills', 'Jubilee Hills', 'Hitech City', 'Gachibowli', 'Madhapur',
+    'Kondapur', 'Begumpet', 'Secunderabad', 'Ameerpet', 'Kukatpally',
+    'Miyapur', 'LB Nagar', 'Mehdipatnam', 'Dilsukhnagar', 'Uppal',
+    'Somajiguda', 'Himayatnagar', 'Kompally', 'Shamshabad', 'Nallagandla',
+  ],
+};
+
+const DEFAULT_AREAS = [
+  'City Center', 'Business District', 'Airport Area', 'Railway Station', 'Top Hotels',
+  'Premium Localities', 'Nearby Suburbs', 'Major Malls', 'IT Hubs', 'Residential Areas',
+];
+
+const getCityAreas = (citySlug: string) => CITY_AREAS[citySlug] ?? DEFAULT_AREAS;
+
 async function fetchProfiles() {
   try {
     const [dbProfiles, s3Images] = await Promise.all([
@@ -93,6 +115,8 @@ export default async function CityEscortPage({ params }: { params?: any }) {
   const citySlug = canonicalSlug;
   const cityPath = encodeURIComponent(citySlug);
   const cityDisplay = formatCityName(citySlug);
+  const cityAreas = getCityAreas(citySlug);
+  const topCityAreas = cityAreas.slice(0, 8).join(', ');
 
   const BASE_URL = 'https://www.aliyaescort.com';
 
@@ -155,7 +179,7 @@ export default async function CityEscortPage({ params }: { params?: any }) {
         name: `What areas in ${cityDisplay} do escorts service?`,
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Escort service is available across all major areas including SG Highway, Satellite, Vastrapur, Prahlad Nagar, Bodakdev, Navrangpura, Ellisbridge, CG Road, Maninagar, and all 5-star hotels in the city.',
+          text: `Escort service is available across all major areas including ${topCityAreas}, and all 5-star hotels in ${cityDisplay}.`,
         },
       },
       {
@@ -382,12 +406,7 @@ export default async function CityEscortPage({ params }: { params?: any }) {
           Escort Service Available In
         </h2>
         <div className="flex flex-wrap gap-2">
-          {[
-            'SG Highway', 'Satellite', 'Vastrapur', 'Prahlad Nagar', 'Bodakdev',
-            'Navrangpura', 'Ellisbridge', 'CG Road', 'Maninagar', 'Gota',
-            'Chandkheda', 'Motera', 'Bopal', 'South Bopal', 'Thaltej',
-            'Ambawadi', 'Paldi', 'Vejalpur', 'Iscon', 'Science City',
-          ].map((area) => (
+          {cityAreas.map((area) => (
             <span key={area} className="bg-zinc-800 text-gray-300 text-xs px-3 py-1 rounded-full border border-white/5 hover:border-pink-500/30 transition">
               {area}
             </span>
@@ -416,7 +435,7 @@ export default async function CityEscortPage({ params }: { params?: any }) {
               },
               {
                 q: `Which areas in ${cityDisplay} are covered?`,
-                a: `We cover SG Highway, Satellite, Vastrapur, Prahlad Nagar, Bodakdev, Navrangpura, Ellisbridge, CG Road, Maninagar, and all major 5-star hotels in ${cityDisplay}.`,
+                a: `We cover ${topCityAreas}, and all major 5-star hotels in ${cityDisplay}.`,
               },
               {
                 q: `What is the rate for call girls in ${cityDisplay}?`,
@@ -442,7 +461,7 @@ export default async function CityEscortPage({ params }: { params?: any }) {
         <p className="text-gray-500 text-xs leading-relaxed">
           Aliya Escort {cityDisplay} is India&#39;s trusted directory for verified independent escort profiles in {cityDisplay}.
           Browse genuine call girls available 24/7 — no advance payment, real photos, incall &amp; outcall.
-          Service available across SG Highway, Satellite, Vastrapur, Prahlad Nagar, Bodakdev &amp; all areas of {cityDisplay}.
+          Service available across {topCityAreas} &amp; all areas of {cityDisplay}.
           All adults. All consensual. Comply with local laws.
         </p>
       </div>

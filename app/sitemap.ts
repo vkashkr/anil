@@ -34,7 +34,7 @@ async function fetchAllProfileSlugs(): Promise<{ slug: string; updatedAt?: strin
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/`,                     lastModified: new Date(), changeFrequency: 'daily',  priority: 1.0 },
-    { url: `${BASE_URL}/Hyderabad/escorts`, lastModified: new Date(), changeFrequency: 'daily',  priority: 0.95 },
+    { url: `${BASE_URL}/hyderabad/escorts`, lastModified: new Date(), changeFrequency: 'daily',  priority: 0.95 },
   ];
 
   let profileRoutes: MetadataRoute.Sitemap = [];

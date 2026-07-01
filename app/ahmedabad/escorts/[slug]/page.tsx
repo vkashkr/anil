@@ -20,6 +20,23 @@ interface PageProps {
 const makeSlug = (raw: string) =>
   raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
+const sanitizeProfileHtml = (html?: string) => {
+  if (!html) return '';
+  return String(html)
+    .replace(/<\s*\/?\s*(script|style|iframe|object|embed|meta|link|title)[^>]*>/gi, '')
+    .replace(/\son\w+\s*=\s*(["']).*?\1/gi, '')
+    .replace(/\son\w+\s*=\s*[^\s>]+/gi, '')
+    .replace(/javascript:/gi, '');
+};
+
+const sanitizeInlineCss = (css?: string) => {
+  if (!css) return '';
+  return String(css)
+    .replace(/<\/?style[^>]*>/gi, '')
+    .replace(/<\/?script[^>]*>/gi, '')
+    .replace(/<\/?iframe[^>]*>/gi, '');
+};
+
 // cache() deduplicates: generateMetadata and the page component share one fetch per request
 const loadProfile = cache(async (slug: string): Promise<Profile | undefined> => {
   // Strip '-independent-escort' suffix to get the seoTitle/name for DB lookup
@@ -105,6 +122,8 @@ export default async function ProfileSlugPage({ params }: PageProps) {
   const canonicalUrl = `${BASE_URL}/ahmedabad/escorts/${makeSlug(profile.seoTitle || profile.name)}-independent-escort`;
   const whatsappText = encodeURIComponent(`hello, ${profile.name} I saw your profile on Aliya Escort`);
   const reviews = profile.reviews ?? [];
+  const safeDescriptionHtml = sanitizeProfileHtml(profile.description);
+  const safeCustomCss = sanitizeInlineCss(profile.customCss);
 
   // Pull well-known keys out of extraProperties for structured display
   const ep = profile.extraProperties ?? {};
@@ -162,8 +181,8 @@ export default async function ProfileSlugPage({ params }: PageProps) {
     <div className="min-h-screen bg-zinc-900 text-gray-100 font-sans pb-14 md:pb-0">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      {profile.customCss && (
-        <style dangerouslySetInnerHTML={{ __html: profile.customCss }} />
+      {safeCustomCss && (
+        <style dangerouslySetInnerHTML={{ __html: safeCustomCss }} />
       )}
 
       {/* Sticky nav + breadcrumb */}
@@ -355,14 +374,14 @@ export default async function ProfileSlugPage({ params }: PageProps) {
             )}
 
             {/* ── About Me ── */}
-            {profile.description && (
+            {safeDescriptionHtml && (
               <div className="bg-black/40 p-5 rounded-2xl border border-white/5 backdrop-blur-sm">
                 <h3 className="text-base font-bold text-white mb-3 flex items-center gap-2">
                   <span className="text-fuchsia-400">◆</span> About Me
                 </h3>
                 <div
                   className="text-gray-300 text-sm leading-relaxed prose prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ __html: profile.description }}
+                  dangerouslySetInnerHTML={{ __html: safeDescriptionHtml }}
                 />
               </div>
             )}

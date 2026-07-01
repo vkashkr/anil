@@ -10,6 +10,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: [
           '/',
           '/ahmedabad/*',
+          '/hyderabad/*',
         ],
         disallow: ['/admin/', '/api/', '/login/', '/upload/', '/view/'],
       },
@@ -20,7 +21,7 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: 'Bingbot',
-        allow: ['/ahmedabad/*', '/'],
+        allow: ['/ahmedabad/*', '/hyderabad/*', '/'],
         disallow: ['/admin/', '/api/', '/login/', '/upload/', '/view/'],
       },
     ],
