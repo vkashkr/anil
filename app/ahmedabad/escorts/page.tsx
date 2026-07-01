@@ -241,7 +241,7 @@ export default async function AhmedabadEscortPage() {
           </div>
         ) : (
           profiles.map((p, profileIndex) => {
-            const profileSlug = p.name;
+            const profileSlug = makeSlug(p.name);
             const profileUrl = `/ahmedabad/escorts/${encodeURIComponent(profileSlug)}`;
             const mainImage = p.images[0] || null;
             const thumbs = p.images.slice(1, 4); // up to 3 extra thumbnails

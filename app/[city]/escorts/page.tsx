@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import ClientCityRedirect from './ClientCityRedirect';
 import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
 import { PHONE_TEL, WHATSAPP_URL } from '@/app/lib/constants';
+import { formatCityName, makeSlug, resolveAllowedCitySlug } from '@/app/lib/city-slugs';
 
 const API_BASE = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp';
 
@@ -39,17 +40,6 @@ async function fetchS3ImagesByProfileId(): Promise<Record<string, string[]>> {
   } while (nextToken);
   return imagesByid;
 }
-
-const makeSlug = (raw: string) =>
-  raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-
-const formatCityName = (raw: string) =>
-  String(raw)
-    .replace(/[-_]+/g, ' ')
-    .trim()
-    .split(/\s+/)
-    .map((w) => (w ? w[0].toUpperCase() + w.slice(1).toLowerCase() : ''))
-    .join(' ');
 
 const CITY_AREAS: Record<string, string[]> = {
   ahmedabad: [
@@ -107,12 +97,17 @@ export default async function CityEscortPage({ params }: { params?: any }) {
   const resolvedParams = params ? await params : undefined;
 
   const cityRaw = String(resolvedParams?.city ?? 'ahmedabad');
-  const canonicalSlug = makeSlug(cityRaw || 'ahmedabad');
-  // Only perform server redirect when params.city exists (normalize casing/format)
-  if (resolvedParams?.city && resolvedParams.city !== canonicalSlug) {
-    redirect(`/${canonicalSlug}/escorts`);
+  const requestedSlug = makeSlug(cityRaw || 'ahmedabad');
+  const canonicalSlug = resolveAllowedCitySlug(cityRaw);
+  if (resolvedParams?.city && !canonicalSlug) {
+    notFound();
   }
-  const citySlug = canonicalSlug;
+  const citySlug = canonicalSlug ?? 'ahmedabad';
+
+  // Normalize casing and known aliases (e.g. hyderabsd -> hyderabad)
+  if (resolvedParams?.city && requestedSlug !== citySlug) {
+    redirect(`/${citySlug}/escorts`);
+  }
   const cityPath = encodeURIComponent(citySlug);
   const cityDisplay = formatCityName(citySlug);
   const cityAreas = getCityAreas(citySlug);
@@ -290,7 +285,7 @@ export default async function CityEscortPage({ params }: { params?: any }) {
           </div>
         ) : (
           profiles.map((p, profileIndex) => {
-            const profileSlug = p.name;
+            const profileSlug = makeSlug(p.name);
             const profileUrl = `/${citySlug}/escorts/${encodeURIComponent(profileSlug)}`;
             const mainImage = p.images[0] || null;
             const thumbs = p.images.slice(1, 4); // up to 3 extra thumbnails

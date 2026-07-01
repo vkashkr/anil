@@ -2,13 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
-const makeSlug = (raw: string) =>
-  String(raw)
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+import { resolveAllowedCitySlug } from '@/app/lib/city-slugs';
 
 export default function ClientCityRedirect() {
   const router = useRouter();
@@ -19,7 +13,11 @@ export default function ClientCityRedirect() {
       const parts = path.split('/').filter(Boolean);
       const city = parts[0] || '';
       if (!city) return;
-      const canonical = makeSlug(city || '');
+      const canonical = resolveAllowedCitySlug(city || '');
+      if (!canonical) {
+        router.replace('/ahmedabad/escorts');
+        return;
+      }
       const expected = `/${canonical}/escorts`;
       if (path.toLowerCase() !== expected.toLowerCase()) {
         router.replace(expected);

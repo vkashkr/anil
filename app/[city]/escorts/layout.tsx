@@ -1,27 +1,14 @@
 import type { Metadata } from 'next';
+import { notFound, redirect } from 'next/navigation';
 import ClientCityRedirect from './ClientCityRedirect';
+import { formatCityName, makeSlug, resolveAllowedCitySlug } from '@/app/lib/city-slugs';
 
 const BASE_URL = 'https://www.aliyaescort.com';
 
-const makeSlug = (raw: string) =>
-  String(raw || '')
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-
-const formatCityName = (raw: string) =>
-  String(raw)
-    .replace(/[-_]+/g, ' ')
-    .trim()
-    .split(/\s+/)
-    .map((w) => (w ? w[0].toUpperCase() + w.slice(1).toLowerCase() : ''))
-    .join(' ');
-
 export async function generateMetadata({ params }: { params?: any }): Promise<Metadata> {
   const resolvedParams = params ? await params : undefined;
-  const cityRaw = String(resolvedParams?.city ?? 'Hydrabad');
-  const citySlug = makeSlug(cityRaw || 'Hydrabad');
+  const cityRaw = String(resolvedParams?.city ?? 'ahmedabad');
+  const citySlug = resolveAllowedCitySlug(cityRaw) ?? 'ahmedabad';
   const cityDisplay = formatCityName(citySlug);
 
   const title = `Escorts ${cityDisplay}, India`;
@@ -76,9 +63,19 @@ export async function generateMetadata({ params }: { params?: any }): Promise<Me
   };
 }
 
-export default function CityEscortLayout({ children, params }: { children: React.ReactNode; params?: any }) {
-  // `params` may be a promise; render client redirect when not provided server-side
-  const isServerParamMissing = !params;
+export default async function CityEscortLayout({ children, params }: { children: React.ReactNode; params?: any }) {
+  const resolvedParams = params ? await params : undefined;
+  if (resolvedParams?.city) {
+    const requested = makeSlug(String(resolvedParams.city));
+    const canonical = resolveAllowedCitySlug(String(resolvedParams.city));
+    if (!canonical) notFound();
+    if (requested !== canonical) {
+      redirect(`/${canonical}/escorts`);
+    }
+  }
+
+  // `params` may be absent in some edge render paths; keep client fallback.
+  const isServerParamMissing = !resolvedParams?.city;
   return (
     <>
       {isServerParamMissing && <ClientCityRedirect />}
