@@ -72,7 +72,7 @@ export default function SEOContent() {
           <div className="mt-8">
             <h3 className="font-bold text-lg text-yellow-400 uppercase tracking-wider mb-2">Contact Us</h3>
             <p className="text-fuchsia-300 font-semibold">
-              For instant booking, call or WhatsApp us at <span className="font-extrabold text-pink-400 animate-pulse">+91-9974599843</span>. Our support team is available <span className="italic text-yellow-400">24/7</span> to assist you.
+              For instant booking, call or WhatsApp us at <span className="font-extrabold text-pink-400 animate-pulse">+91-9157204082</span>. Our support team is available <span className="italic text-yellow-400">24/7</span> to assist you.
             </p>
           </div>
           

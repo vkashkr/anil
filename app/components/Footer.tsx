@@ -41,8 +41,8 @@ export default function Footer() {
           </button>
 
           <div className="flex gap-3">
-            <a href="tel:+919974599843" className="call-btn call font-bold text-sm px-4 py-0.5 rounded-full bg-gradient-to-r from-pink-500 via-fuchsia-500 to-yellow-400 text-white shadow-lg hover:scale-105 hover:from-yellow-400 hover:to-pink-500 transition-all duration-200">Call Now</a>
-            <a href="https://wa.me/919974599843?text=Hello, %20Aliya%20Escort%20 Ahmedabad" className="call-btn whatsapp font-bold text-sm px-4 py-0.5 rounded-full bg-gradient-to-r from-green-400 via-fuchsia-500 to-pink-400 text-white shadow-lg hover:scale-105 hover:from-pink-400 hover:to-green-400 transition-all duration-200">WhatsApp</a>
+            <a href="tel:+919157204082" className="call-btn call font-bold text-sm px-4 py-0.5 rounded-full bg-gradient-to-r from-pink-500 via-fuchsia-500 to-yellow-400 text-white shadow-lg hover:scale-105 hover:from-yellow-400 hover:to-pink-500 transition-all duration-200">Call Now</a>
+            <a href="https://wa.me/919157204082?text=Hello, %20Aliya%20Escort%20 Ahmedabad" className="call-btn whatsapp font-bold text-sm px-4 py-0.5 rounded-full bg-gradient-to-r from-green-400 via-fuchsia-500 to-pink-400 text-white shadow-lg hover:scale-105 hover:from-pink-400 hover:to-green-400 transition-all duration-200">WhatsApp</a>
           </div>
           <div className="text-xs md:text-sm text-gray-200 text-center font-normal">
             <span className="inline-flex items-center gap-2 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-400 to-fuchsia-500 animate-pulse">

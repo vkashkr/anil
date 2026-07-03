@@ -123,10 +123,10 @@ export function generateProfileHtml(profile: any) {
 
                     <div class="mt-8 pt-6 border-t border-white/10">
                         <h3 class="text-lg font-bold text-white mb-4">Contact Information</h3>
-                        <a href="tel:+919974599843" class="block w-full text-center bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200 mb-4">
+                        <a href="tel:+919157204082" class="block w-full text-center bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200 mb-4">
                             Details: 📞 Call Now
                         </a>
-                         <a href="https://wa.me/919974599843" class="block w-full text-center bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-400 hover:to-teal-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200">
+                         <a href="https://wa.me/919157204082" class="block w-full text-center bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-400 hover:to-teal-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200">
                             💬 WhatsApp Me
                         </a>
                         <p class="text-center text-xs text-gray-500 mt-4">

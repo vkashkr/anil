@@ -58,7 +58,7 @@ const jsonLd = {
   "image": "https://www.aliyaescort.com/aliya-logo-A-4-improved.svg",
   "description": "Premium call girl and escort agency in Ahmedabad offering independent and high-profile companions.",
   "url": "https://www.aliyaescort.com/",
-  "telephone": "+919974599843",
+  "telephone": "+919157204082",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "SG Highway",
@@ -73,7 +73,7 @@ const jsonLd = {
     "longitude": 72.5714
   },
   "sameAs": [
-    "https://wa.me/919974599843"
+    "https://wa.me/919157204082"
   ],
   "openingHoursSpecification": [
     {
