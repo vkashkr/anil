@@ -113,14 +113,12 @@ export default async function Home() {
 
         <p className="relative z-10 text-lg sm:text-xl text-gray-100 max-w-xl sm:max-w-2xl text-center mb-4 font-medium">
           <span className="bg-black/30 px-3 py-2 rounded-2xl shadow-lg backdrop-blur-sm inline-block">
-            Welcome to <span className="font-bold text-pink-300">Escorts Ahmedabad</span> – latest news and updates about our{' '}
+            Welcome to <span className="font-bold text-pink-300">Escorts Ahmedabad</span> and call girls services{' '}
             <span className="text-fuchsia-300 font-semibold">genuine, independent call girls</span> and{' '}
             <span className="text-yellow-200 font-semibold">premium escort services</span> in Ahmedabad.{' '}
             Book local girls for home or hotel delivery, enjoy{' '}
             <span className="italic text-pink-200">safe, private, and affordable companionship</span>.{' '}
             <span className="text-yellow-300 font-bold">No advance payment</span>,{' '}
-            <span className="text-fuchsia-200 font-bold">100% privacy</span>, and{' '}
-            <span className="text-pink-200 font-bold">real profiles only</span>.
           </span>
         </p>
         <span className="relative z-10 text-pink-200 font-semibold text-base sm:text-lg bg-black/20 px-4 py-1 rounded-full shadow-md tracking-wide mt-1">
