@@ -3,7 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import ClientCityRedirect from './ClientCityRedirect';
 import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
 import { PHONE_TEL, WHATSAPP_URL } from '@/app/lib/constants';
-import { formatCityName, makeSlug, resolveAllowedCitySlug } from '@/app/lib/city-slugs';
+import { formatCityName, getProfileCitySlug, makeSlug, resolveAllowedCitySlug } from '@/app/lib/city-slugs';
 
 const API_BASE = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp';
 
@@ -63,7 +63,7 @@ const DEFAULT_AREAS = [
 
 const getCityAreas = (citySlug: string) => CITY_AREAS[citySlug] ?? DEFAULT_AREAS;
 
-async function fetchProfiles() {
+async function fetchProfiles(citySlug: string) {
   try {
     const [dbProfiles, s3Images] = await Promise.all([
       getAllProfilesFromDynamoDB(),
@@ -73,6 +73,9 @@ async function fetchProfiles() {
     const seenId = new Set<string>();
     return dbProfiles
       .filter((p) => p.isVisible !== false && p.name && p.name !== '-')
+      // Only show profiles that actually belong to this city — avoids
+      // duplicate/doorway content across city routes.
+      .filter((p) => getProfileCitySlug(p) === citySlug)
       .map((p) => ({
         ...p,
         images: s3Images[p.id]?.length ? s3Images[p.id] : (p.images ?? []),
@@ -91,8 +94,6 @@ async function fetchProfiles() {
 }
 
 export default async function CityEscortPage({ params }: { params?: any }) {
-  const profiles = await fetchProfiles();
-
   // `params` is a Promise in the App Router; await to access values
   const resolvedParams = params ? await params : undefined;
 
@@ -108,6 +109,7 @@ export default async function CityEscortPage({ params }: { params?: any }) {
   if (resolvedParams?.city && requestedSlug !== citySlug) {
     redirect(`/${citySlug}/escorts`);
   }
+  const profiles = await fetchProfiles(citySlug);
   const cityPath = encodeURIComponent(citySlug);
   const cityDisplay = formatCityName(citySlug);
   const cityAreas = getCityAreas(citySlug);

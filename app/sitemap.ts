@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
-import { makeSlug } from '@/app/lib/city-slugs';
+import { getProfileCitySlug, makeSlug } from '@/app/lib/city-slugs';
 
 // Re-fetch from DynamoDB on every request — no build-time baking
 export const dynamic = 'force-dynamic';
@@ -8,29 +8,6 @@ export const dynamic = 'force-dynamic';
 const BASE_URL = 'https://www.aliyaescort.com';
 
 type SitemapProfileRoute = { city: string; slug: string; updatedAt?: string };
-
-function getProfileCitySlug(profile: { city?: string; location?: string; state?: string }): string | null {
-  const text = [profile.city, profile.location, profile.state]
-    .filter(Boolean)
-    .map((v) => String(v).toLowerCase())
-    .join(' ');
-
-  // Canonicalize common city variants to stable slugs used by routes.
-  if (/(hyderabad|hydrabad|hyderbad|secunderabad|telangana)/i.test(text)) {
-    return 'hyderabad';
-  }
-  if (/(ahmedabad|gujarat)/i.test(text)) {
-    return 'ahmedabad';
-  }
-
-  const candidates = [profile.city, profile.location, profile.state]
-    .filter(Boolean)
-    .map((v) => String(v).split(/[|,/]/)[0]?.trim() || '')
-    .map((v) => makeSlug(v))
-    .filter(Boolean);
-
-  return candidates[0] || null;
-}
 
 async function fetchAllProfileSlugs(): Promise<SitemapProfileRoute[]> {
   try {
@@ -52,19 +29,12 @@ async function fetchAllProfileSlugs(): Promise<SitemapProfileRoute[]> {
       const slug = makeSlug(raw);
       if (!slug) continue;
 
-      const targetCities = new Set<string>([city]);
-      // Dual-city sitemap mode for core city clusters.
-      if (city === 'ahmedabad' || city === 'hyderabad') {
-        targetCities.add('ahmedabad');
-        targetCities.add('hyderabad');
-      }
-
-      for (const targetCity of targetCities) {
-        const citySlugKey = `${targetCity}:${slug}`;
-        if (seenCitySlug.has(citySlugKey)) continue;
-        seenCitySlug.add(citySlugKey);
-        results.push({ city: targetCity, slug, updatedAt: p.updatedAt });
-      }
+      // Each profile belongs to exactly one city — cross-posting to other
+      // cities creates duplicate/doorway content and hurts rankings.
+      const citySlugKey = `${city}:${slug}`;
+      if (seenCitySlug.has(citySlugKey)) continue;
+      seenCitySlug.add(citySlugKey);
+      results.push({ city, slug, updatedAt: p.updatedAt });
     }
     return results;
   } catch {

@@ -5,7 +5,7 @@ import { notFound, redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { getProfileBySeoTitleFromDynamoDB, Profile } from '@/app/lib/dynamodb';
 import { PHONE_TEL, PHONE_DISPLAY, WHATSAPP_URL } from '@/app/lib/constants';
-import { formatCityName, makeSlug, resolveAllowedCitySlug } from '@/app/lib/city-slugs';
+import { formatCityName, getProfileCitySlug, makeSlug, resolveAllowedCitySlug } from '@/app/lib/city-slugs';
 import ProfileGallery from '@/app/ahmedabad/escorts/[slug]/ProfileGallery';
 import ReviewForm from '@/app/ahmedabad/escorts/[slug]/ReviewForm';
 
@@ -68,6 +68,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const profile = await loadProfile(slug);
   if (!profile) return { title: 'Profile Not Found' };
 
+  // A profile only lives at its real city's URL — don't generate doorway
+  // metadata (duplicate content) for an unrelated city.
+  const realCity = getProfileCitySlug(profile);
+  if (realCity && realCity !== citySlug) {
+    return { title: 'Profile Not Found', robots: { index: false, follow: false } };
+  }
+
   const canonicalProfileSlug = makeSlug(profile.seoTitle || profile.name);
   const url = `${BASE_URL}/${citySlug}/escorts/${canonicalProfileSlug}`;
   const title = profile.seoTitle || `${profile.name} - Call Girl in ${cityDisplay} | Aliya Escort`;
@@ -110,6 +117,13 @@ export default async function CityProfilePage({ params }: PageProps) {
   const profile = await loadProfile(slug);
 
   if (!profile) notFound();
+
+  // A profile only lives at its real city's URL — redirect instead of
+  // rendering duplicate/doorway content under an unrelated city.
+  const realCity = getProfileCitySlug(profile);
+  if (realCity && realCity !== citySlug) {
+    redirect(`/${realCity}/escorts/${slug}`);
+  }
 
   const canonicalProfileSlug = makeSlug(profile.seoTitle || profile.name);
   const decodedSlug = decodeURIComponent(String(slug || '')).trim();

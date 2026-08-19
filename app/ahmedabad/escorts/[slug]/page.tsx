@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { cache } from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { getProfileBySeoTitleFromDynamoDB, Profile } from '@/app/lib/dynamodb';
 import { PHONE_TEL, PHONE_DISPLAY, WHATSAPP_URL } from '@/app/lib/constants';
+import { getProfileCitySlug } from '@/app/lib/city-slugs';
 import ProfileGallery from './ProfileGallery';
 import ReviewForm from './ReviewForm';
 
@@ -72,6 +73,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const profile = await loadProfile(slug);
   if (!profile) return { title: 'Profile Not Found' };
 
+  const realCity = getProfileCitySlug(profile);
+  if (realCity && realCity !== 'ahmedabad') {
+    return { title: 'Profile Not Found', robots: { index: false, follow: false } };
+  }
+
   const url = `${BASE_URL}/ahmedabad/escorts/${makeSlug(profile.seoTitle || profile.name)}-independent-escort`;
   const title =
     profile.seoTitle || `${profile.name} — Call Girl in Ahmedabad | Aliya Escort`;
@@ -115,6 +121,13 @@ export default async function ProfileSlugPage({ params }: PageProps) {
   const { slug } = await params;
   const profile = await loadProfile(slug);
   if (!profile) notFound();
+
+  // A profile only lives at its real city's URL — redirect instead of
+  // rendering duplicate/doorway content under an unrelated city.
+  const realCity = getProfileCitySlug(profile);
+  if (realCity && realCity !== 'ahmedabad') {
+    redirect(`/${realCity}/escorts/${slug}`);
+  }
 
   const cookieStore = await cookies();
   const isAdmin = cookieStore.get('auth_token')?.value === 'authenticated';

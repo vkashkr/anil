@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
 import { PHONE_TEL, WHATSAPP_URL } from '@/app/lib/constants';
+import { getProfileCitySlug } from '@/app/lib/city-slugs';
 
 const API_BASE = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp';
 
@@ -51,6 +52,8 @@ async function fetchProfiles() {
     const seenId = new Set<string>();
     return dbProfiles
       .filter((p) => p.isVisible !== false && p.name && p.name !== '-')
+      // Only ahmedabad profiles here — avoids duplicate/doorway content with other cities.
+      .filter((p) => getProfileCitySlug(p) === 'ahmedabad')
       .map((p) => ({
         ...p,
         images: s3Images[p.id]?.length ? s3Images[p.id] : (p.images ?? []),
