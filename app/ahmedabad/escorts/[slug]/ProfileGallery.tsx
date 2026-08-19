@@ -34,7 +34,6 @@ export default function ProfileGallery({ images, name }: Props) {
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
             priority
-            unoptimized
           />
         )}
       </div>
@@ -57,7 +56,6 @@ export default function ProfileGallery({ images, name }: Props) {
                 fill
                 className="object-cover"
                 sizes="80px"
-                unoptimized
               />
             </button>
           ))}

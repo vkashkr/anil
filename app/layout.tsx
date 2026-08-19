@@ -116,7 +116,6 @@ export default function RootLayout({
         {/* Preconnect to external origins for faster LCP */}
         <link rel="preconnect" href="https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com" />
         <link rel="dns-prefetch" href="//4k1gg1dlc3.execute-api.us-east-1.amazonaws.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         {/* Geographic targeting meta tags */}
         <meta name="geo.region" content="IN-GJ" />
         <meta name="geo.placename" content="Ahmedabad" />

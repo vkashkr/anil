@@ -17,6 +17,7 @@ export default function HeroVideo() {
           poster="/images/placeholder.svg"
         >
           <source src="/title.mp4" type="video/mp4" />
+          <track kind="captions" src="/captions/hero-empty.vtt" srcLang="en" label="English" />
           Your browser does not support the video tag.
         </video>
 
@@ -29,9 +30,9 @@ export default function HeroVideo() {
         </div>
 
         <div className="absolute bottom-6 left-6 z-20 text-left">
-           <h3 className="text-2xl font-bold text-white drop-shadow-md mb-1">
+           <h2 className="text-2xl font-bold text-white drop-shadow-md mb-1">
              Aliya, 22
-           </h3>
+           </h2>
            <p className="text-pink-300 text-sm font-medium flex items-center gap-1">
              <span className="bg-pink-600 text-white text-[10px] px-1.5 rounded">NEW</span>
              Top Rated Model
