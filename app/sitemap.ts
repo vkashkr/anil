@@ -75,7 +75,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           ),
         ])) as SitemapProfileRoute[]);
 
-    const uniqueCities = Array.from(new Set([...defaultCitySlugs, ...profiles.map((p) => p.city)])).sort();
+    const uniqueCities = Array.from(new Set([...defaultCitySlugs])).sort();
     cityRoutes = uniqueCities.map((city) => ({
       url: `${BASE_URL}/${city}/escorts`,
       lastModified: now,
