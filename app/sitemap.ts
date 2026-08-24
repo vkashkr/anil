@@ -49,12 +49,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Always include core city listing routes even if profile fetch is empty/timed out.
-  const defaultCitySlugs = ['ahmedabad', 'hyderabad'];
+  const defaultCitySlugs = ['hyderabad'];
   const defaultCityRoutes: MetadataRoute.Sitemap = defaultCitySlugs.map((city) => ({
     url: `${BASE_URL}/${city}/escorts`,
     lastModified: now,
     changeFrequency: 'daily' as const,
-    priority: 0.95,
+    priority: 0.9,
   }));
 
   let cityRoutes: MetadataRoute.Sitemap = [];
@@ -80,7 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE_URL}/${city}/escorts`,
       lastModified: now,
       changeFrequency: 'daily' as const,
-      priority: 0.95,
+      priority: 0.9,
     }));
 
     profileRoutes = profiles.map(({ city, slug, updatedAt }) => ({
