@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     canonical: 'https://www.aliyaescort.com/',
   },
   openGraph: {
-    title: "Escort Ahmedabad  | Premium Call Girl Service",
+    title: "Escort Ahmedabad | Premium Call Girl Service",
     description: "Aliya Escort — Ahmedabad's most trusted escort directory. Real profiles, verified photos, 24/7 incall & outcall across Gujarat.",
     url: 'https://www.aliyaescort.com/',
     siteName: 'Escort Ahmedabad ',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Escort Ahmedabad  | Premium Call Girl Service',
+    title: 'Escort Ahmedabad | Premium Call Girl Service',
     description: "Ahmedabad's most trusted escort directory. Real profiles, 24/7 incall & outcall, no advance payment.",
     site: '@AliyaEscort',
   },

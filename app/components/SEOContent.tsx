@@ -43,7 +43,7 @@ export default function SEOContent() {
               The Ultimate Destination for <span className="underline decoration-wavy decoration-pink-400">Premium <span className="text-pink-400">Call Girls</span></span> and <span className="font-bold text-yellow-400">Escort Services</span> in Ahmedabad.
             </p>
             <p>
-              <span className="text-pink-400 font-bold">Are you searching for the best <span className="italic underline decoration-wavy decoration-fuchsia-400">call girls in Ahmedabad</span>?</span> <span className="text-gray-200">Escort Ahmedabad  is your <span className="font-bold text-fuchsia-400">one-stop solution</span> for <span className="italic text-pink-400">luxury companionship</span> with genuine independent profiles.</span>
+              <span className="text-pink-400 font-bold">Are you searching for the best <span className="italic underline decoration-wavy decoration-fuchsia-400">call girls in Ahmedabad</span>?</span> <span className="text-gray-200">Escort Ahmedabad is your <span className="font-bold text-fuchsia-400">one-stop solution</span> for <span className="italic text-pink-400">luxury companionship</span> with genuine independent profiles.</span>
             </p>
           </div>
 
