@@ -139,7 +139,8 @@ export async function generateMetadata({
   const story = await resolveStoryBySlug(slug);
   if (!story) return { title: 'Story Not Found' };
 
-  const url = `${BASE_URL}/stories/entertainment/${slug}`;
+  const canonicalSlug = story.slug || slug;
+  const url = `${BASE_URL}/stories/entertainment/${canonicalSlug}`;
   const coverImg = story.images?.find((img) => img.id === story.metadata.coverImage);
   const ogImages = coverImg?.src ? [{ url: coverImg.src, alt: coverImg.alt }] : [];
   return {
@@ -268,11 +269,16 @@ export default async function StorySlugPage({
   const story = await resolveStoryBySlug(slug);
   if (!story) notFound();
 
+  const canonicalSlug = story.slug || slug;
+  if (slug !== canonicalSlug) {
+    redirect(`/stories/entertainment/${encodeURIComponent(canonicalSlug)}`);
+  }
+
   const { metadata: meta, paragraphs, images, characters } = story;
   const imageMap = Object.fromEntries(images.map((img) => [img.id, img]));
   const bannerImage = imageMap[meta.bannerImage];
   const coverImage = imageMap[meta.coverImage];
-  const canonicalUrl = `${BASE_URL}/stories/entertainment/${slug}`;
+  const canonicalUrl = `${BASE_URL}/stories/entertainment/${canonicalSlug}`;
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">

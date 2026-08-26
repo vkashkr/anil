@@ -287,7 +287,7 @@ export default async function CityEscortPage({ params }: { params?: any }) {
           </div>
         ) : (
           profiles.map((p, profileIndex) => {
-            const profileSlug = makeSlug(p.name);
+            const profileSlug = makeSlug(p.seoTitle || p.name);
             const profileUrl = `/${citySlug}/escorts/${encodeURIComponent(profileSlug)}`;
             const mainImage = p.images[0] || null;
             const thumbs = p.images.slice(1, 4); // up to 3 extra thumbnails

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+const BASE_URL = 'https://www.aliyaescort.com'
+
 /* ─── Types ────────────────────────────────────────────────────── */
 interface StoryMeta {
   genre: string
@@ -53,15 +55,11 @@ function storyUrl(story: StorySummary): string {
 }
 
 /* ─── SEO ───────────────────────────────────────────────────────── */
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   title: 'Stories — Dark Romance & Literary Drama',
   description:
     'Read original Hinglish short stories exploring desire, loneliness, and self-discovery. Sensual, melancholic, and beautifully written.',
   robots: { index: true, follow: true },
-  // Fix #7 — missing canonical on stories listing page
-  alternates: {
-    canonical: 'https://www.aliyaescort.com/stories',
-  },
   openGraph: {
     url: 'https://www.aliyaescort.com/stories',
     title: 'Stories — Dark Romance & Literary Drama',
@@ -69,6 +67,17 @@ export const metadata: Metadata = {
       'Read original Hinglish short stories exploring desire, loneliness, and self-discovery.',
     type: 'website',
   },
+}
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}): Promise<Metadata> {
+  const params = await searchParams;
+  const page = Math.max(1, Number(params.page) || 1);
+  const canonical = page > 1 ? `${BASE_URL}/stories?page=${page}` : `${BASE_URL}/stories`;
+  return { ...baseMetadata, alternates: { canonical } };
 }
 
 

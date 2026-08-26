@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Profile Not Found', robots: { index: false, follow: false } };
   }
 
-  const url = `${BASE_URL}/ahmedabad/escorts/${makeSlug(profile.seoTitle || profile.name)}-independent-escort`;
+  const url = `${BASE_URL}/ahmedabad/escorts/${makeSlug(profile.seoTitle || profile.name)}`;
   const title =
     profile.seoTitle || `${profile.name} — Call Girl in Ahmedabad | Aliya Escort`;
   const description =
@@ -129,10 +129,17 @@ export default async function ProfileSlugPage({ params }: PageProps) {
     redirect(`/${realCity}/escorts/${slug}`);
   }
 
+  const canonicalProfileSlug = makeSlug(profile.seoTitle || profile.name);
+  const decodedSlug = decodeURIComponent(String(slug || '')).trim();
+  const requestedSlug = makeSlug(decodedSlug.replace(/-independent-escort$/i, ''));
+  if (!requestedSlug || requestedSlug !== canonicalProfileSlug || decodedSlug !== requestedSlug) {
+    redirect(`/ahmedabad/escorts/${canonicalProfileSlug}`);
+  }
+
   const cookieStore = await cookies();
   const isAdmin = cookieStore.get('auth_token')?.value === 'authenticated';
 
-  const canonicalUrl = `${BASE_URL}/ahmedabad/escorts/${makeSlug(profile.seoTitle || profile.name)}-independent-escort`;
+  const canonicalUrl = `${BASE_URL}/ahmedabad/escorts/${canonicalProfileSlug}`;
   const whatsappText = encodeURIComponent(`hello, ${profile.name} I saw your profile on Aliya Escort`);
   const reviews = profile.reviews ?? [];
   const safeDescriptionHtml = sanitizeProfileHtml(profile.description);
@@ -154,14 +161,18 @@ export default async function ProfileSlugPage({ params }: PageProps) {
   const fmtKey = (k: string) =>
     k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
-  // Last active from updatedAt
-  let lastActive = '';
+  // Keep the rendered date stable across server and client renders.
+  let lastUpdated = '';
   if (profile.updatedAt) {
     try {
-      const d = new Date(profile.updatedAt);
-      const diff = Date.now() - d.getTime();
-      const days = Math.floor(diff / 86400000);
-      lastActive = days === 0 ? 'Today' : days === 1 ? 'Yesterday' : `${days} days ago`;
+      const updatedDate = new Date(profile.updatedAt);
+      if (!Number.isNaN(updatedDate.getTime())) {
+        lastUpdated = updatedDate.toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        });
+      }
     } catch { /* noop */ }
   }
 
@@ -262,8 +273,8 @@ export default async function ProfileSlugPage({ params }: PageProps) {
                   <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-yellow-300">
                     {profile.name}
                   </h2>
-                  {lastActive && (
-                    <p className="text-gray-500 text-xs mt-1">🕐 Last active: {lastActive}</p>
+                  {lastUpdated && (
+                    <p className="text-gray-500 text-xs mt-1">Last updated: {lastUpdated}</p>
                   )}
                 </div>
                 {/* Trust badges */}

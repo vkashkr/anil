@@ -121,9 +121,6 @@ export default function RootLayout({
         <meta name="geo.placename" content="Ahmedabad" />
         <meta name="geo.position" content="23.0225;72.5714" />
         <meta name="ICBM" content="23.0225, 72.5714" />
-        {/* hreflang for Indian English audiences */}
-        <link rel="alternate" hrefLang="en-IN" href="https://www.aliyaescort.com/" />
-        <link rel="alternate" hrefLang="x-default" href="https://www.aliyaescort.com/" />
         {/* JSON-LD structured data in <head> for optimal crawler discovery */}
         <script
           type="application/ld+json"

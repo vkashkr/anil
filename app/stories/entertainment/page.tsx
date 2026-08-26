@@ -53,14 +53,11 @@ function storyUrl(story: StorySummary): string {
 }
 
 /* ─── SEO ─────────────────────────────────────────────────────── */
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   title: 'Entertainment Stories — Dark Romance & Literary Drama',
   description:
     'Read original Hinglish short stories exploring desire, loneliness, and self-discovery. Sensual, melancholic, and beautifully written.',
   robots: { index: true, follow: true },
-  alternates: {
-    canonical: `${BASE_URL}/stories/entertainment`,
-  },
   openGraph: {
     url: `${BASE_URL}/stories/entertainment`,
     title: 'Entertainment Stories — Dark Romance & Literary Drama',
@@ -74,6 +71,19 @@ export const metadata: Metadata = {
     description: 'Original Hinglish dark romance and literary drama stories.',
     site: '@AliyaEscort',
   },
+}
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}): Promise<Metadata> {
+  const params = await searchParams;
+  const page = Math.max(1, Number(params.page) || 1);
+  const canonical = page > 1
+    ? `${BASE_URL}/stories/entertainment?page=${page}`
+    : `${BASE_URL}/stories/entertainment`;
+  return { ...baseMetadata, alternates: { canonical } };
 }
 
 /* ─── Data fetching ───────────────────────────────────────────── */

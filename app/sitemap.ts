@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
-import { getProfileCitySlug, makeSlug } from '@/app/lib/city-slugs';
+import { ALLOWED_CITY_SLUGS, getProfileCitySlug, makeSlug } from '@/app/lib/city-slugs';
 
 // Re-fetch from DynamoDB on every request — no build-time baking
 export const dynamic = 'force-dynamic';
@@ -49,7 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Always include core city listing routes even if profile fetch is empty/timed out.
-  const defaultCitySlugs = ['hyderabad'];
+  const defaultCitySlugs = [...ALLOWED_CITY_SLUGS];
   const defaultCityRoutes: MetadataRoute.Sitemap = defaultCitySlugs.map((city) => ({
     url: `${BASE_URL}/${city}/escorts`,
     lastModified: now,
