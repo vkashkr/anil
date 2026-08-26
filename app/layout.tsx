@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     default: "Ahmedabad escorts, Gujarat, India",
     template: "%s",
   },
-  description: "Aliya Escort — Ahmedabad's most trusted escort directory since 2020. Browse real, verified independent call girls for incall & outcall across Gujarat. 24/7, no advance payment.",
+  description: "We have 50+ Ahmedabad escorts on Aliya Escort",
   keywords: ["ahmedabad escort", "escort service ahmedabad", "call girls in ahmedabad", "ahmedabad call girls", "ahmedabad escort service", "independent call girls ahmedabad", "college girls ahmedabad", "housewife escort ahmedabad", "vip escort service", "russian call girls ahmedabad", "night out girls ahmedabad", "female escort ahmedabad", "local call girls ahmedabad", "escort girls ahmedabad", "cheap escort ahmedabad"],
   alternates: {
     canonical: 'https://www.aliyaescort.com/',
