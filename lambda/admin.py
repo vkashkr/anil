@@ -20,7 +20,7 @@ def generate_profile_html(profile):
     Mirroring the logic from app/lib/s3-html.ts
     """
     name = profile.get('name', 'Unknown')
-    seo_title = profile.get('seoTitle') or f"{name} - Aliya Escort Ahmedabad"
+    seo_title = profile.get('seoTitle') or f"{name} - Escort Ahmedabad "
     description = profile.get('description', '')
     seo_description = profile.get('seoDescription') or description[:160]
     custom_css = profile.get('customCss', '')
@@ -138,7 +138,7 @@ def generate_profile_html(profile):
         </div>
     </main>
     <footer class="w-full bg-black text-gray-500 py-6 text-center mt-12 border-t border-gray-800">
-        <div>Copyright © 2026 Aliya Escort Ahmedabad</div>
+        <div>Copyright © 2026 Escort Ahmedabad </div>
     </footer>
 </body>
 </html>

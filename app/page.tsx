@@ -227,7 +227,7 @@ export default async function Home() {
             </div>
             <div className="flex flex-col md:flex-row justify-between items-center gap-3">
               <p className="text-gray-500 text-xs text-center md:text-left">
-                © 2026 Aliya Escort Ahmedabad. All rights reserved.
+                © 2026 Escort Ahmedabad . All rights reserved.
               </p>
               <div className="flex items-center gap-4 text-xs text-gray-500">
                 <a href="#" className="hover:text-pink-300 transition">Privacy Policy</a>

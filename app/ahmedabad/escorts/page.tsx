@@ -127,7 +127,7 @@ export default async function AhmedabadEscortPage() {
         name: 'Are the ahmedabad escort profiles real and verified?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes. All profiles on Aliya Escort Ahmedabad are genuine, independent adults with verified photos. No fake or stock images.',
+          text: 'Yes. All profiles on Escort Ahmedabad  are genuine, independent adults with verified photos. No fake or stock images.',
         },
       },
       {
@@ -386,7 +386,7 @@ export default async function AhmedabadEscortPage() {
             },
             {
               q: 'Are the profiles real and verified?',
-              a: 'Yes. All profiles on Aliya Escort Ahmedabad are genuine, independent adults with verified photos. No fake or stock images.',
+              a: 'Yes. All profiles on Escort Ahmedabad  are genuine, independent adults with verified photos. No fake or stock images.',
             },
             {
               q: 'Is incall and outcall service available?',
@@ -418,7 +418,7 @@ export default async function AhmedabadEscortPage() {
       <div className="max-w-3xl mx-auto px-4 py-8 text-center border-t border-white/5">
         <h2 className="text-sm font-semibold text-gray-500 mb-2">About Ahmedabad Escort Service</h2>
         <p className="text-gray-500 text-xs leading-relaxed">
-          Aliya Escort Ahmedabad is India&#39;s trusted directory for verified independent escort profiles in Ahmedabad, Gujarat.
+          Escort Ahmedabad  is India&#39;s trusted directory for verified independent escort profiles in Ahmedabad, Gujarat.
           Browse genuine call girls available 24/7 — no advance payment, real photos, incall &amp; outcall.
           Service available across SG Highway, Satellite, Vastrapur, Prahlad Nagar, Bodakdev &amp; all areas of Ahmedabad.
           All adults. All consensual. Comply with local laws.

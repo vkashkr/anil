@@ -41,7 +41,7 @@ export function generateProfileHtml(profile: any) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${profile.seoTitle || profile.name + " - Aliya Escort Ahmedabad"}</title>
+    <title>${profile.seoTitle || profile.name + " - Escort Ahmedabad "}</title>
     <meta name="description" content="${profile.seoDescription || profile.description?.substring(0, 160)}">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -138,7 +138,7 @@ export function generateProfileHtml(profile: any) {
         </div>
     </main>
     <footer class="w-full bg-black text-gray-500 py-6 text-center mt-12 border-t border-gray-800">
-        <div>Copyright © 2026 Aliya Escort Ahmedabad</div>
+        <div>Copyright © 2026 Escort Ahmedabad </div>
     </footer>
 </body>
 </html>

@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Aliya Escort Ahmedabad — Verified Call Girls in Ahmedabad, Gujarat';
+export const alt = 'Escort Ahmedabad  — Verified Call Girls in Ahmedabad, Gujarat';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -49,7 +49,7 @@ export default function Image() {
             display: 'flex',
           }}
         >
-          Aliya Escort Ahmedabad
+          Escort Ahmedabad 
         </div>
 
         {/* Sub-title */}

@@ -538,7 +538,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
                 This website contains adult content intended exclusively for individuals aged 18 years and above. By entering and using this site, you confirm that you are of legal age in your jurisdiction. All profiles are of consenting adults.
               </p>
             </div>
-            <p className="text-gray-500 text-xs text-center">© 2026 Aliya Escort Ahmedabad. All rights reserved.</p>
+            <p className="text-gray-500 text-xs text-center">© 2026 Escort Ahmedabad . All rights reserved.</p>
           </div>
         </div>
       </footer>

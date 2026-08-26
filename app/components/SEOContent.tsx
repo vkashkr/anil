@@ -35,7 +35,7 @@ export default function SEOContent() {
         <div className="absolute inset-0 pointer-events-none z-0" style={{background: 'radial-gradient(circle at 80% 10%, rgba(255,0,128,0.12) 0, transparent 70%), radial-gradient(circle at 10% 90%, rgba(255,255,0,0.10) 0, transparent 70%)'}}></div>
         <div className="relative z-10 text-base md:text-lg leading-relaxed text-gray-100">
           <h2 className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-500 to-yellow-300 text-3xl md:text-4xl drop-shadow-pink animate-pulse mb-6">
-            Welcome to Aliya Escort Ahmedabad
+            Welcome to Escort Ahmedabad 
           </h2>
           
           <div className="space-y-4">
@@ -43,12 +43,12 @@ export default function SEOContent() {
               The Ultimate Destination for <span className="underline decoration-wavy decoration-pink-400">Premium <span className="text-pink-400">Call Girls</span></span> and <span className="font-bold text-yellow-400">Escort Services</span> in Ahmedabad.
             </p>
             <p>
-              <span className="text-pink-400 font-bold">Are you searching for the best <span className="italic underline decoration-wavy decoration-fuchsia-400">call girls in Ahmedabad</span>?</span> <span className="text-gray-200">Aliya Escort Ahmedabad is your <span className="font-bold text-fuchsia-400">one-stop solution</span> for <span className="italic text-pink-400">luxury companionship</span> with genuine independent profiles.</span>
+              <span className="text-pink-400 font-bold">Are you searching for the best <span className="italic underline decoration-wavy decoration-fuchsia-400">call girls in Ahmedabad</span>?</span> <span className="text-gray-200">Escort Ahmedabad  is your <span className="font-bold text-fuchsia-400">one-stop solution</span> for <span className="italic text-pink-400">luxury companionship</span> with genuine independent profiles.</span>
             </p>
           </div>
 
           <div className="mt-8">
-            <h3 className="font-bold text-fuchsia-400 text-2xl tracking-wide drop-shadow-pink mb-4">Why Choose Aliya Escort Ahmedabad?</h3>
+            <h3 className="font-bold text-fuchsia-400 text-2xl tracking-wide drop-shadow-pink mb-4">Why Choose Escort Ahmedabad ?</h3>
             <ul className="list-disc pl-6 text-pink-400 font-semibold space-y-2">
               <li><span className="font-bold text-yellow-600">2000+ Verified Profiles:</span> Choose from a vast selection of real, independent call girls.</li>
               <li><span className="font-bold text-fuchsia-600">Fastest Service:</span> Doorstep delivery in 30 minutes, 24/7 availability.</li>
@@ -107,11 +107,11 @@ export default function SEOContent() {
           </h2>
           
           <p className="mb-4">
-            <span className="italic text-fuchsia-400 font-semibold">नमस्कार!</span> <span className="text-yellow-400 font-bold">अगर आप अहमदाबाद के <span className="underline decoration-wavy decoration-pink-400">Satellite, Vastrapur, Maninagar</span>, या किसी भी मोहल्ले में रहते हैं</span> और <span className="font-bold text-fuchsia-400">एकदम लोकल, भरोसेमंद</span> और <span className="italic text-pink-400">दिल से सेवा देने वाली कॉल गर्ल्स</span> की तलाश में हैं, तो <span className="font-bold text-yellow-300">Aliya Escort Ahmedabad</span> आपके लिए सबसे सही ठिकाना है।
+            <span className="italic text-fuchsia-400 font-semibold">नमस्कार!</span> <span className="text-yellow-400 font-bold">अगर आप अहमदाबाद के <span className="underline decoration-wavy decoration-pink-400">Satellite, Vastrapur, Maninagar</span>, या किसी भी मोहल्ले में रहते हैं</span> और <span className="font-bold text-fuchsia-400">एकदम लोकल, भरोसेमंद</span> और <span className="italic text-pink-400">दिल से सेवा देने वाली कॉल गर्ल्स</span> की तलाश में हैं, तो <span className="font-bold text-yellow-300">Escort Ahmedabad </span> आपके लिए सबसे सही ठिकाना है।
           </p>
 
           <div className="mt-6">
-            <h3 className="font-bold text-2xl text-fuchsia-400 tracking-wide drop-shadow-pink mb-4">क्यों चुनें Aliya Escort Ahmedabad?</h3>
+            <h3 className="font-bold text-2xl text-fuchsia-400 tracking-wide drop-shadow-pink mb-4">क्यों चुनें Escort Ahmedabad ?</h3>
             <ul className="list-disc pl-6 text-pink-400 font-semibold space-y-2">
               <li>2000+ असली लोकल प्रोफाइल्स</li>
               <li>सबसे तेज़ डिलीवरी, सिर्फ 30 मिनट में</li>
