@@ -4,7 +4,7 @@
 // Fix #13 — Typed interfaces, no `any`
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import ReadingProgress from '../ReadingProgress';
 import StoryImg from '../StoryImg';
 import AdminEditButton from '../AdminEditButton';
