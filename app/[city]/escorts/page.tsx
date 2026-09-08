@@ -3,7 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import ClientCityRedirect from './ClientCityRedirect';
 import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
 import { PHONE_TEL, WHATSAPP_URL } from '@/app/lib/constants';
-import { formatCityName, getProfileCitySlug, makeSlug, resolveAllowedCitySlug } from '@/app/lib/city-slugs';
+import { formatCityName, getProfileCitySlug, getProfileSlug, makeSlug, resolveAllowedCitySlug } from '@/app/lib/city-slugs';
 
 const API_BASE = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp';
 
@@ -83,7 +83,7 @@ async function fetchProfiles(citySlug: string) {
       .filter((p) => {
         if (seenId.has(p.id)) return false;
         seenId.add(p.id);
-        const slug = makeSlug(p.name);
+        const slug = getProfileSlug(p);
         if (seenSlug.has(slug)) return false;
         seenSlug.add(slug);
         return true;
@@ -137,7 +137,7 @@ export default async function CityEscortPage({ params }: { params?: any }) {
     itemListElement: profiles.slice(0, 50).map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${BASE_URL}/${cityPath}/escorts/${encodeURIComponent(makeSlug(p.name))}`,
+      url: `${BASE_URL}/${cityPath}/escorts/${encodeURIComponent(getProfileSlug(p))}`,
       name: p.name,
     })),
   };

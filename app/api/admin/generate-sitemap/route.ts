@@ -1,6 +1,6 @@
 import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
 import { uploadHtmlToS3 } from '@/app/lib/s3-html';
-import { getProfileCitySlug, makeSlug } from '@/app/lib/city-slugs';
+import { getProfileCitySlug, getProfileSlug } from '@/app/lib/city-slugs';
 
 const BASE_URL = 'https://www.aliyaescort.com';
 
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
             .filter((profile) => profile.isVisible !== false)
             .map((profile) => {
                 const city = getProfileCitySlug(profile);
-                const slug = makeSlug(profile.seoTitle || profile.name || '');
+                const slug = getProfileSlug(profile);
                 return city && slug ? `${BASE_URL}/${city}/escorts/${slug}` : null;
             })
             .filter((url): url is string => url !== null)

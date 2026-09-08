@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next';
 import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
-import { ALLOWED_CITY_SLUGS, getProfileCitySlug, makeSlug } from '@/app/lib/city-slugs';
+import { ALLOWED_CITY_SLUGS, getProfileCitySlug, getProfileSlug } from '@/app/lib/city-slugs';
 
-// Re-fetch from DynamoDB on every request — no build-time baking
-export const dynamic = 'force-dynamic';
+// Keep the sitemap stable for crawlers while allowing profile changes to appear quickly.
+export const revalidate = 300;
 
 const BASE_URL = 'https://www.aliyaescort.com';
 
@@ -24,9 +24,7 @@ async function fetchAllProfileSlugs(): Promise<SitemapProfileRoute[]> {
       if (!city) continue;
 
       // Match canonical profile route slug strategy.
-      const raw = p.seoTitle || p.name;
-      if (!raw || raw === '-') continue;
-      const slug = makeSlug(raw);
+      const slug = getProfileSlug(p);
       if (!slug) continue;
 
       // Each profile belongs to exactly one city — cross-posting to other
@@ -60,20 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let cityRoutes: MetadataRoute.Sitemap = [];
   let profileRoutes: MetadataRoute.Sitemap = [];
   try {
-    // Prevent long-running profile fetches from delaying sitemap generation.
-    // If fetching profiles takes longer than `PROFILE_FETCH_TIMEOUT_MS`, fall
-    // back to an empty list so the sitemap still returns quickly. This helps
-    // avoid Google Search Console "Temporary processing error" when the
-    // server is slow or the upstream API is unresponsive.
-    const PROFILE_FETCH_TIMEOUT_MS = 15000;
-    const profiles = process.env.NODE_ENV === 'development'
-      ? await fetchAllProfileSlugs()
-      : ((await Promise.race([
-          fetchAllProfileSlugs(),
-          new Promise<SitemapProfileRoute[]>((resolve) =>
-            setTimeout(() => resolve([]), PROFILE_FETCH_TIMEOUT_MS),
-          ),
-        ])) as SitemapProfileRoute[]);
+    const profiles = await fetchAllProfileSlugs();
 
     const uniqueCities = Array.from(new Set([...defaultCitySlugs])).sort();
     cityRoutes = uniqueCities.map((city) => ({
