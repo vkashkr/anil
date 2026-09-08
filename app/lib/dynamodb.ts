@@ -26,7 +26,9 @@ const API_URL = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp/admi
 
 async function callApi(body: Record<string, unknown>) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10_000);
+    // Profile scans can take longer than ordinary point reads, especially
+    // while the Lambda is cold or DynamoDB is paginating a larger table.
+    const timeout = setTimeout(() => controller.abort(), 30_000);
     try {
         const response = await fetch(API_URL, {
             method: 'POST',

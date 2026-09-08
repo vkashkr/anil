@@ -17,7 +17,7 @@ function escapeXml(value: string): string {
 export async function POST(request: Request) {
     try {
         // Prevent long-running profile fetches from causing a 500.
-        const PROFILE_FETCH_TIMEOUT_MS = 8000;
+        const PROFILE_FETCH_TIMEOUT_MS = 30_000;
         const profiles = (await Promise.race([
             getAllProfilesFromDynamoDB(),
             new Promise<never>((_, reject) =>
@@ -39,6 +39,10 @@ export async function POST(request: Request) {
                 seen.add(url);
                 return true;
             });
+
+        if (profileUrls.length === 0) {
+            throw new Error('Profile scan returned no canonical URLs; existing sitemap was not replaced');
+        }
 
         const cityUrls = ['ahmedabad', 'hyderabad'].map((city) => `${BASE_URL}/${city}/escorts`);
         const urls = [...cityUrls, ...profileUrls];

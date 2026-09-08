@@ -10,34 +10,27 @@ const BASE_URL = 'https://www.aliyaescort.com';
 type SitemapProfileRoute = { city: string; slug: string; updatedAt?: string };
 
 async function fetchAllProfileSlugs(): Promise<SitemapProfileRoute[]> {
-  try {
-    const profiles = await getAllProfilesFromDynamoDB();
-    const seenId = new Set<string>();
-    const seenCitySlug = new Set<string>();
-    const results: SitemapProfileRoute[] = [];
-    for (const p of profiles) {
-      if (!p.id || seenId.has(p.id)) continue;
-      seenId.add(p.id);
-      if (p.isVisible === false) continue;
+  const profiles = await getAllProfilesFromDynamoDB();
+  const seenId = new Set<string>();
+  const seenCitySlug = new Set<string>();
+  const results: SitemapProfileRoute[] = [];
+  for (const p of profiles) {
+    if (!p.id || seenId.has(p.id)) continue;
+    seenId.add(p.id);
+    if (p.isVisible === false) continue;
 
-      const city = getProfileCitySlug(p);
-      if (!city) continue;
+    const city = getProfileCitySlug(p);
+    if (!city) continue;
 
-      // Match canonical profile route slug strategy.
-      const slug = getProfileSlug(p);
-      if (!slug) continue;
+    const slug = getProfileSlug(p);
+    if (!slug) continue;
 
-      // Each profile belongs to exactly one city — cross-posting to other
-      // cities creates duplicate/doorway content and hurts rankings.
-      const citySlugKey = `${city}:${slug}`;
-      if (seenCitySlug.has(citySlugKey)) continue;
-      seenCitySlug.add(citySlugKey);
-      results.push({ city, slug, updatedAt: p.updatedAt });
-    }
-    return results;
-  } catch {
-    return [];
+    const citySlugKey = `${city}:${slug}`;
+    if (seenCitySlug.has(citySlugKey)) continue;
+    seenCitySlug.add(citySlugKey);
+    results.push({ city, slug, updatedAt: p.updatedAt });
   }
+  return results;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
