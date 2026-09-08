@@ -96,7 +96,7 @@ export default async function AhmedabadEscortPage() {
     itemListElement: profiles.slice(0, 50).map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${BASE_URL}/ahmedabad/escorts/${encodeURIComponent(makeSlug(p.name))}`,
+      url: `${BASE_URL}/ahmedabad/escorts/${encodeURIComponent(makeSlug(p.seoTitle || p.name))}`,
       name: p.name,
     })),
   };

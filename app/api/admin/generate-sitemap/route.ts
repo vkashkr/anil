@@ -1,5 +1,18 @@
 import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
 import { uploadHtmlToS3 } from '@/app/lib/s3-html';
+import { getProfileCitySlug, makeSlug } from '@/app/lib/city-slugs';
+
+const BASE_URL = 'https://www.aliyaescort.com';
+
+function escapeXml(value: string): string {
+    return value.replace(/[<>&'\"]/g, (character) => ({
+        '<': '&lt;',
+        '>': '&gt;',
+        '&': '&amp;',
+        "'": '&apos;',
+        '"': '&quot;',
+    })[character] || character);
+}
 
 export async function POST(request: Request) {
     try {
@@ -7,24 +20,38 @@ export async function POST(request: Request) {
         const PROFILE_FETCH_TIMEOUT_MS = 8000;
         const profiles = (await Promise.race([
             getAllProfilesFromDynamoDB(),
-            new Promise<typeof getAllProfilesFromDynamoDB>(() =>
-                // resolve to an empty array after timeout
-                setTimeout(() => [], PROFILE_FETCH_TIMEOUT_MS),
+            new Promise<never>((_, reject) =>
+                setTimeout(() => reject(new Error('Profile fetch timed out')), PROFILE_FETCH_TIMEOUT_MS),
             ),
         ])) as any[];
+
+        const seen = new Set<string>();
+        const profileUrls = profiles
+            .filter((profile) => profile.isVisible !== false)
+            .map((profile) => {
+                const city = getProfileCitySlug(profile);
+                const slug = makeSlug(profile.seoTitle || profile.name || '');
+                return city && slug ? `${BASE_URL}/${city}/escorts/${slug}` : null;
+            })
+            .filter((url): url is string => url !== null)
+            .filter((url) => {
+                if (seen.has(url)) return false;
+                seen.add(url);
+                return true;
+            });
         
         // Generate sitemap.xml content
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://www.aliyaescort.com/</loc>
+        <loc>${BASE_URL}/</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
-    ${profiles.map(p => `
+    ${profileUrls.map(url => `
     <url>
-        <loc>https://www.aliyaescort.com/ahmedabad/escorts/${(p.name || '').trim().toLowerCase().replace(/\s+/g, '-')}</loc>
-        <lastmod>${p.updatedAt || new Date().toISOString()}</lastmod>
+        <loc>${escapeXml(url)}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>`).join('')}
