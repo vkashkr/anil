@@ -39,6 +39,9 @@ export async function POST(request: Request) {
                 seen.add(url);
                 return true;
             });
+
+        const cityUrls = ['ahmedabad', 'hyderabad'].map((city) => `${BASE_URL}/${city}/escorts`);
+        const urls = [...cityUrls, ...profileUrls];
         
         // Generate sitemap.xml content
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -48,7 +51,7 @@ export async function POST(request: Request) {
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
-    ${profileUrls.map(url => `
+    ${urls.map(url => `
     <url>
         <loc>${escapeXml(url)}</loc>
         <lastmod>${new Date().toISOString()}</lastmod>
@@ -59,7 +62,7 @@ export async function POST(request: Request) {
 
         // Upload to S3 (best-effort)
         try {
-            await uploadHtmlToS3('sitemap.xml', sitemap);
+            await uploadHtmlToS3('sitemap.xml', sitemap, 'application/xml');
         } catch (uploadErr) {
             console.error('Sitemap upload error:', uploadErr);
         }
