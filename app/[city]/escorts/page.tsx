@@ -233,9 +233,9 @@ export default async function CityEscortPage({ params }: { params?: any }) {
           Find the best independent call girls in {cityDisplay}.
         </p>
         <p className="text-gray-300 text-sm max-w-xl mx-auto mb-5">
-          We have{' '}
-          <span className="text-pink-300 font-bold">more than 100+ verified profiles</span>{' '}
-          available in {cityDisplay}. Independent call girls, 24/7 — incall &amp; outcall, no advance payment.
+          We currently show{' '}
+          <span className="text-pink-300 font-bold">{profiles.length} verified profiles</span>{' '}
+          available in {cityDisplay}. Independent adult profiles, 24/7 — private companionship and direct contact.
         </p>
         <div className="flex justify-center gap-3 flex-wrap">
           <a

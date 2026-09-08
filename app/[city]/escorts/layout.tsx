@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params?: any }): Promise<Me
   const cityDisplay = formatCityName(citySlug);
 
   const title = `Escorts ${cityDisplay}, India`;
-  const description = `Browse 1000+ verified ${cityDisplay.toLowerCase()} escort profiles. Independent call girls in ${cityDisplay} available 24/7 for hotel & home service. No advance, 100% real photos. Book now.`;
+  const description = `Browse verified ${cityDisplay.toLowerCase()} escort profiles. Independent adults in ${cityDisplay} available 24/7 for private companionship. Real photos and direct contact.`;
   const url = `${BASE_URL}/${encodeURIComponent(citySlug)}/escorts`;
 
   return {
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: { params?: any }): Promise<Me
       canonical: url,
     },
     openGraph: {
-      title: `${cityDisplay} Escorts | 1000+ Verified Profiles`,
+      title: `${cityDisplay} Escorts | Verified Profiles`,
       description,
       url,
       siteName: `Escorts ${cityDisplay}`,

@@ -5,7 +5,7 @@ const BASE_URL = 'https://www.aliyaescort.com';
 export const metadata: Metadata = {
   title: 'Escort Ahmedabad, Gujarat, India',
   description:
-    'Browse 1000+ verified ahmedabad escort profiles. Independent call girls in Ahmedabad available 24/7 for hotel & home service. No advance, 100% real photos. Book now.',
+    'Browse verified Ahmedabad escort profiles. Independent adults in Ahmedabad available 24/7 for private companionship. Real photos and direct contact.',
   keywords: [
     'ahmedabad escort',
     'ahmedabad escorts',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     canonical: `${BASE_URL}/ahmedabad/escorts`,
   },
   openGraph: {
-    title: 'Ahmedabad Escort Service | 1000+ Verified Profiles',
+    title: 'Ahmedabad Escort Service | Verified Profiles',
     description:
       'Browse genuine, verified ahmedabad escort profiles. Independent call girls available 24/7. No advance payment. Real photos only.',
     url: `${BASE_URL}/ahmedabad/escorts`,
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Ahmedabad Escort Service',
     description:
-      '1000+ verified ahmedabad escort profiles. Book independent call girls in Ahmedabad 24/7.',
+      'Verified Ahmedabad escort profiles with direct contact and private companionship availability.',
     site: '@AliyaEscort',
   },
   robots: {

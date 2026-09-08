@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { PHONE_TEL, WHATSAPP_URL } from '@/app/lib/constants';
+import { getProfileSlug } from '@/app/lib/city-slugs';
 
 const DEFAULT_WHATSAPP_TEXT = encodeURIComponent('Hello Aliya, I am interested in your service');
 
@@ -66,8 +67,7 @@ export default function HomeNav({ initialProfilesById }: HomeNavProps) {
   };
 
   const navigateToProfile = (name: string, seoTitle?: string) => {
-    const rawSlug = seoTitle || name;
-    const slug = rawSlug.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const slug = getProfileSlug({ name, seoTitle });
     router.push(`/ahmedabad/escorts/${encodeURIComponent(slug)}`);
     setSearchQuery('');
     setSearchFocused(false);

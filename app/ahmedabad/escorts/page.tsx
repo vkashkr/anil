@@ -39,9 +39,6 @@ async function fetchS3ImagesByProfileId(): Promise<Record<string, string[]>> {
   return imagesByid;
 }
 
-const makeSlug = (raw: string) =>
-  raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-
 async function fetchProfiles() {
   try {
     const [dbProfiles, s3Images] = await Promise.all([
@@ -190,9 +187,9 @@ export default async function AhmedabadEscortPage() {
           Find the best independent call girls in Ahmedabad.
         </p>
         <p className="text-gray-300 text-sm max-w-xl mx-auto mb-5">
-          We have{' '}
-          <span className="text-pink-300 font-bold">more than 100+ verified profiles</span>{' '}
-          available in Ahmedabad. Independent call girls, 24/7 — incall &amp; outcall, no advance payment.
+          We currently show{' '}
+          <span className="text-pink-300 font-bold">{profiles.length} verified profiles</span>{' '}
+          available in Ahmedabad. Independent adult profiles, 24/7 — private companionship and direct contact.
         </p>
         <div className="flex justify-center gap-3 flex-wrap">
           <a

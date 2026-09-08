@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getProfileSlug } from '@/app/lib/city-slugs';
 
 type Profile = {
   id: string | number;
@@ -34,9 +35,7 @@ export default function ProfileCard({ id, images }: ProfileCardProps) {
     setIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
-  // Safe slug generation — prefer seoTitle for SEO-rich URLs
-  const rawSlug = profile.seoTitle || profile.name || 'profile';
-  const slug = rawSlug.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const slug = getProfileSlug(profile);
 
   return (
     <div className="relative bg-white rounded-xl shadow-lg overflow-hidden flex flex-col group transition-transform duration-200 hover:scale-105">

@@ -50,7 +50,7 @@ export default function SEOContent() {
           <div className="mt-8">
             <h3 className="font-bold text-fuchsia-400 text-2xl tracking-wide drop-shadow-pink mb-4">Why Choose Escort Ahmedabad ?</h3>
             <ul className="list-disc pl-6 text-pink-400 font-semibold space-y-2">
-              <li><span className="font-bold text-yellow-600">2000+ Verified Profiles:</span> Choose from a vast selection of real, independent call girls.</li>
+              <li><span className="font-bold text-yellow-600">Verified Profiles:</span> Browse real, independent adult profiles with direct contact.</li>
               <li><span className="font-bold text-fuchsia-600">Fastest Service:</span> Doorstep delivery in 30 minutes, 24/7 availability.</li>
               <li><span className="font-bold text-pink-600">Cash Payment & No Advance:</span> Hassle-free booking with complete privacy.</li>
               <li><span className="font-bold text-yellow-500">Exclusive Discounts:</span> Enjoy up to 60% off your first booking.</li>
@@ -113,7 +113,7 @@ export default function SEOContent() {
           <div className="mt-6">
             <h3 className="font-bold text-2xl text-fuchsia-400 tracking-wide drop-shadow-pink mb-4">क्यों चुनें Escort Ahmedabad ?</h3>
             <ul className="list-disc pl-6 text-pink-400 font-semibold space-y-2">
-              <li>2000+ असली लोकल प्रोफाइल्स</li>
+              <li>असली लोकल प्रोफाइल्स</li>
               <li>सबसे तेज़ डिलीवरी, सिर्फ 30 मिनट में</li>
               <li>कैश पेमेंट, कोई एडवांस नहीं</li>
               <li>24x7 सर्विस, जब चाहें बुक करें</li>
