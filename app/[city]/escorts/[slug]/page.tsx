@@ -127,8 +127,10 @@ export default async function CityProfilePage({ params }: PageProps) {
 
   const canonicalProfileSlug = getProfileSlug(profile);
   const decodedSlug = decodeURIComponent(String(slug || '')).trim();
-  const requestedSlug = makeSlug(decodedSlug.replace(/-independent-escort$/i, ''));
-  if (!requestedSlug || requestedSlug !== canonicalProfileSlug || decodedSlug !== requestedSlug) {
+  // Compare against the full canonical slug directly — it may legitimately
+  // end in "-independent-escort" itself, so stripping that suffix before
+  // comparing would falsely mismatch and redirect back to the same URL.
+  if (!decodedSlug || decodedSlug !== canonicalProfileSlug) {
     redirect(`/${citySlug}/escorts/${canonicalProfileSlug}`);
   }
 
