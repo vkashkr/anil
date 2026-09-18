@@ -68,16 +68,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const profile = await loadProfile(slug);
   if (!profile) return { title: 'Profile Not Found' };
 
-  // A profile only lives at its real city's URL — don't generate doorway
-  // metadata (duplicate content) for an unrelated city.
-  const realCity = getProfileCitySlug(profile);
-  if (realCity && realCity !== citySlug) {
-    return { title: 'Profile Not Found', robots: { index: false, follow: false } };
-  }
-
+  const realCity = getProfileCitySlug(profile) || citySlug;
   const canonicalProfileSlug = getProfileSlug(profile);
-  const url = `${BASE_URL}/${citySlug}/escorts/${canonicalProfileSlug}`;
-  const title = profile.seoTitle || `${profile.name} - Call Girl in ${cityDisplay} | Aliya Escort`;
+  const url = `${BASE_URL}/${realCity}/escorts/${canonicalProfileSlug}`;
+  const title = profile.seoTitle || `${profile.name} - Call Girl in ${formatCityName(realCity)} | Aliya Escort`;
   const description =
     profile.seoDescription ||
     profile.description?.replace(/<[^>]+>/g, '').slice(0, 160) ||
@@ -118,25 +112,20 @@ export default async function CityProfilePage({ params }: PageProps) {
 
   if (!profile) notFound();
 
-  // A profile only lives at its real city's URL — redirect instead of
-  // rendering duplicate/doorway content under an unrelated city.
-  const realCity = getProfileCitySlug(profile);
-  if (realCity && realCity !== citySlug) {
-    redirect(`/${realCity}/escorts/${slug}`);
-  }
-
+  const realCity = getProfileCitySlug(profile) || citySlug;
   const canonicalProfileSlug = getProfileSlug(profile);
+  const canonicalCitySlug = realCity;
   const decodedSlug = decodeURIComponent(String(slug || '')).trim();
   // Compare against the full canonical slug directly — it may legitimately
   // end in "-independent-escort" itself, so stripping that suffix before
   // comparing would falsely mismatch and redirect back to the same URL.
   if (!decodedSlug || decodedSlug !== canonicalProfileSlug) {
-    redirect(`/${citySlug}/escorts/${canonicalProfileSlug}`);
+    redirect(`/${canonicalCitySlug}/escorts/${canonicalProfileSlug}`);
   }
 
   const cookieStore = await cookies();
   const isAdmin = cookieStore.get('auth_token')?.value === 'authenticated';
-  const canonicalUrl = `${BASE_URL}/${citySlug}/escorts/${canonicalProfileSlug}`;
+  const canonicalUrl = `${BASE_URL}/${canonicalCitySlug}/escorts/${canonicalProfileSlug}`;
   const whatsappText = encodeURIComponent(`hello, ${profile.name} I saw your profile on Aliya Escort`);
   const safeDescriptionHtml = sanitizeProfileHtml(profile.description);
   const safeCustomCss = sanitizeInlineCss(profile.customCss);

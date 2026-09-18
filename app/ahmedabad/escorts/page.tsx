@@ -3,7 +3,7 @@ import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
 import { PHONE_TEL, WHATSAPP_URL } from '@/app/lib/constants';
 import { getProfileCitySlug, getProfileSlug } from '@/app/lib/city-slugs';
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 const API_BASE = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp';
 
@@ -21,7 +21,7 @@ async function fetchS3ImagesByProfileId(): Promise<Record<string, string[]>> {
       ? `${API_BASE}/view?limit=100&next_token=${encodeURIComponent(nextToken)}`
       : `${API_BASE}/view?limit=100`;
     let res: Response;
-    try { res = await fetch(url, { next: { revalidate: 60 } }); } catch { break; }
+    try { res = await fetch(url, { next: { revalidate: 300 } }); } catch { break; }
     if (!res.ok) break;
     const data = await res.json();
     if (!data?.images || !Array.isArray(data.images)) break;
