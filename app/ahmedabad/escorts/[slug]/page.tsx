@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { cache } from 'react';
 import { notFound, redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { getProfileBySeoTitleFromDynamoDB, Profile } from '@/app/lib/dynamodb';
@@ -36,7 +35,7 @@ const sanitizeInlineCss = (css?: string) => {
 };
 
 // cache() deduplicates: generateMetadata and the page component share one fetch per request
-const loadProfile = cache(async (slug: string): Promise<Profile | undefined> => {
+async function loadProfile(slug: string): Promise<Profile | undefined> {
   // Strip '-independent-escort' suffix to get the seoTitle/name for DB lookup
   const cleanSlug = slug.replace(/-independent-escort$/, '');
   const profile = await getProfileBySeoTitleFromDynamoDB(cleanSlug).catch(() => undefined);
@@ -63,7 +62,7 @@ const loadProfile = cache(async (slug: string): Promise<Profile | undefined> => 
   }
 
   return profile;
-});
+}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -72,12 +71,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const realCity = getProfileCitySlug(profile) || 'ahmedabad';
   const url = `${BASE_URL}/${realCity}/escorts/${getProfileSlug(profile)}`;
-  const title =
-    profile.seoTitle || `${profile.name} — Call Girl in Ahmedabad | Aliya Escort`;
-  const description =
-    profile.seoDescription ||
-    profile.description?.replace(/<[^>]+>/g, '').slice(0, 160) ||
-    `Meet ${profile.name}${profile.age ? `, age ${profile.age}` : ''} — verified independent call girl in ${profile.city || 'Ahmedabad'}, Gujarat. Real photos, 24/7 available, no advance payment. Book now on Aliya Escort.`;
+  const seoTitle = String(profile.seoTitle || '').trim() || `${profile.name} — Call Girl in ${profile.city || profile.location || 'Ahmedabad'} | Aliya Escort`;
+  const seoDescription = String(profile.seoDescription || '').trim() || profile.description?.replace(/<[^>]+>/g, '').trim().slice(0, 160) || `Meet ${profile.name}${profile.age ? `, age ${profile.age}` : ''} — verified independent call girl in ${profile.city || profile.location || 'Ahmedabad'}, Gujarat. Real photos, 24/7 available, no advance payment.`;
+  const title = seoTitle;
+  const description = seoDescription;
 
   return {
     title,
@@ -172,7 +169,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
     name: profile.name,
     url: canonicalUrl,
     image: profile.images?.[0] ?? undefined,
-    description: profile.seoDescription || profile.description?.replace(/<[^>]+>/g, '').slice(0, 160) || undefined,
+    description: String(profile.seoDescription || '').trim() || profile.description?.replace(/<[^>]+>/g, '').slice(0, 160) || undefined,
     address: {
       '@type': 'PostalAddress',
       addressLocality: profile.city || profile.location || 'Ahmedabad',
@@ -241,11 +238,11 @@ export default async function ProfileSlugPage({ params }: PageProps) {
         {/* SEO H1 block */}
         <div className="mb-6 bg-gradient-to-r from-black/60 via-fuchsia-950/40 to-black/60 rounded-2xl p-5 border border-white/5">
           <h1 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-400 to-yellow-300 mb-2">
-            {profile.seoTitle || `${profile.name} — Call Girl in ${profile.city || profile.location || 'Ahmedabad'}`}
+            {String(profile.seoTitle || '').trim() || `${profile.name} — Call Girl in ${profile.city || profile.location || 'Ahmedabad'}`}
           </h1>
           <p className="text-gray-400 text-sm md:text-base leading-relaxed">
-            {profile.seoDescription ||
-              `${profile.name} available in ${profile.place ? profile.place + ', ' : ''}${profile.city || profile.location || 'Ahmedabad'}${profile.state ? ', ' + profile.state : ''}. Genuine, verified profile with real photos.`}
+            {String(profile.seoDescription || '').trim() ||
+              (profile.description ? profile.description.replace(/<[^>]+>/g, '').trim().slice(0, 160) : `${profile.name} available in ${profile.place ? profile.place + ', ' : ''}${profile.city || profile.location || 'Ahmedabad'}${profile.state ? ', ' + profile.state : ''}. Genuine, verified profile with real photos.`)}
           </p>
         </div>
 
