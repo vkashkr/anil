@@ -35,6 +35,7 @@ async function callApi(body: Record<string, unknown>) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),
             signal: controller.signal,
+            next: { revalidate: 60 },
         });
         clearTimeout(timeout);
 
