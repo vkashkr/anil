@@ -59,7 +59,7 @@ async function fetchAllStoryRoutes(): Promise<SitemapStoryRoute[]> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
+  const now = new Date().toISOString().slice(0, 10);
   const rootRoute: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
     { url: `${BASE_URL}/stories`, lastModified: now, changeFrequency: 'daily', priority: 0.7 },
@@ -68,13 +68,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Always include core city listing routes even if profile fetch is empty/timed out.
   const defaultCitySlugs = [...ALLOWED_CITY_SLUGS];
-  const defaultCityRoutes: MetadataRoute.Sitemap = defaultCitySlugs.map((city) => ({
-    url: `${BASE_URL}/${city}/escorts`,
-    lastModified: now,
-    changeFrequency: 'daily' as const,
-    priority: 0.9,
-  }));
-
   let cityRoutes: MetadataRoute.Sitemap = [];
   let profileRoutes: MetadataRoute.Sitemap = [];
   let storyRoutes: MetadataRoute.Sitemap = [];
@@ -84,13 +77,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       fetchAllStoryRoutes(),
     ]);
 
-    const uniqueCities = Array.from(new Set([...defaultCitySlugs])).sort();
-    cityRoutes = uniqueCities.map((city) => ({
-      url: `${BASE_URL}/${city}/escorts`,
-      lastModified: now,
-      changeFrequency: 'daily' as const,
-      priority: 0.9,
-    }));
 
     profileRoutes = profiles.map(({ city, slug, updatedAt }) => ({
       url: `${BASE_URL}/${city}/escorts/${slug}`,
@@ -113,6 +99,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Sitemap dynamic route generation error:', error);
   }
 
-  const finalCityRoutes = cityRoutes.length > 0 ? cityRoutes : defaultCityRoutes;
+  const finalCityRoutes = cityRoutes.length > 0 ? cityRoutes : [];
   return [...rootRoute, ...finalCityRoutes, ...profileRoutes, ...storyRoutes];
 }

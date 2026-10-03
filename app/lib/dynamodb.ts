@@ -26,8 +26,9 @@ const API_URL = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp/admi
 
 async function callApi(body: Record<string, unknown>) {
     const controller = new AbortController();
-    // Profile scans can take longer than ordinary point reads, especially
-    // while the Lambda is cold or DynamoDB is paginating a larger table.
+    // Profile reads must stay fresh; stale cached 404s or older scan results can
+    // leave a valid profile page missing even after the backend record is restored.
+    const isProfileLookup = body.action === 'get_profile' || body.action === 'scan_profiles';
     const timeout = setTimeout(() => controller.abort(), 30_000);
     try {
         const response = await fetch(API_URL, {
@@ -35,7 +36,8 @@ async function callApi(body: Record<string, unknown>) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),
             signal: controller.signal,
-            next: { revalidate: 300 },
+            cache: isProfileLookup ? 'no-store' : 'default',
+            next: isProfileLookup ? { revalidate: 0 } : { revalidate: 300 },
         });
         clearTimeout(timeout);
 
