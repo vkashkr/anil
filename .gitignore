@@ -3,6 +3,10 @@
 # dependencies
 /node_modules
 /scripts
+!/scripts/
+/scripts/*
+!/scripts/revalidate_after_sync.py
+!/scripts/update_profiles_from_csv.py
 /.pnp
 .pnp.*
 .yarn/*
@@ -11,6 +15,10 @@
 !.yarn/releases
 !.yarn/versions
 /local_scripts
+!/local_scripts/
+/local_scripts/*
+!/local_scripts/sync_to_s3.py
+!/local_scripts/requirements.txt
 
 # testing
 /coverage

@@ -41,6 +41,13 @@ async function loadProfile(slug: string): Promise<Profile | undefined> {
   const profile = await getProfileBySeoTitleFromDynamoDB(cleanSlug).catch(() => undefined);
   if (!profile) return undefined;
 
+  const rawServices: unknown = profile.services;
+  profile.services = Array.isArray(rawServices)
+    ? rawServices.filter((service): service is string => typeof service === 'string')
+    : typeof rawServices === 'string'
+      ? rawServices.split(',').map((service) => service.trim()).filter(Boolean)
+      : [];
+
   // Fetch images from S3 (stored separately from DynamoDB metadata)
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   try {
@@ -590,4 +597,3 @@ export default async function ProfileSlugPage({ params }: PageProps) {
 }
 
 // keep the old ?name= URL working — silently reuse the same slug route
-
