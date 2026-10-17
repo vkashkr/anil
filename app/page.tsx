@@ -105,7 +105,7 @@ export default async function Home() {
           style={{ background: 'radial-gradient(circle at 80% 10%, rgba(255,0,128,0.10) 0, transparent 70%), radial-gradient(circle at 10% 90%, rgba(255,255,0,0.08) 0, transparent 70%)' }}
         />
         <h1 className="relative z-10 text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-500 to-yellow-300 text-center leading-tight mb-3">
-          Ahmedabad Escort &amp; Local Call Girls 👄
+          Ahmedabad Escorts &amp; Escort Service
         </h1>
 
         {/* Marquee receives initial server-fetched profiles as props */}
@@ -113,19 +113,15 @@ export default async function Home() {
 
         <p className="relative z-10 text-lg sm:text-xl text-gray-100 max-w-xl sm:max-w-2xl text-center mb-4 font-medium">
           <span className="bg-black/30 px-3 py-2 rounded-2xl shadow-lg backdrop-blur-sm inline-block">
-            Welcome to <span className="font-bold text-pink-300">Escorts Ahmedabad</span> – latest news and updates about our{' '}
-            <span className="text-fuchsia-300 font-semibold">genuine, independent call girls</span> and{' '}
-            <span className="text-yellow-200 font-semibold">premium escort services</span> in Ahmedabad.{' '}
-            Book local girls for home or hotel delivery, enjoy{' '}
-            <span className="italic text-pink-200">safe, private, and affordable companionship</span>.{' '}
-            <span className="text-yellow-300 font-bold">No advance payment</span>,{' '}
-            <span className="text-fuchsia-200 font-bold">100% privacy</span>, and{' '}
-            <span className="text-pink-200 font-bold">real profiles only</span>.
+            Browse <span className="font-bold text-pink-300">Ahmedabad escort profiles</span> and local listing information.{' '}
+            If you are searching for an <span className="text-fuchsia-300 font-semibold">escort service in Ahmedabad</span>,{' '}
+            Ahmedabad escorts, or <span className="text-yellow-200 font-semibold">call girls in Ahmedabad</span>,{' '}
+            review the profile details and contact information available on Aliya Escort.
           </span>
         </p>
         <span className="relative z-10 text-pink-200 font-semibold text-base sm:text-lg bg-black/20 px-4 py-1 rounded-full shadow-md tracking-wide mt-1">
-          Ahmedabad&apos;s <span className="text-yellow-200 font-bold">#1 Local Girl Service</span> |{' '}
-          <span className="text-fuchsia-200 font-bold">{profileCount || '1000'}+ Verified Profiles</span>
+          Local listings for Ahmedabad, Gujarat |{' '}
+          <span className="text-fuchsia-200 font-bold">{profileCount} profiles</span>
         </span>
       </div>
 

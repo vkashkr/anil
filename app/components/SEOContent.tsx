@@ -35,32 +35,31 @@ export default function SEOContent() {
         <div className="absolute inset-0 pointer-events-none z-0" style={{background: 'radial-gradient(circle at 80% 10%, rgba(255,0,128,0.12) 0, transparent 70%), radial-gradient(circle at 10% 90%, rgba(255,255,0,0.10) 0, transparent 70%)'}}></div>
         <div className="relative z-10 text-base md:text-lg leading-relaxed text-gray-100">
           <h2 className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-500 to-yellow-300 text-3xl md:text-4xl drop-shadow-pink animate-pulse mb-6">
-            Welcome to Escort Ahmedabad 
+            Ahmedabad Escort Service and Local Profiles
           </h2>
           
           <div className="space-y-4">
             <p>
-              The Ultimate Destination for <span className="underline decoration-wavy decoration-pink-400">Premium <span className="text-pink-400">Call Girls</span></span> and <span className="font-bold text-yellow-400">Escort Services</span> in Ahmedabad.
+              Explore local profiles and information about <span className="font-bold text-yellow-400">escort services in Ahmedabad</span>. This page brings together profile details for people comparing Ahmedabad escorts and local listings.
             </p>
             <p>
-              <span className="text-pink-400 font-bold">Are you searching for the best <span className="italic underline decoration-wavy decoration-fuchsia-400">call girls in Ahmedabad</span>?</span> <span className="text-gray-200">Escort Ahmedabad is your <span className="font-bold text-fuchsia-400">one-stop solution</span> for <span className="italic text-pink-400">luxury companionship</span> with genuine independent profiles.</span>
+              Searches such as <span className="text-pink-400 font-bold">“escort Ahmedabad,” “Ahmedabad escort service,”</span> and <span className="text-fuchsia-400 font-bold">“call girl in Ahmedabad”</span> often reflect a need for local information. Review each listing for its available details and use the listed contact options if you need clarification.
             </p>
           </div>
 
           <div className="mt-8">
-            <h3 className="font-bold text-fuchsia-400 text-2xl tracking-wide drop-shadow-pink mb-4">Why Choose Escort Ahmedabad ?</h3>
+            <h3 className="font-bold text-fuchsia-400 text-2xl tracking-wide drop-shadow-pink mb-4">Browse Ahmedabad escort listings</h3>
             <ul className="list-disc pl-6 text-pink-400 font-semibold space-y-2">
-              <li><span className="font-bold text-yellow-600">Verified Profiles:</span> Browse real, independent adult profiles with direct contact.</li>
-              <li><span className="font-bold text-fuchsia-600">Fastest Service:</span> Doorstep delivery in 30 minutes, 24/7 availability.</li>
-              <li><span className="font-bold text-pink-600">Cash Payment & No Advance:</span> Hassle-free booking with complete privacy.</li>
-              <li><span className="font-bold text-yellow-500">Exclusive Discounts:</span> Enjoy up to 60% off your first booking.</li>
-              <li><span className="font-bold text-fuchsia-700">Safe & Discreet:</span> Licensed agency, strict confidentiality.</li>
+              <li>Browse profiles listed for Ahmedabad and nearby areas.</li>
+              <li>Review the information and photos shown on each profile page.</li>
+              <li>Check the listing details and contact options before making arrangements.</li>
+              <li>Use the area coverage section to find listings by Ahmedabad neighborhood.</li>
             </ul>
           </div>
 
           <div className="mt-8">
             <h3 className="font-bold text-lg text-fuchsia-400 uppercase tracking-wider mb-2">Area Coverage</h3>
-            <p className="text-gray-200 mb-4">We serve all major locations in Ahmedabad, including:</p>
+            <p className="text-gray-200 mb-4">Listings include Ahmedabad neighborhoods such as:</p>
             <ul className="list-disc pl-6 text-yellow-400 font-semibold grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-1">
               {['Satellite', 'SG Highway', 'Vastrapur', 'Navrangpura', 'Prahlad Nagar', 'Bodakdev', 'Maninagar', 'Ellisbridge', 'Paldi', 'Thaltej', 'Ambawadi', 'Naranpura', 'Chandkheda', 'Bopal', 'Gota', 'Sola', 'Memnagar'].map(loc => (
                 <li key={loc}>{loc}</li>
@@ -113,16 +112,10 @@ export default function SEOContent() {
           <div className="mt-6">
             <h3 className="font-bold text-2xl text-fuchsia-400 tracking-wide drop-shadow-pink mb-4">क्यों चुनें Escort Ahmedabad ?</h3>
             <ul className="list-disc pl-6 text-pink-400 font-semibold space-y-2">
-              <li>असली लोकल प्रोफाइल्स</li>
-              <li>सबसे तेज़ डिलीवरी, सिर्फ 30 मिनट में</li>
-              <li>कैश पेमेंट, कोई एडवांस नहीं</li>
-              <li>24x7 सर्विस, जब चाहें बुक करें</li>
-              <li>हर बुकिंग पर डिस्काउंट और ऑफर</li>
+              <li>अहमदाबाद और आसपास की प्रोफाइल्स देखें।</li>
+              <li>हर प्रोफाइल पर उपलब्ध जानकारी और तस्वीरें पढ़ें।</li>
+              <li>किसी भी व्यवस्था से पहले प्रोफाइल में दी गई जानकारी की पुष्टि करें।</li>
             </ul>
-          </div>
-          
-          <div className="mt-8 text-yellow-300 font-semibold italic text-sm leading-relaxed opacity-80">
-            अहमदाबाद कॉल गर्ल्स, लोकल गर्ल्स अहमदाबाद, सस्ती कॉल गर्ल्स अहमदाबाद, रशियन कॉल गर्ल्स अहमदाबाद, कॉलेज गर्ल्स अहमदाबाद, हाउसवाइफ एस्कॉर्ट्स अहमदाबाद, VIP एस्कॉर्ट्स अहमदाबाद, इंडिपेंडेंट कॉल गर्ल्स अहमदाबाद, बेस्ट कॉल गर्ल सर्विस अहमदाबाद.
           </div>
         </div>
       </div>

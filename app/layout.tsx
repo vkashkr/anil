@@ -15,17 +15,17 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.aliyaescort.com'),
   title: {
-    default: "Ahmedabad escorts, Gujarat, India",
+    default: "Ahmedabad Escorts & Escort Service | Aliya Escort",
     template: "%s",
   },
-  description: "We have 50+ Ahmedabad escorts on Aliya Escort",
-  keywords: ["ahmedabad escort", "escort service ahmedabad", "call girls in ahmedabad", "ahmedabad call girls", "ahmedabad escort service", "independent call girls ahmedabad", "college girls ahmedabad", "housewife escort ahmedabad", "vip escort service", "russian call girls ahmedabad", "night out girls ahmedabad", "female escort ahmedabad", "local call girls ahmedabad", "escort girls ahmedabad", "cheap escort ahmedabad"],
+  description: "Browse Ahmedabad escort profiles and information about escort services in Ahmedabad. Explore local listings and profile details on Aliya Escort.",
+  keywords: ["Ahmedabad escort", "Ahmedabad escorts", "escort Ahmedabad", "escort service in Ahmedabad", "call girl Ahmedabad", "Ahmedabad escort service", "call girl in Ahmedabad", "Ahmedabad call girl"],
   alternates: {
     canonical: 'https://www.aliyaescort.com/',
   },
   openGraph: {
-    title: "Escort Ahmedabad | Premium Call Girl Service",
-    description: "Aliya Escort — Ahmedabad's most trusted escort directory. Real profiles, verified photos, 24/7 incall & outcall across Gujarat.",
+    title: "Ahmedabad Escorts & Escort Service | Aliya Escort",
+    description: "Browse Ahmedabad escort profiles and information about local escort services on Aliya Escort.",
     url: 'https://www.aliyaescort.com/',
     siteName: 'Escort Ahmedabad ',
     locale: 'en_IN',
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Escort Ahmedabad | Premium Call Girl Service',
-    description: "Ahmedabad's most trusted escort directory. Real profiles, 24/7 incall & outcall, no advance payment.",
+    title: 'Ahmedabad Escorts & Escort Service | Aliya Escort',
+    description: "Browse Ahmedabad escort profiles and information about local escort services on Aliya Escort.",
     site: '@AliyaEscort',
   },
   robots: {
