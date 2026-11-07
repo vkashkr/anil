@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
     const normalised = getProfileSlug({ name: slug });
     revalidatePath(`/ahmedabad/escorts/${normalised}`);
     revalidatePath(`/hyderabad/escorts/${normalised}`);
+    revalidatePath(`/${normalised}`);
   }
 
   revalidatePath('/ahmedabad/escorts');
