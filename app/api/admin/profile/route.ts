@@ -17,7 +17,6 @@ export async function POST(request: Request) {
       const result = await deleteProfileFromDynamoDB(profileId);
       revalidatePath('/');
       revalidatePath('/ahmedabad/escorts');
-      revalidatePath('/hyderabad/escorts');
       return NextResponse.json(result);
     }
 
@@ -33,9 +32,7 @@ export async function POST(request: Request) {
     if (result?.success !== false && profile.name) {
       const slug = getProfileSlug(profile);
       revalidatePath(`/ahmedabad/escorts/${slug}`);
-      revalidatePath(`/hyderabad/escorts/${slug}`);
       revalidatePath('/ahmedabad/escorts');
-      revalidatePath('/hyderabad/escorts');
       revalidatePath('/');
     }
 

@@ -1,4 +1,4 @@
-export const ALLOWED_CITY_SLUGS = ['ahmedabad', 'hyderabad'] as const;
+export const ALLOWED_CITY_SLUGS = ['ahmedabad'] as const;
 
 
 export const makeSlug = (raw: string) =>
@@ -33,14 +33,12 @@ export function getProfileCitySlug(profile: {
   place?: string;
 }): string | null {
   const explicitCity = String(profile.city || '').toLowerCase();
-  if (/(hyderabad|hydrabad|hyderbad|secunderabad)/i.test(explicitCity)) return 'hyderabad';
   if (/ahmedabad/i.test(explicitCity)) return 'ahmedabad';
 
   const text = [profile.location, profile.state, profile.district, profile.place]
     .filter(Boolean)
     .map((value) => String(value).toLowerCase())
     .join(' ');
-  if (/(hyderabad|hydrabad|hyderbad|secunderabad|telangana)/i.test(text)) return 'hyderabad';
   if (/(ahmedabad|gujarat)/i.test(text)) return 'ahmedabad';
 
   return null;

@@ -44,7 +44,7 @@ export async function POST(request: Request) {
             throw new Error('Profile scan returned no canonical URLs; existing sitemap was not replaced');
         }
 
-        const cityUrls = ['ahmedabad', 'hyderabad'].map((city) => `${BASE_URL}/${city}/escorts`);
+        const cityUrls = ['ahmedabad'].map((city) => `${BASE_URL}/${city}/escorts`);
         const urls = [...cityUrls, ...profileUrls];
         
         // Generate sitemap.xml content

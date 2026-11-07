@@ -22,12 +22,10 @@ export async function POST(req: NextRequest) {
   if (slug) {
     const normalised = getProfileSlug({ name: slug });
     revalidatePath(`/ahmedabad/escorts/${normalised}`);
-    revalidatePath(`/hyderabad/escorts/${normalised}`);
     revalidatePath(`/${normalised}`);
   }
 
   revalidatePath('/ahmedabad/escorts');
-  revalidatePath('/hyderabad/escorts');
   revalidatePath('/');
 
   return NextResponse.json({ success: true, revalidated: slug || 'city listings' });
