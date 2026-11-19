@@ -190,8 +190,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Ahmedabad Escorts', item: `${BASE_URL}/ahmedabad/escorts` },
-      { '@type': 'ListItem', position: 3, name: profile.name, item: canonicalUrl },
+      { '@type': 'ListItem', position: 2, name: profile.name, item: canonicalUrl },
     ],
   };
 

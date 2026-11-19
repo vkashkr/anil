@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getAllProfilesFromDynamoDB } from '@/app/lib/dynamodb';
-import { ALLOWED_CITY_SLUGS, getProfileCitySlug, getProfileSlug } from '@/app/lib/city-slugs';
+import { getProfileCitySlug, getProfileSlug } from '@/app/lib/city-slugs';
 
 // Keep the sitemap stable for crawlers while allowing profile changes to appear quickly.
 export const revalidate = 300;
@@ -66,8 +66,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/stories/entertainment`, lastModified: now, changeFrequency: 'daily', priority: 0.7 },
   ];
 
-  // Always include core city listing routes even if profile fetch is empty/timed out.
-  const defaultCitySlugs = [...ALLOWED_CITY_SLUGS];
   let profileRoutes: MetadataRoute.Sitemap = [];
   let storyRoutes: MetadataRoute.Sitemap = [];
   const [profilesResult, storiesResult] = await Promise.allSettled([
@@ -101,11 +99,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Sitemap story route generation error:', storiesResult.reason);
   }
 
-  const finalCityRoutes: MetadataRoute.Sitemap = defaultCitySlugs.map((city) => ({
-    url: `${BASE_URL}/${city}/escorts`,
-    lastModified: now,
-    changeFrequency: 'daily',
-    priority: 0.9,
-  }));
-  return [...rootRoute, ...finalCityRoutes, ...profileRoutes, ...storyRoutes];
+  return [...rootRoute, ...profileRoutes, ...storyRoutes];
 }

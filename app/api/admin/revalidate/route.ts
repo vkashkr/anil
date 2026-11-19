@@ -6,7 +6,7 @@ import { getProfileSlug } from '@/app/lib/city-slugs';
 /**
  * POST /api/admin/revalidate
  * Body: { slug?: string }   — revalidates a specific profile slug
- *       {}                  — revalidates the city listing pages
+ *       {}                  — revalidates the homepage
  *
  * Requires admin auth cookie. Called automatically by /api/admin/profile after
  * every save, but can also be triggered manually.
@@ -25,8 +25,7 @@ export async function POST(req: NextRequest) {
     revalidatePath(`/${normalised}`);
   }
 
-  revalidatePath('/ahmedabad/escorts');
   revalidatePath('/');
 
-  return NextResponse.json({ success: true, revalidated: slug || 'city listings' });
+  return NextResponse.json({ success: true, revalidated: slug || 'homepage' });
 }

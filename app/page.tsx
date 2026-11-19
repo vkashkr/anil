@@ -1,3 +1,4 @@
+import Link from "next/link";
 import ProfileMarquee from "./components/ProfileMarquee";
 import HeroVideo from "./components/HeroVideo";
 import SEOContent from "./components/SEOContent";
@@ -165,10 +166,8 @@ export default async function Home() {
             <div>
               <h3 className="text-lg font-bold text-white mb-4">Quick Links</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="/" className="text-gray-400 hover:text-pink-300 transition">Home</a></li>
-                <li><a href="/ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">Ahmedabad Escort Service</a></li>
-                <li><a href="/ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">VIP Escorts</a></li>
-                <li><a href="/ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">New Arrivals</a></li>
+                <li><Link href="/" className="text-gray-400 hover:text-pink-300 transition">Home</Link></li>
+                <li><Link href="/#profiles" className="text-gray-400 hover:text-pink-300 transition">Browse Profiles</Link></li>
                 <li><span className="text-gray-400">Adults Only — 18+</span></li>
                 <li><span className="text-gray-400">Mutual Consent Required</span></li>
               </ul>

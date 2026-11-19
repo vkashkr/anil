@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { saveProfileToDynamoDB, deleteProfileFromDynamoDB, Profile } from '@/app/lib/dynamodb';
+import { saveProfileToDynamoDB, deleteProfileFromDynamoDB } from '@/app/lib/dynamodb';
 import { getProfileSlug } from '@/app/lib/city-slugs';
 
 export async function POST(request: Request) {
@@ -16,7 +16,6 @@ export async function POST(request: Request) {
       }
       const result = await deleteProfileFromDynamoDB(profileId);
       revalidatePath('/');
-      revalidatePath('/ahmedabad/escorts');
       return NextResponse.json(result);
     }
 
@@ -32,7 +31,6 @@ export async function POST(request: Request) {
     if (result?.success !== false && profile.name) {
       const slug = getProfileSlug(profile);
       revalidatePath(`/ahmedabad/escorts/${slug}`);
-      revalidatePath('/ahmedabad/escorts');
       revalidatePath('/');
     }
 

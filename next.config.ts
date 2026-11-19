@@ -43,6 +43,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // The homepage now replaces the Ahmedabad directory landing page.
+      {
+        source: '/ahmedabad/escorts',
+        destination: '/',
+        statusCode: 301,
+      },
       // Permanent redirect: /escorts?name=priya → /escorts/priya
       // Passes link equity and prevents duplicate content indexing
       {

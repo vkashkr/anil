@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { PHONE_TEL, WHATSAPP_URL } from '@/app/lib/constants';
 import { getProfileSlug } from '@/app/lib/city-slugs';
@@ -78,9 +79,9 @@ export default function HomeNav({ initialProfilesById }: HomeNavProps) {
       <div className="max-w-6xl mx-auto bg-black/30 backdrop-blur-xl rounded-2xl px-4 py-2.5 sm:px-5 sm:py-3 border border-white/10 shadow-2xl">
         {/* Top row */}
         <div className="flex justify-between items-center">
-          <a href="/" className="flex items-center gap-2 flex-shrink-0">
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
             <span className="text-lg sm:text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-400 to-yellow-300">Aliya Escort</span>
-          </a>
+          </Link>
 
           {/* Desktop search */}
           <div className="flex-1 max-w-xs mx-4 hidden md:block" ref={searchRef}>
@@ -130,10 +131,10 @@ export default function HomeNav({ initialProfilesById }: HomeNavProps) {
 
           {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-4 text-sm flex-shrink-0">
-            <a href="/ahmedabad/escorts" className="text-gray-300 hover:text-pink-300 transition flex items-center gap-1">
+            <Link href="/#profiles" className="text-gray-300 hover:text-pink-300 transition flex items-center gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               Profiles
-            </a>
+            </Link>
             <a href="/login" className="text-gray-300 hover:text-pink-300 transition flex items-center gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
               Login
@@ -215,10 +216,10 @@ export default function HomeNav({ initialProfilesById }: HomeNavProps) {
         {/* Mobile menu dropdown */}
         {mobileMenuOpen && (
           <div className="md:hidden mt-2 pt-2 border-t border-white/10 grid grid-cols-4 gap-2">
-            <a href="/ahmedabad/escorts" onClick={() => setMobileMenuOpen(false)} className="flex flex-col items-center gap-1 py-2 rounded-lg hover:bg-white/10 transition">
+            <Link href="/#profiles" onClick={() => setMobileMenuOpen(false)} className="flex flex-col items-center gap-1 py-2 rounded-lg hover:bg-white/10 transition">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               <span className="text-gray-300 text-xs">Profiles</span>
-            </a>
+            </Link>
             <a href="/login" onClick={() => setMobileMenuOpen(false)} className="flex flex-col items-center gap-1 py-2 rounded-lg hover:bg-white/10 transition">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
               <span className="text-gray-300 text-xs">Login</span>
