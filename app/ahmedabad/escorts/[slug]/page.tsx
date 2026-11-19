@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { getProfileBySeoTitleFromDynamoDB, Profile } from '@/app/lib/dynamodb';
 import { PHONE_TEL, PHONE_DISPLAY, WHATSAPP_URL } from '@/app/lib/constants';
-import { getProfileCitySlug, getProfileSlug, makeSlug } from '@/app/lib/city-slugs';
+import { getProfileCitySlug, getProfileSlug } from '@/app/lib/city-slugs';
 import ProfileGallery from './ProfileGallery';
 import ReviewForm from './ReviewForm';
 
@@ -74,27 +74,27 @@ async function loadProfile(slug: string): Promise<Profile | undefined> {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const profile = await loadProfile(slug);
-  if (!profile) return { title: 'Profile Not Found' };
+  if (!profile || profile.isVisible === false) {
+    return { title: 'Profile Not Found', robots: { index: false, follow: false } };
+  }
 
   const realCity = getProfileCitySlug(profile) || 'ahmedabad';
   const url = `${BASE_URL}/${realCity}/escorts/${getProfileSlug(profile)}`;
-  const seoTitle = String(profile.seoTitle || '').trim() || `${profile.name} — Call Girl in ${profile.city || profile.location || 'Ahmedabad'} | Aliya Escort`;
-  const seoDescription = String(profile.seoDescription || '').trim() || profile.description?.replace(/<[^>]+>/g, '').trim().slice(0, 160) || `Meet ${profile.name}${profile.age ? `, age ${profile.age}` : ''} — verified independent call girl in ${profile.city || profile.location || 'Ahmedabad'}, Gujarat. Real photos, 24/7 available, no advance payment.`;
+  const city = profile.city || profile.location || 'Ahmedabad';
+  const seoTitle = String(profile.seoTitle || '').trim() || `${profile.name} — Adult Companion Profile in ${city} | Aliya Escort`;
+  const profileDescription = String(profile.description || '')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const seoDescription = String(profile.seoDescription || '').trim()
+    || profileDescription.slice(0, 160)
+    || `View ${profile.name}'s profile in ${city}, Gujarat. Review the listed information and confirm availability and terms directly.`;
   const title = seoTitle;
   const description = seoDescription;
 
   return {
     title,
     description,
-    keywords: [
-      profile.name,
-      `${profile.name} escort`,
-      `call girl ${profile.city || 'ahmedabad'}`,
-      `escort ${profile.city || 'ahmedabad'}`,
-      'ahmedabad escort',
-      'call girls ahmedabad',
-      'escort service ahmedabad',
-    ],
     alternates: { canonical: url },
     openGraph: {
       url,
@@ -117,7 +117,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ProfileSlugPage({ params }: PageProps) {
   const { slug } = await params;
   const profile = await loadProfile(slug);
-  if (!profile) notFound();
+  if (!profile || profile.isVisible === false) notFound();
 
   const realCity = getProfileCitySlug(profile) || 'ahmedabad';
   const canonicalProfileSlug = getProfileSlug(profile);
@@ -245,11 +245,13 @@ export default async function ProfileSlugPage({ params }: PageProps) {
         {/* SEO H1 block */}
         <div className="mb-6 bg-gradient-to-r from-black/60 via-fuchsia-950/40 to-black/60 rounded-2xl p-5 border border-white/5">
           <h1 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-400 to-yellow-300 mb-2">
-            {String(profile.seoTitle || '').trim() || `${profile.name} — Call Girl in ${profile.city || profile.location || 'Ahmedabad'}`}
+            {String(profile.seoTitle || '').trim() || `${profile.name} — Adult Companion Profile in ${profile.city || profile.location || 'Ahmedabad'}`}
           </h1>
           <p className="text-gray-400 text-sm md:text-base leading-relaxed">
             {String(profile.seoDescription || '').trim() ||
-              (profile.description ? profile.description.replace(/<[^>]+>/g, '').trim().slice(0, 160) : `${profile.name} available in ${profile.place ? profile.place + ', ' : ''}${profile.city || profile.location || 'Ahmedabad'}${profile.state ? ', ' + profile.state : ''}. Genuine, verified profile with real photos.`)}
+              (profile.description
+                ? profile.description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 160)
+                : `View ${profile.name}'s profile in ${profile.city || profile.location || 'Ahmedabad'}, Gujarat. Confirm listed information and availability directly.`)}
           </p>
         </div>
 
@@ -260,7 +262,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
           {/* Right: profile details */}
           <div className="flex flex-col gap-5">
 
-            {/* ── Name + trust badges ── */}
+            {/* ── Name + listing labels ── */}
             <div className="bg-black/40 p-5 rounded-2xl border border-white/5 backdrop-blur-sm shadow-xl">
               <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
                 <div>
@@ -271,13 +273,13 @@ export default async function ProfileSlugPage({ params }: PageProps) {
                     <p className="text-gray-500 text-xs mt-1">Last updated: {lastUpdated}</p>
                   )}
                 </div>
-                {/* Trust badges */}
+                {/* Listing labels */}
                 <div className="flex flex-col gap-1.5 items-end shrink-0">
                   <span className="flex items-center gap-1 bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">
-                    ✓ Verified Profile
+                    Adult Profile Listing
                   </span>
                   <span className="flex items-center gap-1 bg-pink-500/15 border border-pink-500/40 text-pink-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">
-                    📷 Real Photos
+                    📷 Profile Photos
                   </span>
                 </div>
               </div>
@@ -314,7 +316,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
 
             {/* ── Contact CTA (visible without scrolling) ── */}
             <div className="bg-gradient-to-br from-green-950/60 to-teal-950/60 p-5 rounded-2xl border border-green-700/30 shadow-xl">
-              <p className="text-green-300 text-xs font-semibold uppercase tracking-widest mb-3 text-center">📲 Book Now — 24/7 Available</p>
+              <p className="text-green-300 text-xs font-semibold uppercase tracking-widest mb-3 text-center">📲 Contact for Profile Details</p>
               <a
                 href={PHONE_TEL}
                 className="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 mb-3"
@@ -334,9 +336,9 @@ export default async function ProfileSlugPage({ params }: PageProps) {
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
                   <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 01-4.29-1.248l-.308-.184-2.87.852.852-2.87-.184-.308A8 8 0 1112 20z"/>
                 </svg>
-                <span>WhatsApp for Quick Booking</span>
+                <span>WhatsApp for Listing Enquiries</span>
               </a>
-              <p className="text-center text-xs text-gray-500 mt-3">* Direct call — no advance required</p>
+              <p className="text-center text-xs text-gray-500 mt-3">Confirm availability, location, rates, and terms directly before agreeing.</p>
             </div>
 
             {/* ── Physical stats table ── */}
@@ -467,7 +469,7 @@ export default async function ProfileSlugPage({ params }: PageProps) {
                       ))}
                     </div>
                   </div>
-                  <p className="text-gray-500 text-xs mt-1">Based on {reviews.length}+ verified reviews</p>
+                  <p className="text-gray-500 text-xs mt-1">Based on {reviews.length} reviews</p>
                 </div>
               );
             })()}
@@ -490,16 +492,16 @@ export default async function ProfileSlugPage({ params }: PageProps) {
             <div>
               <h3 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-400 to-yellow-300 mb-4">Aliya Escort</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
-                Premium escort services in Ahmedabad &amp; Gujarat. Trusted by thousands of satisfied clients. Real profiles, verified photos, genuine service.
+                Adults-only escort and companion profile directory for Ahmedabad, Gujarat. Review each listing’s information and contact options.
               </p>
             </div>
             <div>
               <h3 className="text-lg font-bold text-white mb-4">About Us</h3>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> 100% Verified Profiles</li>
-                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Real &amp; Recent Photos</li>
-                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Complete Privacy Guaranteed</li>
-                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> 24/7 Availability</li>
+                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Individual Profile Details</li>
+                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Ahmedabad Local Listings</li>
+                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Direct Contact Options</li>
+                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Availability Varies by Listing</li>
               </ul>
             </div>
             <div>

@@ -24,11 +24,12 @@ export interface Profile {
 
 const API_URL = 'https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com/dvp/admin';
 
-async function callApi(body: Record<string, unknown>) {
+async function callApi(body: Record<string, unknown>, options?: { revalidate?: number }) {
     const controller = new AbortController();
     // Profile reads must stay fresh; stale cached 404s or older scan results can
     // leave a valid profile page missing even after the backend record is restored.
     const isProfileLookup = body.action === 'get_profile' || body.action === 'scan_profiles';
+    const revalidate = options?.revalidate ?? (isProfileLookup ? 0 : 300);
     const timeout = setTimeout(() => controller.abort(), 30_000);
     try {
         const response = await fetch(API_URL, {
@@ -36,8 +37,8 @@ async function callApi(body: Record<string, unknown>) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),
             signal: controller.signal,
-            cache: isProfileLookup ? 'no-store' : 'default',
-            next: isProfileLookup ? { revalidate: 0 } : { revalidate: 300 },
+            cache: revalidate === 0 ? 'no-store' : 'default',
+            next: { revalidate },
         });
         clearTimeout(timeout);
 
@@ -62,8 +63,8 @@ export async function getProfileFromDynamoDB(id: string) {
     return result.profile as Profile | undefined;
 }
 
-export async function getAllProfilesFromDynamoDB() {
-    const result = await callApi({ action: 'scan_profiles' });
+export async function getAllProfilesFromDynamoDB(options?: { revalidate?: number }) {
+    const result = await callApi({ action: 'scan_profiles' }, options);
     return result.profiles as Profile[];
 }
 

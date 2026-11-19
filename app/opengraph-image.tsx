@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Escort Ahmedabad — Verified Call Girls in Ahmedabad, Gujarat';
+export const alt = 'Ahmedabad Escort and Companion Profiles — Aliya Escort';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -35,7 +35,7 @@ export default function Image() {
             display: 'flex',
           }}
         >
-          ✔ VERIFIED PROFILES · AHMEDABAD
+          AHMEDABAD · GUJARAT
         </div>
 
         {/* Main title */}
@@ -49,7 +49,7 @@ export default function Image() {
             display: 'flex',
           }}
         >
-          Escort Ahmedabad 
+          Ahmedabad Profiles
         </div>
 
         {/* Sub-title */}
@@ -62,7 +62,7 @@ export default function Image() {
             display: 'flex',
           }}
         >
-          Independent Call Girls in Ahmedabad, Gujarat
+          Escort and Companion Listings
         </div>
 
         {/* Feature row */}
@@ -75,7 +75,7 @@ export default function Image() {
             justifyContent: 'center',
           }}
         >
-          {['24/7 Available', 'No Advance', 'Incall & Outcall', 'Real Photos'].map((f) => (
+          {['Adults Only', 'Profile Details', 'Local Listings', 'Direct Contact'].map((f) => (
             <div
               key={f}
               style={{

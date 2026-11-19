@@ -50,29 +50,15 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
+const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": "https://www.aliyaescort.com/#business",
+  "@id": "https://www.aliyaescort.com/#organization",
   "name": "Aliya Escort",
   "image": "https://www.aliyaescort.com/aliya-logo-A-4-improved.svg",
   "description": "Adults-only directory for browsing escort and companionship profiles in Ahmedabad, Gujarat.",
   "url": "https://www.aliyaescort.com/",
-  "telephone": "+919974599843",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "SG Highway",
-    "addressLocality": "Ahmedabad",
-    "addressRegion": "Gujarat",
-    "postalCode": "380054",
-    "addressCountry": "IN"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 23.0225,
-    "longitude": 72.5714
-  },
-  "sameAs": ["https://wa.me/919974599843"]
+  "telephone": "+919974599843"
 };
 
 const websiteJsonLd = {
@@ -82,14 +68,6 @@ const websiteJsonLd = {
   'url': 'https://www.aliyaescort.com/',
   'name': 'Aliya Escort',
   'description': 'Ahmedabad escort profile directory and local listings.',
-  'potentialAction': {
-    '@type': 'SearchAction',
-    'target': {
-      '@type': 'EntryPoint',
-      'urlTemplate': 'https://www.aliyaescort.com/ahmedabad/escorts?search={search_term_string}',
-    },
-    'query-input': 'required name=search_term_string',
-  },
 };
 
 export default function RootLayout({
@@ -103,15 +81,10 @@ export default function RootLayout({
         {/* Preconnect to external origins for faster LCP */}
         <link rel="preconnect" href="https://4k1gg1dlc3.execute-api.us-east-1.amazonaws.com" />
         <link rel="dns-prefetch" href="//4k1gg1dlc3.execute-api.us-east-1.amazonaws.com" />
-        {/* Geographic targeting meta tags */}
-        <meta name="geo.region" content="IN-GJ" />
-        <meta name="geo.placename" content="Ahmedabad" />
-        <meta name="geo.position" content="23.0225;72.5714" />
-        <meta name="ICBM" content="23.0225, 72.5714" />
         {/* JSON-LD structured data in <head> for optimal crawler discovery */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <script
           type="application/ld+json"

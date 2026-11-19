@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Ahmedabad Escort Service — Browse Verified Call Girls | Aliya Escort';
+export const alt = 'Ahmedabad Escort and Companion Profiles | Aliya Escort';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -48,7 +48,7 @@ export default function Image() {
             display: 'flex',
           }}
         >
-          Ahmedabad Escort Service
+          Ahmedabad Profiles
         </div>
 
         {/* Sub */}
@@ -60,7 +60,7 @@ export default function Image() {
             display: 'flex',
           }}
         >
-          1000+ Verified Independent Escorts in Ahmedabad
+          Escort and companion listings in Gujarat
         </div>
 
         {/* Tags */}
@@ -73,7 +73,7 @@ export default function Image() {
             justifyContent: 'center',
           }}
         >
-          {['College Girls', 'Housewife', 'VIP Escort', 'Hotel Delivery', 'No Advance'].map((t) => (
+          {['Adults Only', 'Profile Details', 'Local Listings', 'Contact Options'].map((t) => (
             <div
               key={t}
               style={{
@@ -106,7 +106,7 @@ export default function Image() {
             borderRadius: '999px',
           }}
         >
-          🟢 24/7 Available · SG Highway · Satellite · Vastrapur
+          Availability and coverage vary by profile
         </div>
       </div>
     ),

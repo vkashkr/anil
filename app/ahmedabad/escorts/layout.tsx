@@ -3,31 +3,16 @@ import type { Metadata } from 'next';
 const BASE_URL = 'https://www.aliyaescort.com';
 
 export const metadata: Metadata = {
-  title: 'Escort Ahmedabad, Gujarat, India',
+  title: 'Ahmedabad Escort & Companion Profiles | Aliya Escort',
   description:
-    'Browse verified Ahmedabad escort profiles. Independent adults in Ahmedabad available 24/7 for private companionship. Real photos and direct contact.',
-  keywords: [
-    'ahmedabad escort',
-    'ahmedabad escorts',
-    'ahmedabad escort service',
-    'escort in ahmedabad',
-    'call girls in ahmedabad',
-    'ahmedabad call girls',
-    'independent escort ahmedabad',
-    'female escort ahmedabad',
-    'vip escort ahmedabad',
-    'college girl escort ahmedabad',
-    'housewife escort ahmedabad',
-    'escort near me ahmedabad',
-    'local call girls ahmedabad',
-  ],
+    'Browse adult escort and companion profiles listed in Ahmedabad, Gujarat. Review each profile’s details and contact options, then confirm availability directly.',
   alternates: {
     canonical: `${BASE_URL}/ahmedabad/escorts`,
   },
   openGraph: {
-    title: 'Ahmedabad Escort Service | Verified Profiles',
+    title: 'Ahmedabad Escort & Companion Profiles',
     description:
-      'Browse genuine, verified ahmedabad escort profiles. Independent call girls available 24/7. No advance payment. Real photos only.',
+      'Explore adult escort and companion profiles listed in Ahmedabad. Profile details, contact options, and availability vary by listing.',
     url: `${BASE_URL}/ahmedabad/escorts`,
     siteName: 'Escort Ahmedabad',
     locale: 'en_IN',
@@ -35,9 +20,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ahmedabad Escort Service',
+    title: 'Ahmedabad Escort & Companion Profiles',
     description:
-      'Verified Ahmedabad escort profiles with direct contact and private companionship availability.',
+      'Review Ahmedabad profile details and contact options. Confirm availability directly with each listing.',
     site: '@AliyaEscort',
   },
   robots: {

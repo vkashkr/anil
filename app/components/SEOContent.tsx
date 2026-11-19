@@ -59,13 +59,14 @@ export default function SEOContent() {
 
           <div className="mt-8">
             <h3 className="font-bold text-lg text-fuchsia-400 uppercase tracking-wider mb-2">Area Coverage</h3>
-            <p className="text-gray-200 mb-4">Listings include Ahmedabad neighborhoods such as:</p>
+            <p className="text-gray-200 mb-4">Ahmedabad localities shown for general context include:</p>
             <ul className="list-disc pl-6 text-yellow-400 font-semibold grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-1">
               {['Satellite', 'SG Highway', 'Vastrapur', 'Navrangpura', 'Prahlad Nagar', 'Bodakdev', 'Maninagar', 'Ellisbridge', 'Paldi', 'Thaltej', 'Ambawadi', 'Naranpura', 'Chandkheda', 'Bopal', 'Gota', 'Sola', 'Memnagar'].map(loc => (
                 <li key={loc}>{loc}</li>
               ))}
               <li>And more...</li>
             </ul>
+            <p className="text-gray-400 text-sm mt-3">Coverage varies by profile; confirm the location directly.</p>
           </div>
 
           <div className="mt-8">
@@ -88,7 +89,7 @@ export default function SEOContent() {
                 { q: "What is the minimum meeting duration?", a: "Duration and scheduling differ by listing. Ask the provider directly about availability, duration, and all related charges before confirming." },
                 { q: "Are there hidden charges?", a: "Any rate or travel charge should be confirmed directly before an arrangement is agreed. Review all terms with the provider and do not send money based on unclear details." },
                 { q: "Do listings offer incall or outcall?", a: "Some providers may offer one or both options. The profile or direct conversation should confirm the meeting location, consent, availability, and applicable terms." },
-                { q: `How do I contact you for booking?`, a: `You can reach us anytime via phone call or WhatsApp at ${PHONE_DISPLAY}. Our support team is available 24 hours a day, 7 days a week to assist with bookings and queries.` }
+                { q: `How do I contact you about a listing?`, a: `For directory enquiries, call or WhatsApp ${PHONE_DISPLAY}. Response times vary. For profile availability and terms, contact the listed provider directly.` }
               ].map((faq, i) => (
                 <FAQItem key={i} q={faq.q} a={faq.a} index={i} />
               ))}
@@ -102,19 +103,19 @@ export default function SEOContent() {
         <div className="absolute inset-0 pointer-events-none z-0" style={{background: 'radial-gradient(circle at 80% 10%, rgba(255,255,0,0.10) 0, transparent 70%), radial-gradient(circle at 10% 90%, rgba(255,0,128,0.10) 0, transparent 70%)'}}></div>
         <div className="relative z-10 text-base md:text-lg leading-relaxed text-gray-100">
           <h2 className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-400 to-fuchsia-500 text-3xl md:text-4xl drop-shadow-pink animate-pulse mb-6">
-            अहमदाबाद की लोकल कॉल गर्ल्स और एस्कॉर्ट सर्विस – पूरी जानकारी
+            Ahmedabad ki local escort aur companion listings
           </h2>
           
           <p className="mb-4">
-            <span className="italic text-fuchsia-400 font-semibold">नमस्कार!</span> <span className="text-yellow-400 font-bold">अगर आप अहमदाबाद के <span className="underline decoration-wavy decoration-pink-400">Satellite, Vastrapur, Maninagar</span>, या किसी भी मोहल्ले में रहते हैं</span> और <span className="font-bold text-fuchsia-400">एकदम लोकल, भरोसेमंद</span> और <span className="italic text-pink-400">दिल से सेवा देने वाली कॉल गर्ल्स</span> की तलाश में हैं, तो <span className="font-bold text-yellow-300">Escort Ahmedabad </span> आपके लिए सबसे सही ठिकाना है।
+            <span className="italic text-fuchsia-400 font-semibold">Kem cho!</span> Ahmedabad, Gujarat ke adult escort aur companion profile listings yahan ek jagah browse karein. Har profile par di gayi details, photos aur contact options alag ho sakte hain.
           </p>
 
           <div className="mt-6">
-            <h3 className="font-bold text-2xl text-fuchsia-400 tracking-wide drop-shadow-pink mb-4">क्यों चुनें Escort Ahmedabad ?</h3>
+            <h3 className="font-bold text-2xl text-fuchsia-400 tracking-wide drop-shadow-pink mb-4">Listing ko kaise review karein?</h3>
             <ul className="list-disc pl-6 text-pink-400 font-semibold space-y-2">
-              <li>अहमदाबाद और आसपास की प्रोफाइल्स देखें।</li>
-              <li>हर प्रोफाइल पर उपलब्ध जानकारी और तस्वीरें पढ़ें।</li>
-              <li>किसी भी व्यवस्था से पहले प्रोफाइल में दी गई जानकारी की पुष्टि करें।</li>
+              <li>Ahmedabad aur Gujarat ke listed profiles aur unki details dekhein.</li>
+              <li>Location, photos aur contact information ko har profile par alag se check karein.</li>
+              <li>Availability, identity, rates aur terms ko provider se directly confirm karein.</li>
             </ul>
           </div>
         </div>

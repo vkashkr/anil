@@ -100,60 +100,38 @@ export default async function AhmedabadEscortPage() {
     })),
   };
 
+  const faqItems = [
+    {
+      q: 'How can I browse Ahmedabad profile listings?',
+      a: 'Browse the profiles on this page and open a listing to review its details and contact options. Confirm current information directly before making any arrangement.',
+    },
+    {
+      q: 'Are profile details independently verified?',
+      a: 'This directory displays profile information for visitors to review. Confirm identity, photos, availability, and terms directly; the site does not make an independent verification claim for every listing.',
+    },
+    {
+      q: 'How can I check availability and meeting options?',
+      a: 'Options and availability vary by profile. Review the individual listing and contact the provider directly to confirm location, timing, and terms.',
+    },
+    {
+      q: 'Which Ahmedabad areas are covered?',
+      a: 'The directory focuses on Ahmedabad, Gujarat. Area names shown on the page are localities of interest and do not guarantee that every profile serves each locality.',
+    },
+    {
+      q: 'Where can I find rates and other terms?',
+      a: 'Rates and terms vary by profile. Ask the provider directly and agree on all details before making an arrangement.',
+    },
+  ];
+
   // ── JSON-LD: FAQPage ────────────────────────────────────────────────────
   const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'Are you searching for ahmedabad escorts?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'I have real profiles that provide you escort service in Ahmedabad, Gujrat, India',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How do I book an ahmedabad escort?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Browse our verified profiles, click "View Profile & Contact", then call or WhatsApp directly. No advance payment required — pay only on arrival.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Are the ahmedabad escort profiles real and verified?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes. All profiles on Escort Ahmedabad are genuine, independent adults with verified photos. No fake or stock images.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What areas in Ahmedabad do escorts service?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Escort service is available across all major areas including SG Highway, Satellite, Vastrapur, Prahlad Nagar, Bodakdev, Navrangpura, Ellisbridge, CG Road, Maninagar, and all 5-star hotels in Ahmedabad.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Is incall and outcall available in Ahmedabad?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes. Both incall (at the escort\'s location) and outcall (hotel or home delivery) services are available 24/7 in Ahmedabad.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is the rate for call girls in Ahmedabad?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Rates vary by profile. Contact directly via call or WhatsApp for current rates. No hidden charges.',
-        },
-      },
-    ],
+    mainEntity: faqItems.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
   };
 
   return (
@@ -183,15 +161,15 @@ export default async function AhmedabadEscortPage() {
       {/* ── Hero ── */}
       <div className="bg-gradient-to-br from-black via-fuchsia-950/80 to-pink-950/60 px-4 pt-9 pb-7 text-center">
         <h1 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-300 to-yellow-300 mb-2">
-          Escorts in Ahmedabad, Gujarat, India
+          Ahmedabad Escort &amp; Companion Profiles
         </h1>
         <p className="text-gray-400 text-sm md:text-base max-w-xl mx-auto mb-1">
-          Find the best independent call girls in Ahmedabad.
+          Browse adult profiles listed in Ahmedabad, Gujarat, and review each listing’s information and contact options.
         </p>
         <p className="text-gray-300 text-sm max-w-xl mx-auto mb-5">
-          We currently show{' '}
-          <span className="text-pink-300 font-bold">{profiles.length} verified profiles</span>{' '}
-          available in Ahmedabad. Independent adult profiles, 24/7 — private companionship and direct contact.
+          This directory currently displays{' '}
+          <span className="text-pink-300 font-bold">{profiles.length} profiles</span>.{' '}
+          Listings, locations, and availability can vary; confirm details directly.
         </p>
         <div className="flex justify-center gap-3 flex-wrap">
           <a
@@ -210,25 +188,6 @@ export default async function AhmedabadEscortPage() {
           </a>
         </div>
 
-        {/* ── Services chips (keyword density) ── */}
-        <div className="mt-5 flex flex-wrap justify-center gap-2 max-w-2xl mx-auto">
-          {[
-            'Girlfriend Experience',
-            'Hotel Outcall',
-            'Home Delivery',
-            'Incall Service',
-            'College Girls',
-            'Housewife Escorts',
-            'VIP Escort',
-            'Independent Girls',
-            '24/7 Available',
-            'No Advance',
-          ].map((s) => (
-            <span key={s} className="bg-white/5 border border-white/10 text-gray-400 text-[11px] px-3 py-1 rounded-full">
-              {s}
-            </span>
-          ))}
-        </div>
       </div>
 
       {/* ── Listing ── */}
@@ -276,9 +235,9 @@ export default async function AhmedabadEscortPage() {
                         <span className="text-[10px] text-center px-1">Contact for photos</span>
                       </div>
                     )}
-                    {/* Verified badge */}
+                    {/* Directory label */}
                     <div className="absolute top-2 left-2 bg-fuchsia-600/90 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-tight">
-                      ✔ Aliya
+                      Aliya listing
                     </div>
                   </Link>
 
@@ -322,8 +281,8 @@ export default async function AhmedabadEscortPage() {
                     <span className="bg-zinc-800 text-gray-300 text-[11px] px-2 py-0.5 rounded-full border border-white/10">
                       India
                     </span>
-                    <span className="bg-emerald-700/60 text-emerald-300 text-[11px] px-2 py-0.5 rounded-full border border-emerald-600/30">
-                      🟢 Available
+                    <span className="bg-zinc-800 text-gray-300 text-[11px] px-2 py-0.5 rounded-full border border-white/10">
+                      Availability varies
                     </span>
                   </div>
 
@@ -356,8 +315,9 @@ export default async function AhmedabadEscortPage() {
       {/* ── Area Coverage ── */}
       <div className="max-w-5xl mx-auto px-4 py-6 border-t border-white/5">
         <h2 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">
-          Escort Service Available In
+          Ahmedabad Areas Mentioned in Listings
         </h2>
+        <p className="text-xs text-gray-500 mb-3">Localities are shown for general context. Confirm coverage with the individual profile.</p>
         <div className="flex flex-wrap gap-2">
           {[
             'SG Highway', 'Satellite', 'Vastrapur', 'Prahlad Nagar', 'Bodakdev',
@@ -378,28 +338,7 @@ export default async function AhmedabadEscortPage() {
           Frequently Asked Questions — Ahmedabad Escort Service
         </h2>
         <div className="space-y-3">
-          {[
-            {
-              q: 'How do I book an Ahmedabad escort?',
-              a: 'Browse our verified profiles, click "View Profile & Contact", then call or WhatsApp directly. No advance payment required — pay only on arrival.',
-            },
-            {
-              q: 'Are the profiles real and verified?',
-              a: 'Yes. All profiles on Escort Ahmedabad are genuine, independent adults with verified photos. No fake or stock images.',
-            },
-            {
-              q: 'Is incall and outcall service available?',
-              a: 'Both incall (at the escort\'s location) and outcall (hotel or home delivery) services are available 24/7 across Ahmedabad.',
-            },
-            {
-              q: 'Which areas in Ahmedabad are covered?',
-              a: 'We cover SG Highway, Satellite, Vastrapur, Prahlad Nagar, Bodakdev, Navrangpura, Ellisbridge, CG Road, Maninagar, and all major 5-star hotels in Ahmedabad.',
-            },
-            {
-              q: 'What is the rate for call girls in Ahmedabad?',
-              a: 'Rates vary by profile. Contact directly via call or WhatsApp for current rates. No hidden charges, no advance.',
-            },
-          ].map(({ q, a }) => (
+          {faqItems.map(({ q, a }) => (
             <details key={q} className="group bg-zinc-900 rounded-xl border border-white/5 hover:border-pink-500/20 transition overflow-hidden">
               <summary className="flex items-center justify-between gap-3 px-4 py-3 cursor-pointer list-none select-none text-sm font-semibold text-gray-200 group-open:text-pink-300">
                 {q}
@@ -417,10 +356,10 @@ export default async function AhmedabadEscortPage() {
       <div className="max-w-3xl mx-auto px-4 py-8 text-center border-t border-white/5">
         <h2 className="text-sm font-semibold text-gray-500 mb-2">About Ahmedabad Escort Service</h2>
         <p className="text-gray-500 text-xs leading-relaxed">
-          Escort Ahmedabad is India&#39;s trusted directory for verified independent escort profiles in Ahmedabad, Gujarat.
-          Browse genuine call girls available 24/7 — no advance payment, real photos, incall &amp; outcall.
-          Service available across SG Highway, Satellite, Vastrapur, Prahlad Nagar, Bodakdev &amp; all areas of Ahmedabad.
-          All adults. All consensual. Comply with local laws.
+          This adults-only directory presents escort and companion profiles listed in Ahmedabad, Gujarat.
+          Review each profile’s details and contact options, and confirm identity, availability, location, rates, and terms directly.
+          Locality names are provided as general context and do not guarantee service coverage.
+          Any meeting must involve consenting adults and comply with applicable laws.
         </p>
       </div>
     </div>
