@@ -71,7 +71,7 @@ export default function SEOContent() {
           <div className="mt-8">
             <h3 className="font-bold text-lg text-yellow-400 uppercase tracking-wider mb-2">Contact Us</h3>
             <p className="text-fuchsia-300 font-semibold">
-              For instant booking, call or WhatsApp us at <span className="font-extrabold text-pink-400 animate-pulse">+91-9157204082</span>. Our support team is available <span className="italic text-yellow-400">24/7</span> to assist you.
+              For listing information, call or WhatsApp <a href={`tel:+919974599843`} className="font-extrabold text-pink-400 underline underline-offset-4">{PHONE_DISPLAY}</a>. Availability and response times vary.
             </p>
           </div>
           
@@ -79,15 +79,15 @@ export default function SEOContent() {
             <h3 className="font-bold text-lg text-fuchsia-400 uppercase tracking-wider mb-4">Frequently Asked Questions (FAQs)</h3>
             <div className="space-y-2">
               {[
-                { q: "Are your call girls real and verified?", a: "Yes, every profile on Aliya Escort is 100% genuine and manually verified. We conduct identity checks and ensure all photos are recent and unedited. You get exactly what you see on the profile." },
-                { q: "Is my privacy and identity completely safe?", a: "Absolutely. We maintain strict confidentiality — your personal details, booking history, and contact information are never shared with anyone. All communication is encrypted and our staff follows a strict privacy protocol." },
-                { q: "What payment methods do you accept?", a: "We accept cash payment on delivery for your convenience. No advance payment or online transfer is required. You pay only when you are satisfied with the service." },
-                { q: "How fast can I book a call girl?", a: "Our average delivery time is just 30 minutes within Ahmedabad city limits. We operate 24/7 including holidays. Simply call or WhatsApp us and we'll arrange everything immediately." },
-                { q: "Do you serve areas outside Ahmedabad?", a: "Yes! While our primary service area is Ahmedabad (SG Highway, Satellite, Vastrapur, Prahlad Nagar, Bodakdev, etc.), we also serve Gandhinagar, Sanand, and nearby cities within Gujarat on request." },
-                { q: "Can I choose a specific girl from the website?", a: "Of course! Browse our profiles, pick your preferred companion, and mention her name/ID when you call. If she's available, we'll send her to your location. If not, we'll suggest similar options." },
-                { q: "What is the minimum booking duration?", a: "The minimum booking is typically 1 hour. Extended bookings for overnight stays, dinner dates, or travel companionship are also available at special rates." },
-                { q: "Are there any hidden charges?", a: "No hidden charges whatsoever. The rate you see is the rate you pay. Travel charges may apply for locations outside city limits, which will be communicated upfront before confirmation." },
-                { q: "Do you offer incall and outcall services?", a: "Yes, we offer both. Incall means you visit our safe, clean, and private location. Outcall means the escort visits your hotel, home, or any private location of your choice." },
+                { q: "Are all listed profiles for adults?", a: "This website is intended only for people aged 18 or older. Individual listings should be reviewed directly, and providers must confirm that all parties are consenting adults." },
+                { q: "How can I check the details of a profile?", a: "Open a profile to review its description, location, photos, and listed contact information, then contact the provider directly to confirm current availability and terms." },
+                { q: "What payment methods are available?", a: "Payment methods and rates vary by individual provider. Confirm the full terms, duration, and travel charges directly before agreeing to a meeting." },
+                { q: "How quickly can I arrange a meeting?", a: "Response and availability times vary by listing and location. Contact the provider directly for current availability rather than relying on a fixed delivery time." },
+                { q: "Do listings cover areas outside Ahmedabad?", a: "The main directory focuses on Ahmedabad and nearby areas including SG Highway, Satellite, Vastrapur, Prahlad Nagar, Bodakdev, Gandhinagar, and Sanand when listed." },
+                { q: "Can I choose a specific profile?", a: "Yes. Browse the profiles and mention the profile name or listing ID when you contact the provider. Availability is subject to confirmation." },
+                { q: "What is the minimum meeting duration?", a: "Duration and scheduling differ by listing. Ask the provider directly about availability, duration, and all related charges before confirming." },
+                { q: "Are there hidden charges?", a: "Any rate or travel charge should be confirmed directly before an arrangement is agreed. Review all terms with the provider and do not send money based on unclear details." },
+                { q: "Do listings offer incall or outcall?", a: "Some providers may offer one or both options. The profile or direct conversation should confirm the meeting location, consent, availability, and applicable terms." },
                 { q: `How do I contact you for booking?`, a: `You can reach us anytime via phone call or WhatsApp at ${PHONE_DISPLAY}. Our support team is available 24 hours a day, 7 days a week to assist with bookings and queries.` }
               ].map((faq, i) => (
                 <FAQItem key={i} q={faq.q} a={faq.a} index={i} />

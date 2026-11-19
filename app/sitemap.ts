@@ -99,6 +99,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Sitemap dynamic route generation error:', error);
   }
 
-  const finalCityRoutes = cityRoutes.length > 0 ? cityRoutes : [];
+  const finalCityRoutes: MetadataRoute.Sitemap = defaultCitySlugs.map((city) => ({
+    url: `${BASE_URL}/${city}/escorts`,
+    lastModified: now,
+    changeFrequency: 'daily',
+    priority: 0.9,
+  }));
   return [...rootRoute, ...finalCityRoutes, ...profileRoutes, ...storyRoutes];
 }

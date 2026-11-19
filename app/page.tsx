@@ -105,7 +105,7 @@ export default async function Home() {
           style={{ background: 'radial-gradient(circle at 80% 10%, rgba(255,0,128,0.10) 0, transparent 70%), radial-gradient(circle at 10% 90%, rgba(255,255,0,0.08) 0, transparent 70%)' }}
         />
         <h1 className="relative z-10 text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-500 to-yellow-300 text-center leading-tight mb-3">
-          Ahmedabad Escorts &amp; Escort Service
+          Ahmedabad Escort Profiles &amp; Local Listings
         </h1>
 
         {/* Marquee receives initial server-fetched profiles as props */}
@@ -113,10 +113,8 @@ export default async function Home() {
 
         <p className="relative z-10 text-lg sm:text-xl text-gray-100 max-w-xl sm:max-w-2xl text-center mb-4 font-medium">
           <span className="bg-black/30 px-3 py-2 rounded-2xl shadow-lg backdrop-blur-sm inline-block">
-            Browse <span className="font-bold text-pink-300">Ahmedabad escort profiles</span> and local listing information.{' '}
-            If you are searching for an <span className="text-fuchsia-300 font-semibold">escort service in Ahmedabad</span>,{' '}
-            Ahmedabad escorts, or <span className="text-yellow-200 font-semibold">call girls in Ahmedabad</span>,{' '}
-            review the profile details and contact information available on Aliya Escort.
+            Explore <span className="font-bold text-pink-300">Ahmedabad escort profiles</span>, local neighborhood listings, profile details, and direct contact options.{' '}
+            Use this <span className="text-fuchsia-300 font-semibold">Ahmedabad escort directory</span> to compare available listings and confirm details directly with each adult provider.
           </span>
         </p>
         <span className="relative z-10 text-pink-200 font-semibold text-base sm:text-lg bg-black/20 px-4 py-1 rounded-full shadow-md tracking-wide mt-1">
@@ -142,7 +140,7 @@ export default async function Home() {
                 Aliya Escort
               </h3>
               <p className="text-gray-400 text-sm leading-relaxed">
-                Premium escort services in Ahmedabad &amp; Gujarat. Trusted by thousands of satisfied clients since 2020. Real profiles, verified photos, genuine service.
+                Adults-only local profile directory for Ahmedabad and Gujarat. Browse listing details, available neighborhoods, and direct contact options.
               </p>
               <div className="flex gap-3 mt-4">
                 <span className="w-9 h-9 rounded-full bg-pink-600/20 border border-pink-500/30 flex items-center justify-center text-pink-300 text-sm hover:bg-pink-600/40 transition cursor-pointer">📷</span>
@@ -154,13 +152,13 @@ export default async function Home() {
             <div>
               <h3 className="text-lg font-bold text-white mb-4">About Us</h3>
               <p className="text-gray-400 text-sm leading-relaxed mb-3">
-                Ahmedabad&apos;s most trusted escort agency, providing discreet and professional companionship services.
+                Aliya Escort helps visitors browse local companion and escort listings while keeping profile information and contact details easy to review.
               </p>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> 100% Verified Profiles</li>
-                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Real &amp; Recent Photos</li>
-                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Complete Privacy Guaranteed</li>
-                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> 24/7 Availability</li>
+                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Adult-Only Listings</li>
+                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Location-Focused Profiles</li>
+                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Direct Contact Options</li>
+                <li className="flex items-center gap-2"><span className="text-pink-400">✓</span> Local Area Coverage</li>
               </ul>
             </div>
 
@@ -171,8 +169,8 @@ export default async function Home() {
                 <li><a href="/ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">Ahmedabad Escort Service</a></li>
                 <li><a href="/ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">VIP Escorts</a></li>
                 <li><a href="/ahmedabad/escorts" className="text-gray-400 hover:text-pink-300 transition">New Arrivals</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-pink-300 transition">Privacy Policy</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-pink-300 transition">Terms of Service</a></li>
+                <li><span className="text-gray-400">Adults Only — 18+</span></li>
+                <li><span className="text-gray-400">Mutual Consent Required</span></li>
               </ul>
             </div>
 
@@ -226,11 +224,11 @@ export default async function Home() {
                 © 2026 Escort Ahmedabad . All rights reserved.
               </p>
               <div className="flex items-center gap-4 text-xs text-gray-500">
-                <a href="#" className="hover:text-pink-300 transition">Privacy Policy</a>
+                <span>Privacy Respect</span>
                 <span className="text-gray-700">|</span>
-                <a href="#" className="hover:text-pink-300 transition">Terms of Service</a>
+                <span>18+ Adults Only</span>
                 <span className="text-gray-700">|</span>
-                <a href="#" className="hover:text-pink-300 transition">Contact</a>
+                <a href={PHONE_TEL} className="hover:text-pink-300 transition">Contact</a>
               </div>
             </div>
           </div>
